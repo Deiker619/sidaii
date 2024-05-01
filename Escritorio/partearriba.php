@@ -23,6 +23,8 @@
 
     <!-- Boxicon -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<!-- fontawesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Icons -->
     <!--   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/ css/line.css"> -->
@@ -62,6 +64,7 @@
 
         redireccionar("../index.php");
     }
+    
 
     switch ($rol) {
         case "1adm":
@@ -129,9 +132,14 @@
                         <?php if ($rol != "coorA") { ?>
                             <li><a href="01-atencionCiu.php">Registro beneficiario</a></li>
                         <?php } ?>
+                        <?php if ($rol == "Coordinador") { ?>
+                            <li><a href="14,1-verCoodinacion.php?coordinacion=<?php echo $coordi?>">Ver mi Coordinacion</a></li>
+                        <?php }?>
 
-                        <li><a href="14-coordinacionesEstadales.php">Coordinaciones estadales</a></li>
-
+                        <?php if ($rol == "Administrador" || $rol == "Superusuario"  ) { ?>
+                            <li><a href="14-coordinacionesEstadales.php">Coordinaciones estadales</a></li>
+                        <?php }?>
+                        <!-- <li><a href="14-coordinacionesEstadales.php">Coordinaciones estadales</a></li> -->
                         <li><a href="02-jornadas.php">Jornadas</a></li>
                         <li><a href="12-D-escuela-comunitaria.php">Talleres</a></li>
                         <li><a href="10-encuentros.php">Encuentros</a></li>
@@ -161,9 +169,10 @@
                     <ul class="sub-menu">
                         <li><a href="01-atencionCiu.php">Registro beneficiario</a></li>
                         <li><a href="01,2-atenciones.php">Solicitudes para OAC</a></li>
-
-
+                        
+                        
                         <li><a href="02-jornadas.php">Jornadas</a></li>
+                        <li><a href="10-encuentros.php">Encuentros</a></li>
 
                     </ul>
 
@@ -273,7 +282,10 @@
                 </li> -->
 
             <!-- Boton 2: categorias -->
-            <li>
+            <?php
+            if ($rol == "Superusuario" || $gerencia == "6Plan") {
+            ?>
+                 <li>
                 <div class="ioncn-link">
                     <a>
                     <i class='bx bx-stats'></i>
@@ -286,8 +298,14 @@
 
                     <li><a href="16-planificacionOAC.php">Atención al ciudadano</a></li>
                     <li><a href="#">Operacion estadal </a></li>
+                 
                 </ul>
             </li>
+
+            <?php
+            }
+            ?>
+           
 
             <!-- Boton 3: libros -->
             <!-- <li>
@@ -336,8 +354,16 @@
             <!-- Usuario: perfil -->
             <li>
                 <div class="ioncn-link">
-                    <a>
-                        <img src="profile.png" alt="">
+                    <a><?php
+                            if($_SESSION["profile_photo"]){
+                                $ruta = "fotos_perfil/". $_SESSION["profile_photo"];
+                            }else{
+                                $ruta = "profile.png";
+                            }
+                        ?>
+                        <div class="img-profi">
+                             <img src="<?php echo $ruta ?>" alt="">
+                        </div>
                         <span class="link_name" id="user_active"><?php echo $NombreUsuarioActivo ?></span>
                     </a>
                     <i class='bx bx-chevron-up'></i>
@@ -345,7 +371,10 @@
                 </div>
                 <!-- Submenus de un boton -->
                 <ul class="sub-menu">
+                    <li><a href="__MiPerfil.php">Perfil</a></li>
+                    <li><a href="__CambioContraseña.php">Cambio contraseña</a></li>
                     <li><a href="cerrarsesion.php">Cerrar sesion</a></li>
+                    
 
 
                 </ul>

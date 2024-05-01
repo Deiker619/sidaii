@@ -1,5 +1,6 @@
 <?php
 include_once("partearriba.php");
+$gerencia_json = json_encode($gerencia);
 ?>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
@@ -103,7 +104,7 @@ include_once("partearriba.php");
                 Agregar nuevo encuentro
             </header>
 
-            <form action="../php/procesamientoencuentro.php" method="post" class="dos">
+            <form method="post" class="dos">
                 <div class="form first">
 
                     <div class="details personal">
@@ -174,7 +175,7 @@ include_once("partearriba.php");
 
                 </div>
 
-                <button class="nextBtn" name="registro">
+                <button class="nextBtn" name="registro" id="registro">
                     <span class="btnText">Registrar</span>
                     <ion-icon name="send-outline"></ion-icon>
                 </button>
@@ -217,11 +218,12 @@ include_once("partearriba.php");
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Fecha de taller</th>
+                    <th>Fecha de encuentro</th>
                     <th>Estado</th>
                     <th>Municipio</th>
                     <th>Parroquia</th>
                     <th>Actividad</th>
+                    <th></th>
                     <th></th>
 
                 </tr>
@@ -235,19 +237,28 @@ include_once("partearriba.php");
                 $cantidadRegistros = count($consulta);
                 if ($consulta) {
                     foreach ($consulta as $registros) {
+                        if ($registros["gerencia"] == $gerencia || $rol == "Superusuario") {
                 ?>
-                        <tr>
+                            <tr>
 
-                            <td><?php echo $registros["id"] ?></td>
-                            <td><?php echo $registros["fecha_encuentro"] ?></td>
-                            <td><?php echo $registros["nombre_estado"] ?></td>
-                            <td><?php echo $registros["nombre"] ?></td>
-                            <td><?php echo $registros["nombre_parroquia"] ?></td>
-                            <td><?php echo $registros["actividad"] ?></td>
+                                <td><?php echo $registros["id"] ?></td>
+                                <td><?php echo $registros["fecha_encuentro"] ?></td>
+                                <td><?php echo $registros["nombre_estado"] ?></td>
+                                <td><?php echo $registros["nombre"] ?></td>
+                                <td><?php echo $registros["nombre_parroquia"] ?></td>
+                                <td><?php echo $registros["actividad"] ?></td>
+                                <td><a href="10-verEncuentro.php?id=<?php echo $registros["id"] ?>">Ver encuentro</a></td>
 
-                            <td><a href="eliminar/eliminar_encuentro.php?id=<?php echo $registros["id"] ?>" class="eliminar">Eliminar Reg</a></td>
-                        </tr>
+                                <?php if ($rol == "Superusuario") { ?>
+                                    <td><a href="eliminar/eliminar_encuentro.php?id=<?php echo $registros["id"] ?>" class="eliminar">Eliminar Reg</a></td>
+
+                                <?php } else {
+                                    echo "<td></td>";
+                                } ?>
+
+                            </tr>
                 <?php
+                        }
                     }
                 }
                 ?>
@@ -255,6 +266,109 @@ include_once("partearriba.php");
             </tbody>
         </table>
     </div>
+    <script src="../package/dist/sweetalert2.all.js"></script>
+    <script src="../package/dist/sweetalert2.all.min.js"></script>
+    <script>
+        $(function() {
+
+            $("#registro").click(function(e) {
+
+
+                var valid = this.form.checkValidity();
+                if (valid) {
+
+
+
+                    /* Detalles personales */
+                    var fecha_encuentro = $('#fecha_encuentro').val();
+                    var estado = $('#estado option:selected').text();
+                    var municipio = $('#municipio option:selected').text();
+                    var parroquia = $('#parroquia option:selected').text();
+                    var gerencia = <?php echo $gerencia_json; ?>;
+                    var actividad = $("#actividad").val();
+
+
+
+
+                    e.preventDefault();
+                    Swal.fire({
+                        title: '¿Desea registrar a esta Jornada? ',
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Save',
+                        confirmButtonColor: '#1AA83E',
+                        html: '<b>Estado: ' + estado + '</b> <br>' +
+                            '<b>Municipio: ' + municipio + '</b><br>' +
+                            '<b>Parroquia: ' + parroquia + '</b><br>' +
+                            '<b>Actividad: ' + actividad + '</b>',
+                        denyButtonText: `Don't save`,
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+
+                            var estado = $("#estado").val()
+                            var gerencia = <?php echo $gerencia_json; ?>;
+                            var municipio = $("#municipio").val()
+                            var parroquia = $("#parroquia").val()
+                            var actividad = $("#actividad").val()
+
+                            console.log(estado, municipio, parroquia, actividad, gerencia, fecha_encuentro);
+                            $.ajax({
+                                type: "POST",
+                                url: "../php/procesamientoencuentro.php",
+                                data: {
+                                    estado: estado,
+                                    municipio: municipio,
+                                    parroquia: parroquia,
+                                    actividad: actividad,
+                                    gerencia: gerencia,
+                                    fecha_encuentro: fecha_encuentro
+
+
+
+
+                                },
+                                success: function(data) {
+                                    console.log(data)
+                                    if (data.trim() == "1") {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Se registró el encuentro exitosamente'
+                                        }).then(function() {
+                                            window.location = "10-encuentros.php";
+                                        })
+                                    }
+
+                                    if (data.trim() != "1") {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: "No se pudo registrar la jornada"
+                                        }).then(function() {
+                                            window.location = "10-encuentros.php";
+                                        })
+                                    }
+                                },
+                                error: function(data) {
+                                    Swal.fire({
+                                        'icon': 'error',
+                                        'title': 'Oops...',
+                                        title: "No se pudo registrar la jornada, espere un momento"
+
+                                    })
+                                }
+                            })
+
+                        } else if (result.isDenied) {
+                            Swal.fire('Changes are not saved', '', 'info')
+                        }
+                    })
+
+
+
+                }
+            })
+        })
+    </script>
 
     <?php
     include_once("parteabajo.php");

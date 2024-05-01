@@ -2,14 +2,16 @@
 include_once("partearriba.php");
 ?>
 
+
 <!-- Contenido -->
 
-
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <div class="dash-contenido">
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Remitidos: <?php echo $rol ?></span>
+            <span class="link-name">Remitidos: </span>
         </div>
     </div>
 
@@ -51,22 +53,23 @@ include_once("partearriba.php");
         </div>
 
         <h2>Personas remitidas</h2>
-        <table>
+        <table id="atencionE"> 
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Cedula</th>
                     <th>Remitido por</th>
-                    <th>fecha de remicion</th>
-                    <th>remitido de</th>
+                    <th>Fecha de Remisión</th>
+                    <th>Remitido de</th>
                     <th>Motivo</th>
+                    <th>Solicitud</th>
                     <th></th>
                     <th></th>
                     
 
                 </tr>
             </thead>
-            <tbody>
+            <tbody >
 
                 <?php
                 include_once("../php/6-remitir.php");
@@ -79,8 +82,8 @@ include_once("partearriba.php");
                     $consulta = $aten->consultarTodosRemitidossXCoordinacion();
 
                 }
-                echo $gerencia;
-                echo $coordi;
+             /*    echo $gerencia;
+                echo $coordi; */
                
                
                 $cantidadRegistros = count($consulta);
@@ -94,6 +97,7 @@ include_once("partearriba.php");
                             <td><?php echo $registros["fecha"] ?></td>
                             <td><?php echo $registros["gerencia_remitente"] ?></td>
                             <td><?php echo $registros["motivo"] ?></td>
+                            <td><?php echo $registros["solicitud"] ?></td>
                             <!-- <td style="color: red;">Cita sin dar</td> -->
                             <td><a href="--aceptar_infraestructura.php?id=<?php echo  $registros["id"]; ?>" class="remitir" id="aceptar">Aceptar reg</a></td>
                             <td><a href="--rechazar_remitidos.php?id=<?php echo  $registros["id"]; ?>" class="eliminar" id="rechazar">Rechazar reg</a></td>

@@ -7,7 +7,7 @@ include_once("partearriba.php");
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name"> <?php echo $rol ;?></span>
+            <span class="link-name"> <?php echo $rol; ?></span>
         </div>
     </div>
 
@@ -24,6 +24,7 @@ include_once("partearriba.php");
         $aten->setid($id);
         $consulta = $aten->consultarRemitidosInfraestructura();
         $cantidadRegistros = count($consulta);
+        $informe = $consulta["informe"];
 
 
         ?>
@@ -35,6 +36,12 @@ include_once("partearriba.php");
 
             <form action="" method="post">
                 <div class="form first">
+                    <?php if ($consulta["informe"]) { ?>
+                        <a href="documentos/informes/<?php echo $consulta["informe"] ?>" target="_blank">Ver informe medico</a>
+
+                    <?php } else {
+                        echo "<small style='color:red'>Esta solicitud no tiene informe medico cargado</small>";
+                    } ?>
                     <div class="details personal">
                         <span class="title">Detalles Personales</span>
                         <div class="fields">
@@ -65,6 +72,10 @@ include_once("partearriba.php");
                                 <input type="text" placeholder="Ingresa el nombre " required readonly name="gerencia_remitente" id="gerencia_remitente" value="<?php echo $consulta["gerencia_remitente"] ?>">
                             </div>
 
+                            <div class="input-field">
+                                <label>Solicitud:</label>
+                                <input type="text" placeholder="Ingresa el nombre " style="border-color:blue;" required readonly name="solicitud" id="solicitud" value="<?php echo $consulta["solicitud"] ?>">
+                            </div>
 
                             <div class="input-field">
                                 <label>Fecha</label>
@@ -79,36 +90,40 @@ include_once("partearriba.php");
 
 
 
-                                    <div class="input-field">
-                                        <label>Asignar al area de</label>
-                                        <select name="atencion" id="atencion" require>
-                                            <?php if ($gerencia == "2Atc" || $gerencia == "4Gtno" || $rol == "Superusuario") { ?>
-                                                <option value="1-oac">Atencion a traves de OAC</option>
-                                                <option value="2-ayudte">Entrega Ayuda Tecnica</option>
-                                                <option value="0-aten-coo">Atencion a traves de coordinacion estadal</option>
-                                            <?php } ?>
-                                            <?php if ($gerencia == "5Logi" || $rol == "Superusuario") { ?>
-                                                <option value="3-orypro">Cita laboratorio ortesis y protesis</option>
-                                                <!-- <option value="4-tomedi">Toma Medidas</option>
-                                            <option value="5-pruebar">Prueba artifcio</option> -->
-                                                <option value="6-repaart">Reparacion Artificio</option>
-                                                <option value="7-audiom">Audiometria</option>
-                                            <?php } ?>
 
-                                            <!--   <option value="8-calibr">Calibracion de Protesis Auditivas</option>
+                            <div class="input-field">
+                                <label>Asignar al area de</label>
+                                <select name="atencion" id="atencion" require>
+                                    <?php if ($gerencia == "2Atc" || $rol == "Superusuario") { ?>
+                                        <option value="1-oac">Atencion a traves de OAC</option>
+
+                                    <?php } ?>
+                                    <?php if ($gerencia == "4Gtno" || $rol == "Superusuario") { ?>
+
+                                        <option value="0-aten-coo">Atencion a traves de coordinacion estadal</option>
+                                    <?php } ?>
+                                    <?php if ($gerencia == "5Logi" || $rol == "Superusuario") { ?>
+                                        <option value="3-orypro">Cita laboratorio ortesis y protesis</option>
+                                        <!-- <option value="4-tomedi">Toma Medidas</option>
+                                            <option value="5-pruebar">Prueba artifcio</option> -->
+                                        <option value="6-repaart">Reparacion Artificio</option>
+                                        <option value="7-audiom">Audiometria</option>
+                                    <?php } ?>
+
+                                    <!--   <option value="8-calibr">Calibracion de Protesis Auditivas</option>
                                           estamos esperando tipos de protesis auditivas para agregar a la base
                                             <option value="9-soliproa">Solicitud de protesis auditivas</option> -->
-                                            <?php if ($gerencia == "3Gtnd" || $rol == "Superusuario") { ?>
-                                                <option value="10-partic">Participante de taller</option>
-                                                <option value="11-partic">Participante de encuentro</option>
-                                            <?php } ?>
+                                    <?php if ($gerencia == "3Gtnd" || $rol == "Superusuario") { ?>
+                                        <option value="10-partic">Participante de taller</option>
+                                        <option value="11-partic">Participante de encuentro</option>
+                                    <?php } ?>
 
 
 
 
 
-                                        </select>
-                                    </div>
+                                </select>
+                            </div>
 
 
                         </div>
@@ -116,7 +131,7 @@ include_once("partearriba.php");
 
 
                         <button class="nextBtn" name="registro" id="registro">
-                            <span class="btnText">Enviar</span>
+                            <span class="btnText">Aceptar caso</span>
                             <ion-icon name="send-outline"></ion-icon>
                         </button>
 
@@ -142,24 +157,28 @@ include_once("partearriba.php");
 
 
             $("#registro").click(function(e) {
+                e.preventDefault();
                 var valid = this.form.checkValidity();
                 if (valid) {
                     var cedulauser = <?php echo json_encode($cedulauser); ?>;
 
                     var status = "Aceptado";
+                    var is_remitido = true;
                     var cedula = $("#cedula").val();
+                    var solicitud = $('#solicitud').val();
+                    var informe = <?php echo json_encode($informe) ?>
 
 
                     Swal.fire({
-                        title: 'Esta seguro/a que desea enviar estos archivos?',
+                        title: '¿Esta seguro/a que desea registrar este caso?',
                         showDenyButton: true,
                         showCancelButton: true,
-                        confirmButtonText: 'Enviar',
-                        denyButtonText: `Don't save`,
+                        confirmButtonText: 'Guardar',
+                        denyButtonText: `No guardar`,
                     }).then((result) => {
                         /* Read more about isConfirmed, isDenied below */
                         if (result.isConfirmed) {
-                           
+
                             var cedula = $("#cedula").val();
                             var atencion = $("#atencion").val();
 
@@ -173,15 +192,36 @@ include_once("partearriba.php");
                                     cedulauser: cedulauser
 
 
+
                                 },
                                 success: function(data) {
+                                    console.log(data);
                                     Swal.fire({
                                         'icon': 'success',
                                         'title': 'Asignacion de atencion',
                                         'text': 'Se asigno asistencia correctamente',
                                         'confirmButton': 'btn btn-success'
                                     }).then(function() {
-                                        window.location = "04-ort-remitidos.php";
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "--cargar_aceptado_infraestructura.php",
+                                            data: {
+
+                                                status: status,
+                                                cedula: cedula,
+                                                atencion: atencion,
+                                                is_remitido: is_remitido,
+                                                solicitud: solicitud,
+                                                informe: informe
+
+
+                                            },
+                                            success: function(data) {
+                                                console.log(data);
+                                            }
+
+                                        })
+                                        window.location = "01-remitidos_a.php";
                                     })
                                 },
                                 error: function(data) {
@@ -193,7 +233,10 @@ include_once("partearriba.php");
                                 }
                             })
 
-                           
+                            e.preventDefault();
+
+
+
 
                         } else if (result.isDenied) {
                             Swal.fire('Changes are not saved', '', 'info')
@@ -202,23 +245,9 @@ include_once("partearriba.php");
 
 
 
-                    e.preventDefault();
-
-                    $.ajax({
-                        type: "POST",
-                        url: "--cargar_aceptado_infraestructura.php",
-                        data: {
-
-                            status: status,
-                            cedula: cedula
 
 
-                        },
-                        success: function(data) {
-                            console.log(data);
-                        }
 
-                    })
 
 
                 }

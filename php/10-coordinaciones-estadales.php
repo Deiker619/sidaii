@@ -466,4 +466,32 @@ class Coordinacion extends ManejadorBD
 			exit();
 		}
 	}
+
+
+//SIN IMPLEMENTAR
+	public function PDF_solicitudes($coordinacion){
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT coordinaciones_estadales.nombre_coordinacion,atenciones_coordinaciones.atencion_solicitada, count(atenciones_coordinaciones.cedula)as cantidades 
+			FROM `atenciones_coordinaciones`, usuario, coordinaciones_estadales WHERE `fecha_aten` is NULL and
+			atenciones_coordinaciones.atencion_solicitada is not null and
+			atenciones_coordinaciones.asignado = usuario.cedula AND
+			usuario.coordinacion = coordinaciones_estadales.id and
+            coordinaciones_estadales.id = :coordinacion
+            GROUP BY atenciones_coordinaciones.atencion_solicitada;");
+
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); 
+			// Asiganmos valores a los parametros
+			$stmt->bindParam(':coordinacion', $coordinacion);
+			// Ejecutamos
+			$stmt->execute();
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
 }

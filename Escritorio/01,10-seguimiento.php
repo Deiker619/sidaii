@@ -47,7 +47,7 @@ include_once("partearriba.php");
         $registro = $aten->consultarAtenciones();
 
         $cedula = $registro["cedula"];
-        json_encode($cedula);
+        json_encode($numero);
         ?>
 
         <div class="container dos">
@@ -161,6 +161,7 @@ include_once("partearriba.php");
             var valid = this.form.checkValidity();
             if (valid) {
                 var cedula = <?php echo $cedula; ?>;
+                var numero = <?php echo $numero; ?>;
                 var descripcion = $("#descripcion").val();
                 var fecha = $("#fecha").val();
 
@@ -173,7 +174,8 @@ include_once("partearriba.php");
                     data: {
                         cedula: cedula,
                         descripcion: descripcion,
-                        fecha: fecha
+                        fecha: fecha,
+                        numero: numero
 
 
                     },

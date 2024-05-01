@@ -16,6 +16,7 @@ class AtencionesEstadales extends ManejadorBD
 	private $por;
 	private $asignado;
 	private$coordinacion;
+	private $urgencia;
 
 
 
@@ -53,6 +54,16 @@ class AtencionesEstadales extends ManejadorBD
 	public function setcedula($cedula)
 	{
 		$this->cedula = $cedula;
+	}
+
+
+	public function geturgencia()
+	{
+		return $this->urgencia;
+	}
+	public function seturgencia($urgencia)
+	{
+		$this->urgencia = $urgencia;
 	}
 
 	public function getpor()
@@ -192,10 +203,10 @@ class AtencionesEstadales extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("UPDATE atenciones_coordinaciones SET statu = :statu WHERE cedula = :cedula");
+			$stmt = $this->cnn->prepare("UPDATE atenciones_coordinaciones SET statu = :statu WHERE numero_aten = :numero_aten");
 
 			// Asignamos valores a los parametros
-			$stmt->bindParam(':cedula', $this->cedula);
+			$stmt->bindParam(':numero_aten', $this->numero_aten);
 			$stmt->bindParam(':statu', $this->statu);
 
 
@@ -246,7 +257,7 @@ class AtencionesEstadales extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("SELECT  numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.estado,beneficiario.discapacidad, atenciones_coordinaciones.atencion_solicitada FROM atenciones_coordinaciones, beneficiario WHERE numero_aten = :numero_aten and beneficiario.cedula = atenciones_coordinaciones.cedula and atenciones_coordinaciones.fecha_aten IS NULL;");
+			$stmt = $this->cnn->prepare("SELECT  numero_aten,  beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.estado,beneficiario.discapacidad, atenciones_coordinaciones.atencion_solicitada, atenciones_coordinaciones.informe FROM atenciones_coordinaciones, beneficiario WHERE numero_aten = :numero_aten and beneficiario.cedula = atenciones_coordinaciones.cedula and atenciones_coordinaciones.fecha_aten IS NULL;");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Asiganmos valores a los parametros
@@ -275,8 +286,7 @@ public function consultarTodosAtenciones()
 		try {
 
 			/* ACTU */
-			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten,atenciones_coordinaciones.atencion_solicitada,usuario.nombre, atenciones_coordinaciones.numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion 
-
+			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten,atenciones_coordinaciones.urgencia,atenciones_coordinaciones.atencion_solicitada,usuario.nombre, atenciones_coordinaciones.numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion, atenciones_coordinaciones.informe
 			FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, tipoatencion, usuario, coordinaciones_estadales WHERE
 			
 			usuario.cedula = atenciones_coordinaciones.asignado and
@@ -313,7 +323,8 @@ public function consultarTodosAtenciones()
 		try {
 
 			/* ACTU */
-			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten,atenciones_coordinaciones.atencion_solicitada, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, tipoatencion, usuario, coordinaciones_estadales WHERE
+			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten, atenciones_coordinaciones.urgencia ,atenciones_coordinaciones.atencion_solicitada, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion
+			,atenciones_coordinaciones.informe FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, tipoatencion, usuario, coordinaciones_estadales WHERE
 			atenciones_coordinaciones.asignado = usuario.cedula and 
             usuario.coordinacion = coordinaciones_estadales.id and
 			beneficiario.cedula = atenciones_coordinaciones.cedula and 
@@ -345,8 +356,12 @@ public function consultarTodosAtenciones()
 
 		try {
 
-			$stmt = $this->cnn->prepare("SELECT atenciones_coordinaciones.atencion_recibida, max(`fecha_aten`) as fecha_aten  FROM `atenciones_coordinaciones`
-			WHERE atenciones_coordinaciones.cedula = :cedula and atenciones_coordinaciones.atencion_recibida = :atencion_recibida ");
+			$stmt = $this->cnn->prepare("SELECT atenciones_coordinaciones.atencion_recibida, max(atenciones_coordinaciones.fecha_aten) as fecha_aten, coordinaciones_estadales.nombre_coordinacion  FROM `atenciones_coordinaciones`, usuario, coordinaciones_estadales
+			WHERE
+			atenciones_coordinaciones.cedula = :cedula and 
+			atenciones_coordinaciones.atencion_recibida = :atencion_recibida AND
+			atenciones_coordinaciones.por = usuario.cedula and 
+			usuario.coordinacion = coordinaciones_estadales.id ");
 
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Asiganmos valores a los parametros
@@ -372,13 +387,26 @@ public function consultarTodosAtenciones()
 
 		try {
 
-			$stmt = $this->cnn->prepare("SELECT atenciones_coordinaciones.numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado,discapacid_e.nombre_e, atenciones_coordinaciones.atencion_recibida, atenciones_coordinaciones.atencion_brindada
-			 FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e WHERE
-
-			beneficiario.cedula = atenciones_coordinaciones.cedula and
-			beneficiario.discapacidad = discapacid_e.id_e and
-			beneficiario.estado = estados.id_estados and 
-			atenciones_coordinaciones.fecha_aten IS NOT NULL;");
+			$stmt = $this->cnn->prepare("SELECT atenciones_coordinaciones.numero_aten,
+			beneficiario.cedula,
+			beneficiario.nombre,
+			beneficiario.apellido,
+			estados.nombre_estado,
+			discapacid_e.nombre_e,
+			 CASE WHEN atenciones_coordinaciones.atencion_recibida IS NOT NULL THEN
+				(SELECT tipo_ayuda_tecnica.nombre_tipoayuda
+				 FROM tipo_ayuda_tecnica
+				 WHERE atenciones_coordinaciones.atencion_recibida = tipo_ayuda_tecnica.id)
+			END AS nombre_ayuda,
+		  
+			atenciones_coordinaciones.atencion_solicitada,
+			atenciones_coordinaciones.atencion_brindada,
+			atenciones_coordinaciones.informe
+			FROM atenciones_coordinaciones
+			INNER JOIN beneficiario ON beneficiario.cedula = atenciones_coordinaciones.cedula
+			INNER JOIN estados ON beneficiario.estado = estados.id_estados
+			INNER JOIN discapacid_e ON beneficiario.discapacidad = discapacid_e.id_e
+			WHERE atenciones_coordinaciones.fecha_aten IS NOT NULL;");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Ejecutamos
@@ -401,13 +429,30 @@ public function consultarTodosAtenciones()
 
 				try {
 
-					$stmt = $this->cnn->prepare("SELECT atenciones_coordinaciones.numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado,discapacid_e.nombre_e, atenciones_coordinaciones.atencion_recibida, atenciones_coordinaciones.atencion_brindada
-					FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, usuario WHERE
-				   atenciones_coordinaciones.por = usuario.cedula and usuario.coordinacion = :coordinacion and
-				   beneficiario.cedula = atenciones_coordinaciones.cedula and
-				   beneficiario.discapacidad = discapacid_e.id_e and
-				   beneficiario.estado = estados.id_estados and 
-				   atenciones_coordinaciones.fecha_aten IS NOT NULL;");
+					$stmt = $this->cnn->prepare("SELECT atenciones_coordinaciones.numero_aten,
+					beneficiario.cedula,
+					beneficiario.nombre,
+					beneficiario.apellido,
+					estados.nombre_estado,
+					discapacid_e.nombre_e,
+					 CASE WHEN atenciones_coordinaciones.atencion_recibida IS NOT NULL THEN
+						(SELECT tipo_ayuda_tecnica.nombre_tipoayuda
+						 FROM tipo_ayuda_tecnica
+						 WHERE atenciones_coordinaciones.atencion_recibida = tipo_ayuda_tecnica.id)
+					END AS nombre_ayuda,
+				  
+					atenciones_coordinaciones.atencion_solicitada,
+					atenciones_coordinaciones.atencion_brindada,
+					atenciones_coordinaciones.informe
+					FROM atenciones_coordinaciones
+					INNER JOIN beneficiario ON beneficiario.cedula = atenciones_coordinaciones.cedula
+					INNER JOIN estados ON beneficiario.estado = estados.id_estados
+					INNER JOIN usuario ON atenciones_coordinaciones.por = usuario.cedula
+					INNER JOIN discapacid_e ON beneficiario.discapacidad = discapacid_e.id_e
+					WHERE atenciones_coordinaciones.fecha_aten IS NOT NULL
+					AND
+					usuario.coordinacion = :coordinacion;
+		 ");
 					// Especificamos el fetch mode antes de llamar a fetch()
 					$stmt->bindParam(':coordinacion', $this->coordinacion);
 					$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
@@ -621,12 +666,14 @@ public function consultarTodosAtenciones()
 
 		try {
 
-			$stmt = $this->cnn->prepare("UPDATE atenciones_coordinaciones SET atencion_solicitada = :atencion_solicitada
-                                             WHERE numero_aten = :numero_aten");
+			$stmt = $this->cnn->prepare("UPDATE atenciones_coordinaciones SET atencion_solicitada = :atencion_solicitada,
+											urgencia = :urgencia
+											WHERE numero_aten = :numero_aten");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':atencion_solicitada', $this->atencion_solicitada);
 			$stmt->bindParam(':numero_aten', $this->numero_aten);
+			$stmt->bindParam(':urgencia', $this->urgencia);
 
 			// Ejecutamos
 			$stmt->execute();
@@ -643,7 +690,6 @@ public function consultarTodosAtenciones()
 			exit();
 		}
 	}
-
 
 
 
@@ -1498,6 +1544,61 @@ public function consultarTodosAtenciones()
 
 			// Devuelve los resultados obtenidos
 			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	public function subirArchivo($archivo)
+	{
+
+		try {
+
+			$stmt = $this->cnn->prepare("UPDATE atenciones_coordinaciones SET archivo = :archivo
+                                             WHERE numero_aten = :numero_aten");
+
+			// Asignamos valores a los parametros
+			$stmt->bindParam(':archivo', $archivo);
+			$stmt->bindParam(':numero_aten', $this->numero_aten);
+
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se Afecto: " . $stmt->rowCount() . " Registro<br>"; */
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			/* return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	 */
+
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function subirInforme($archivo)
+	{
+
+		try {
+
+			$stmt = $this->cnn->prepare("UPDATE atenciones_coordinaciones SET informe = :informe
+                                             WHERE numero_aten = :numero_aten");
+
+			// Asignamos valores a los parametros
+			$stmt->bindParam(':informe', $archivo);
+			$stmt->bindParam(':numero_aten', $this->numero_aten);
+
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se Afecto: " . $stmt->rowCount() . " Registro<br>"; */
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			/* return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	 */
+
 		} catch (PDOException $error) {
 			// Mostramos un mensaje genérico de error.
 			echo "Error: ejecutando consulta SQL." . $error->getMessage();

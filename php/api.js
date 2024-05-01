@@ -2,7 +2,7 @@ function conapdis() {
   var inputValue = "";
 
   const { value: atencion } = Swal.fire({
-    title: "Introduce la cedula para buscar en Conpadis",
+    title: "Introduce la cedula para buscar en Conpdis",
     input: "text",
     inputLabel: "Introduce la cedula a buscar y registrar",
     inputValue: inputValue,
@@ -53,7 +53,7 @@ async function conexionApi(a) {
   })
     .then(async function (response) {
       // Comprobamos si la respuesta de la API es exitosa (código 200 OK)
-      if (!response.ok) {
+      if (!response.ok) { 
         throw new Error("Error en la solicitud HTTP: " + response.status);
       }
 

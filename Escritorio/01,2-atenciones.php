@@ -8,7 +8,7 @@ include_once("partearriba.php");
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Atencion al Ciudadano: <?php echo $rol ?></span>
+            <span class="link-name">Atención al Ciudadano: <?php echo $rol ?></span>
         </div>
     </div>
     <!-- Boton de reporte -->
@@ -155,19 +155,26 @@ include_once("partearriba.php");
         include_once("../php/01-discapacitados.php");
         $dis = new Discapacitados(1);
 
-        $consulta = $dis->consultarTodosDiscapacitados();
-        $sincarnet = $dis->consultageneralsincarnet();
+        $consulta = $dis->consultarTodosDiscapacitados() ?? 0;
+        $sincarnet = $dis->consultageneralsincarnet() ?? 0;
 
         include_once("../php/01-atenciones.php");
         $aten = new Atenciones(1);
 
-        $atenciones =  $aten->contarTodasAtencionesa();
+        $atenciones =  $aten->contarTodasAtencionesa() ?? 0;
 
         function CalculoPorcentaje($a, $b)
         {
 
+
             $porcentaje = (count($a) / count($b)) * 100;
-            return $porcentaje;
+
+            if ($porcentaje) {
+                return $porcentaje;
+            } else {
+                $porcentaje = 0;
+                return $porcentaje;
+            }
         }
         ?>
         <div class="box box1">
@@ -239,66 +246,16 @@ include_once("partearriba.php");
 
 
 
-    <!-- reportes 1 -->
-    <!--   <div class="reportes-totales">
-        <div class="reporte">
-            <h3>Personas atendidas</h3>
-            <div class="detalles">
-                <details>
-                    <h1>2000</h1>
-                    <h6 class="exito">+2%</h6>
-                </details>
-                <p class="detalles-texto">Se han atendido 2000 personas en total, sigamos asi.</p>
-            </div>
-        </div> 
-    </div> -->
-    <!-- reportes 1 -->
-    <!--     <div class="reporte">
-            <h3>Personas atendidas</h3>
-            <div class="detalles">
-                <details>
-                    <h1>2000</h1>
-                    <h6 class="exito">+2%</h6>
-                </details>
-                <p class="detalles-texto">Se han atendido 2000 personas en total, sigamos asi.</p>
-            </div>
-        </div> -->
-    <!-- reportes 1 -->
-    <!-- <div class="reporte">
-            <h3>Personas atendidas</h3>
-            <div class="detalles">
-                <details>
-                    <h1>2000</h1>
-                    <h6 class="exito">+2%</h6>
-                </details>
-                <p class="detalles-texto">Se han atendido <i>2000</i> personas en total, sigamos asi.</p>
-            </div>
-        </div> -->
-    <!-- reportes 1 -->
-    <!-- <div class="reporte">
-            <h3>Personas atendidas</h3>
-            <div class="detalles">
-                <details>
-                    <h1>2000</h1>
-                    <h6 class="exito">+2%</h6>
-                </details>
-                <p class="detalles-texto">Se han atendido 2000 personas en total, sigamos asi.</p>
-            </div>
-        </div>
-    </div>
-
-     Final de reportes -->
-
 
     <!-- Graficas dia, mes, año -->
     <canvas id="chart2"></canvas>
     <canvas id="bar-chart" class="chart2" style="height: 200px;"></canvas> <!-- Graficas general -->
     <div class="graficas">
         <div class="tarjetas-graficas">
-            <canvas id="graficaspordiscapacidadg" ></canvas>
+            <canvas id="graficaspordiscapacidadg"></canvas>
         </div>
         <div class="tarjetas-graficas">
-            <canvas id="grafica_sexo" ></canvas>
+            <canvas id="grafica_sexo"></canvas>
         </div>
 
     </div>
@@ -311,35 +268,43 @@ include_once("partearriba.php");
             <form class="upload">
                 <div class="upload_body">
                     <i class='bx bx-file'></i>
-                    <p id="texto_upload">Arrastra archivo para cargar</p>
+                    <p id="texto_upload"><label for="upload-btn">Arrastra archivo para cargar o presiona click en las letras</label></p>
 
 
                 </div>
 
                 <div class="btn-conteiner">
-                    <a class="btn-content" href="Archivos.php">
-                        <span class="btn-title">Ver archivos</span>
-                        <span class="icon-arrow">
-                            <svg width="66px" height="43px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                <g id="arrow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <path id="arrow-icon-one" d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z" fill="#FFFFFF"></path>
-                                    <path id="arrow-icon-two" d="M20.1543933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z" fill="#FFFFFF"></path>
-                                    <path id="arrow-icon-three" d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z" fill="#FFFFFF"></path>
-                                </g>
-                            </svg>
-                        </span>
-                    </a>
+                    <div class="btns-upload">
+                        <a class="btn-content" href="Archivos.php">
+                            <span class="btn-title">Ver archivos</span>
+                            <span class="icon-arrow">
+                                <svg width="66px" height="43px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <g id="arrow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <path id="arrow-icon-one" d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z" fill="#FFFFFF"></path>
+                                        <path id="arrow-icon-two" d="M20.1543933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z" fill="#FFFFFF"></path>
+                                        <path id="arrow-icon-three" d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z" fill="#FFFFFF"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                        </a>
+                        <div class="upload" style="display: none;">
+                            <button type="button" class="btn-warning">
+                                <i class="fa fa-upload"></i> Buscar documento
+                                <input type="file" id="upload-btn">
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
 
                 <!-- <footer class="upload_footer">
-                                    <label for="upload_input" class="upload_buttom" >
-                                        <p><span>or</span> choose file</p>
-                                        <input type="file" id="upload_input" />
-                                    </label>
+                            <label for="upload_input" class="upload_buttom" >
+                                <p><span>or</span> choose file</p>
+                                <input type="file" id="upload_input" />
+                            </label>
 
-                                
-                                </footer> -->
+                        
+                        </footer> -->
                 <!--  <input type="submit" class="btnText"> -->
             </form>
         </div>
@@ -392,7 +357,7 @@ include_once("partearriba.php");
 
         if ($consulta) {
             foreach ($consulta as $registros) {
-                
+
                 if ($registros["statu"] == "Atendido") {
                     $atendido = $registros["cantidades"];
                 }
@@ -408,11 +373,9 @@ include_once("partearriba.php");
                 if ($registros["statu"] == "En espera") {
                     $espera = $registros["cantidades"];
                 }
-
-                
             }
         }
-    
+
         ?>
 
 
@@ -433,7 +396,7 @@ include_once("partearriba.php");
             <div class="detalles">
                 <details>
                     <h1 style="color: #0e9cd4;"><?php echo $espera; ?></h1>
-                <!--     <h6 class="exito">+2%</h6> -->
+                    <!--     <h6 class="exito">+2%</h6> -->
                 </details>
                 <p class="detalles-texto">Hay <?php echo $espera; ?> personas en espera, sigamos asi.</p>
             </div>
@@ -455,7 +418,7 @@ include_once("partearriba.php");
             <div class="detalles">
                 <details>
                     <h1 style="color: red;"><?php echo $sinatender; ?></h1>
-                   <!--  <h6 class="exito">+2%</h6> -->
+                    <!--  <h6 class="exito">+2%</h6> -->
                 </details>
                 <p class="detalles-texto">Faltan <?php echo $sinatender; ?> personas en total para atender, sigamos asi.</p>
             </div>
@@ -497,7 +460,7 @@ include_once("partearriba.php");
 
                     <div class="text_boton"><a class="enlace_especial" href="01,12-solicitudes.php"> Solicitudes</a></div>
                 </button>
-                <?php if ($rol == "Superusuario" || "Administrador") { ?>
+                <?php if ($rol == "Superusuario" || $rol == "Administrador") { ?>
 
                     <button class="Btn guide usuario">
 
@@ -530,7 +493,7 @@ include_once("partearriba.php");
             <input placeholder="Buscar" id="buscador" type="search" class="inputt">
         </div>
         <br> -->
-        
+
 
         <table id="atencion">
             <thead>
@@ -541,11 +504,13 @@ include_once("partearriba.php");
                     <th>Apellido</th>
                     <th>Estado</th>
                     <th>Discapacidad</th>
-                   <!--  <th>Area de Registro</th> -->
                     <th>Solicitud</th>
+                    <th>Informe</th>
                     <th>Status</th>
                     <th></th>
                     <th></th>
+                    <th></th>
+
                     <?php if ($rol == "Administrador" || $rol == "Superusuario") { ?>
                         <th></th>
                     <?php } ?>
@@ -554,7 +519,7 @@ include_once("partearriba.php");
                 </tr>
             </thead>
             <tbody id="atenciones">
-                
+
 
                 <?php
                 include_once("../php/01-atenciones.php");
@@ -563,27 +528,39 @@ include_once("partearriba.php");
                 $cantidadRegistros = count($consulta);
                 if ($consulta) {
                     foreach ($consulta as $registros) {
-                ?>      
+                ?>
                         <tr>
-                             
-                            <td><a class="cedula" id="verBeneficiario" href="modificarAtencionOAC.php?numero_aten=<?php echo $registros['numero_aten']; ?>"><?php echo $registros["numero_aten"] ?></a></td>
-                            <td><a class="cedula" id="verBeneficiario" href="__verBeneficiario.php?cedula=<?php echo $registros['cedula']; ?>"><?php echo $registros['cedula']; ?> </a></td>
+
+                            <td class="sorting_1 <?php echo $registros['urgencia'] ?>"><a class="cedula" id="verBeneficiario" <?php if ($rol == "Administrador" || $rol == "Superusuario") { ?> href="modificarAtencionOAC.php?numero_aten=<?php echo $registros['numero_aten']; ?>" <?php } ?>><?php echo $registros["numero_aten"] ?></a></td>
+                            <td> <a class="cedula" name="enlace" id="verBeneficiario" href="__verBeneficiario.php?cedula=<?php echo $registros['cedula']; ?>"><?php echo $registros['cedula']; ?> </a></td>
                             <td><?php echo $registros["nombre"] ?></td>
                             <td><?php echo $registros["apellido"] ?></td>
                             <td><?php echo $registros["nombre_estado"] ?></td>
                             <td><?php echo $registros["nombre_e"] ?></td>
-                           <!--  <td><?php echo $registros["nombre_atencion"] ?></td> -->
+
                             <?php if ($registros["atencion_solicitada"]) { ?>
 
                                 <td>
-                                    <a class="cargar-solicitud" href="reportes/reporteCargarSolicitudes.php?numero_aten=<?php echo $registros["numero_aten"]; ?>"><?php echo $registros["atencion_solicitada"] ?></a>
-
-                                </td>
 
 
-                            <?php } else { ?>
+                                    <a class="cargar-solicitud" style="padding: 0;" href="reportes/reporteCargarSolicitudes.php?numero_aten=<?php echo $registros["numero_aten"]; ?>"> <?php echo $registros["atencion_solicitada"] ?></a>
+
+
+
+
+
+                                <?php } else { ?>
                                 <td><a class="cargar" id="cargar" onclick='cargar(<?php echo $registros["numero_aten"] ?>)'>Solicitud</a></td>
                             <?php  } ?>
+                            <?php if (!$registros["informe"]) { ?>
+                                <td>
+                                    <i class="bx bxs-file-pdf" onclick="subirArchivo(<?php echo $registros['numero_aten']; ?>)"></i>
+                                    <i class="fa-solid fa-eye eye-icon" onclick="openInput('<?php echo $registros['numero_aten']; ?>')"></i>
+                                </td>
+                            <?php } else { ?>
+                                <td> <a class="informe" id="verBeneficiario" href="documentos/informes/<?php echo $registros['informe']; ?>"> <?php echo "<i class='bx bx-down-arrow-alt'></i>" ?> </a></td>
+
+                            <?php } ?>
 
                             <?php if ($registros["statu"] == "Sin atencion") { ?><!-- OJO: Mejorar -->
 
@@ -594,10 +571,19 @@ include_once("partearriba.php");
 
                             <td><a href="01,3-asignarAtencion.php?numero_aten=<?php echo $registros["numero_aten"] ?>">Dar atencion</a></td>
                             <td><a href="01,10-seguimiento.php?numero_aten=<?php echo $registros["numero_aten"] ?>" class="remitir"> Seguimiento</a></td>
-                            <?php if ($rol == "Superusuario" || "Administrador") { ?>
+                            <?php if ($rol == "Superusuario" || $rol == "Administrador") { ?>
                                 <td><a onclick='eliminar(<?php echo $registros["numero_aten"]; ?>)' class="eliminar">Eliminar Reg</a></td>
                             <?php } ?>
+                            <td>
+                                <div class="enviar">
+                                    <?php if ($registros["atencion_solicitada"]) { ?>
+                                        <div class="enviar_text"> <i class='bx bx-mail-send' onclick="enviarEmail('<?php echo $registros['numero_aten'] ?>','<?php echo $registros['email'] ?? null ?>')" style="color:#3ab556; cursor:pointer"></i></div>
+                                    <?php } else { ?>
 
+                                        <div class="enviar_text"> <i class='bx bx-no-entry' style="color:crimson; cursor:not-allowed "></i></div>
+                                    <?php } ?>
+                                </div>
+                            </td>
 
                         </tr>
                 <?php
@@ -606,7 +592,23 @@ include_once("partearriba.php");
                 ?>
 
             </tbody>
+
+
         </table>
+        <footer class="table-footer">
+            <div class="urgencia-contenedor">
+                <div class="urgencia-color urgente"></div>
+                <label for="">Urgente</label>
+            </div>
+            <div class="urgencia-contenedor">
+                <div class="urgencia-color media"></div>
+                <label for="">Media</label>
+            </div>
+            <div class="urgencia-contenedor">
+                <div class="urgencia-color baja"></div>
+                <label for="">Baja</label>
+            </div>
+        </footer>
     </div>
 
 
@@ -614,6 +616,148 @@ include_once("partearriba.php");
     <script src="../package/dist/sweetalert2.all.min.js"></script>
 
     <script>
+        function enviarEmail(a, b) {
+            let correo = b
+            let email = true;
+            let numero_aten = a;
+
+            /* No tiene correo */
+            if (correo) {
+                Swal.fire({
+                    title: "¿Desea enviar el comprobante al correo registrado?",
+                    html: "<b>Correo: </b>" + b + "",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, enviar!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "reportes/enviarEmail.php",
+                            data: {
+                                numero_aten: numero_aten,
+                                correo: correo,
+
+                            },
+                            success: function(data) {
+                                console.log(data)
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+
+
+
+                                    },
+                                    willClose: () => {
+
+                                        window.location.href = "01,2-atenciones.php#atenciones"
+                                    }
+                                });
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Enviado exitosamente',
+                                });
+
+
+                            },
+                            error: function(data) {
+                                console.log(data)
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Oops...',
+                                    'text': data
+                                })
+                            }
+                        })
+                    }
+                });
+            } else {
+                const {
+                    value: atencion
+                } = Swal.fire({
+                    title: 'Agrega el correo personalizado',
+                    input: 'email',
+                    inputLabel: 'Introduce el correo para enviar comprobante',
+                    inputValue: correo,
+                    footer: "Esta persona no tiene correo registrado",
+                    showCancelButton: true,
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'Debes escribir algo'
+                        }
+
+                        if (value) {
+                            correo = value;
+
+                            $.ajax({
+                                type: "POST",
+                                url: "reportes/enviarEmail.php",
+                                data: {
+                                    numero_aten: numero_aten,
+                                    correo: correo,
+
+                                },
+                                success: function(data) {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+
+
+
+                                        },
+                                        willClose: () => {
+
+                                            window.location.href = "01,2-atenciones.php#atenciones"
+                                        }
+                                    });
+
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Enviado exitosamente',
+                                    });
+
+                                    if (!data) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: "No se pudo registrar la solicitud, verifique datos"
+                                        }).then(function() {
+                                            window.location = "01,2-atenciones.php";
+                                        })
+                                    }
+                                },
+                                error: function(data) {
+                                    Swal.fire({
+                                        'icon': 'error',
+                                        'title': 'Oops...',
+                                        'text': data
+                                    })
+                                }
+                            })
+
+                        }
+                    }
+
+                })
+            }
+            /* Si tiene correo */
+
+        }
+
         function eliminar(p1) {
 
 
@@ -674,64 +818,79 @@ include_once("partearriba.php");
                 showCancelButton: true,
                 confirmButtonText: 'Cargar',
                 confirmButtonColor: '#1AA83E',
-                html: '<label>Elige una solicitud</label><br>' +
-                    '<select name="atencion_recibida" id="atencion_recibida" require>' +
-                    '<option value="1-silla.r">Silla de ruedas estandar</option>' +
-                    '<option value="1.1-S.E16">Silla de rueda ergonomica N16</option>' +
-                    '<option value="1.2-S.E14">Silla de rueda ergonomica N14</option>' +
-                    '<option value="1.3-S.E18">Silla de rueda ergonomica N18</option>' +
-                    '<option value="1.4-S.R.A.">Silla de rueda reclinable adulto</option>' +
-                    '<option value="1.5-SRPE">Silla de rueda pediatrica hergonomica</option>' +
-                    '<option value="1.6-SRB">Silla de rueda bariátricas</option>' +
-                    '<option value="21-sllm">Silla a motor</option>' +
-                    '<option value="27-Sllc">Silla de rueda clinica</option>' +
-                    '<option value="30-sllsr">Silla sanitaria sin ruedas</option>' +
-                    '<option value="31-sllsr">Silla sanitaria con ruedas</option>' +
-                    '<option value="2-MuletasS">Muletas talla S</option>' +
-                    '<option value="2-MuletasM">Muletas talla M</option>' +
-                    '<option value="2-MuletasL">Muletas talla L</option>' +
-                    '<option value="-MuletasCa">Muletas canadienses adultos</option>' +
-                    '<option value="12-Mucp">Muletas canadienses pediatricas</option>' +
-                    '<option value="20-Rglp">Regleta con punzon</option>' +
-                    '<option value="6-andadera">Andadera adulto fija</option>' +
-                    '<option value="22-Apm">Andadera pediatrica multifuncional</option>' +
-                    '<option value="23-Apr">Andadera pediatrica con ruedas</option>' +
-                    '<option value="25-Anpp">Andadera pediatrica posterior</option>' +
-                    '<option value="26-Anpf">Andadera pediatrica fija</option>' +
-                    '<option value="7-CamaCli">Cama Clinica</option>' +
-                    '<option value="8-Col-Anti">Colchon Antiescara</option>' +
-                    ' <option value="1.6-SRB">Silla de ruedas bariátricas</option>' +
-                    '<option value="1.7-COP">Coche ortopédico pediátrico</option>' +
-                    '<option value="28-chorm">Coche ortopedico mediano</option>' +
-                    '<option value="29-chorg">Coche ortopedico grande</option>' +
-                    '<option value="9-felula">Ferula</option>' +
-                    '<option value="8-Grab">Grabadora</option>' +
-                    '<option value="11-panales">Pañales</option>' +
-                    '<option value="12-Pro-aud">Protesis auditivas</option>' +
-                    '<option value="13-Pro-cad">Protesis de Cadera</option>' +
-                    '<option value="14-Pro-rod">Protesis de rodilla</option>' +
-                    '<option value="15-Pro-den">Protesis Dental</option>' +
-                    '<option value="11-Coj">Cojin antiescaras</option>' +
-                    '<option value="3-baston">Baston de apoyo</option>' +
-                    '<option value="4-baston.p">Baston de 4 puntas</option>' +
-                    '<option value="21-Btrpd">Baston de rastreo pediatricos</option>' +
-                    '<option value="13-Brpl34">Baston de rastreo plegable numero 34</option>' +
-                    '<option value="14-Brpl36">Baston de rastreo plegable numero 36</option>' +
-                    '<option value="15-Brpl38">Baston de rastreo plegable numero 38</option>' +
-                    '<option value="15-Brpl44">Baston de rastreo plegable numero 44</option>' +
-                    '<option value="16-Brpl46">Baston de rastreo plegable numero 46</option>' +
-                    '<option value="-bastonRas">Baston de rastreo plegable numero 48</option>' +
-                    '<option value="18-Brpl50">Baston de rastreo plegable numero 50</option>' +
-                    '<option value="19-Brpl52">Baston de rastreo plegable numero 52</option>' +
-                    '<option value="5-ap.audio">Aparato de audiometria</option>' +
-                    '<option value="otros">otros</option>' +
+                html: `
+                    <div class="search-reports" style="display: flex; gap: 1px; justify-content: center">
+                    <div class="reports-contenedor"><label>Elige una solicitud</label><br>
+                        <select name="atencion_recibida" id="atencion_recibida" require>' +
+                        '<option value="1-silla.r">Silla de ruedas estandar</option>' +
+                        '<option value="1.1-S.E16">Silla de rueda ergonomica N16</option>' +
+                        '<option value="1.2-S.E14">Silla de rueda ergonomica N14</option>' +
+                        '<option value="1.3-S.E18">Silla de rueda ergonomica N18</option>' +
+                        '<option value="1.4-S.R.A.">Silla de rueda reclinable adulto</option>' +
+                        '<option value="1.5-SRPE">Silla de rueda pediatrica hergonomica</option>' +
+                        '<option value="1.6-SRB">Silla de rueda bariátricas</option>' +
+                        '<option value="21-sllm">Silla a motor</option>' +
+                        '<option value="27-Sllc">Silla de rueda clinica</option>' +
+                        '<option value="30-sllsr">Silla sanitaria sin ruedas</option>' +
+                        '<option value="31-sllsr">Silla sanitaria con ruedas</option>' +
+                        '<option value="2-MuletasS">Muletas talla S</option>' +
+                        '<option value="2-MuletasM">Muletas talla M</option>' +
+                        '<option value="2-MuletasL">Muletas talla L</option>' +
+                        '<option value="-MuletasCa">Muletas canadienses adultos</option>' +
+                        '<option value="12-Mucp">Muletas canadienses pediatricas</option>' +
+                        '<option value="20-Rglp">Regleta con punzon</option>' +
+                        '<option value="6-andadera">Andadera adulto fija</option>' +
+                        '<option value="22-Apm">Andadera pediatrica multifuncional</option>' +
+                        '<option value="23-Apr">Andadera pediatrica con ruedas</option>' +
+                        '<option value="25-Anpp">Andadera pediatrica posterior</option>' +
+                        '<option value="26-Anpf">Andadera pediatrica fija</option>' +
+                        '<option value="7-CamaCli">Cama Clinica</option>' +
+                        '<option value="8-Col-Anti">Colchon Antiescara</option>' +
+                        ' <option value="1.6-SRB">Silla de ruedas bariátricas</option>' +
+                        '<option value="1.7-COP">Coche ortopédico pediátrico</option>' +
+                        '<option value="28-chorm">Coche ortopedico mediano</option>' +
+                        '<option value="29-chorg">Coche ortopedico grande</option>' +
+                        '<option value="9-felula">Ferula</option>' +
+                        '<option value="8-Grab">Grabadora</option>' +
+                        '<option value="11-panales">Pañales</option>' +
+                        '<option value="12-Pro-aud">Protesis auditivas</option>' +
+                        '<option value="13-Pro-cad">Protesis de Cadera</option>' +
+                        '<option value="14-Pro-rod">Protesis de rodilla</option>' +
+                        '<option value="15-Pro-den">Protesis Dental</option>' +
+                        '<option value="11-Coj">Cojin antiescaras</option>' +
+                        '<option value="3-baston">Baston de apoyo</option>' +
+                        '<option value="4-baston.p">Baston de 4 puntas</option>' +
+                        '<option value="21-Btrpd">Baston de rastreo pediatricos</option>' +
+                        '<option value="13-Brpl34">Baston de rastreo plegable numero 34</option>' +
+                        '<option value="14-Brpl36">Baston de rastreo plegable numero 36</option>' +
+                        '<option value="15-Brpl38">Baston de rastreo plegable numero 38</option>' +
+                        '<option value="15-Brpl44">Baston de rastreo plegable numero 44</option>' +
+                        '<option value="16-Brpl46">Baston de rastreo plegable numero 46</option>' +
+                        '<option value="-bastonRas">Baston de rastreo plegable numero 48</option>' +
+                        '<option value="18-Brpl50">Baston de rastreo plegable numero 50</option>' +
+                        '<option value="19-Brpl52">Baston de rastreo plegable numero 52</option>' +
+                        '<option value="5-ap.audio">Aparato de audiometria</option>' +
+                        '<option value="otros">otros</option>' +
 
-                    '</select>',
+                    '</select><br>
+                    </div>
+                    <div class="reports-contenedor">
+                    <label>Urgencia</label><br>
+                    <select name="urgencia" id="urgencia" require>' +
+                    '<option value="urgente">Urgente</option>' +
+                    '<option value="media">Media</option>' +
+                    '<option value="baja">Baja</option>' +
+                   
+                    </select>
+                    </div></div>`,
                 denyButtonText: `No cargar`,
             }).then((result) => {
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
                     atencion_recibida = $('#atencion_recibida option:selected').text();
+                    urgencia = $('#urgencia option:selected').val();
+
+                    console.log(urgencia)
                     if (atencion_recibida == "otros") {
 
                         var inputValue = "";
@@ -757,7 +916,8 @@ include_once("partearriba.php");
                                         url: "../php/procesamientodecarga_solicitud.php",
                                         data: {
                                             id: id,
-                                            atencion_recibida: atencion_recibida
+                                            atencion_recibida: atencion_recibida,
+                                            urgencia: urgencia
 
                                         },
                                         success: function(data) {
@@ -798,7 +958,8 @@ include_once("partearriba.php");
                             url: "../php/procesamientodecarga_solicitud.php",
                             data: {
                                 id: id,
-                                atencion_recibida: atencion_recibida
+                                atencion_recibida: atencion_recibida,
+                                urgencia: urgencia
 
                             },
                             success: function(data) {
@@ -806,6 +967,8 @@ include_once("partearriba.php");
                                     icon: 'success',
                                     title: data
                                 }).then(function() {
+
+
                                     window.location = "01,2-atenciones.php";
                                 })
 
@@ -843,7 +1006,54 @@ include_once("partearriba.php");
     <!-- <script src="graficas_ayudas_tec/graficas.js"></script> -->
     <script src="archivos.js"></script>
 
+    <script>
+        function subirArchivo(a) {
+            var numero_aten = a;
+            Swal.fire({
+                title: 'Cargar informe medico',
+                input: 'file',
+                inputAttributes: {
+                    accept: ['application/pdf'], // Limita a archivos PDF, puedes ajustar según tus necesidades
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Subir',
+                cancelButtonText: 'Cancelar',
+            }).then((file) => {
+                if (file.isConfirmed && file.value) {
+                    // Crear un objeto FormData y agregar el archivo y el número
+                    const formData = new FormData();
+                    formData.append('archivo', file.value);
+                    formData.append('numero_aten', numero_aten);
 
+                    // Hacer la solicitud AJAX utilizando jQuery
+                    $.ajax({
+                        url: 'documentos/informes/cargardocumento.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            console.log(data);
+                            try {
+                                const dataJ = JSON.parse(data);
+                                Swal.fire(dataJ.mensaje, '', 'success').then(function() {
+                                    window.location = "01,2-atenciones.php";
+                                });
+
+                            } catch (error) {
+                                console.error('Error al analizar la respuesta del servidor como JSON:', error);
+                                Swal.fire('Error en el formato de la respuesta del servidor', '', 'error');
+                            }
+                        },
+                        error: function(error) {
+                            console.error('Error al subir el archivo:', error);
+                            Swal.fire('Error al cargar el archivo', '', 'error');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 
     <!-- END Tablas -->
 

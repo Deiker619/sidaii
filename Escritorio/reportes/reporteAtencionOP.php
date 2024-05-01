@@ -48,11 +48,12 @@ ob_start()
         }
 
         .tabla-atencion h2 {
-            font-size: 18px;
+            font-size: 30px;
             text-align: left;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #707070;
+            color: black;
             margin-left: 20px;
+            text-align: center;
         }
 
         .tabla-atencion table {
@@ -60,7 +61,7 @@ ob_start()
             width: 100%;
             font-family: Arial, Helvetica, sans-serif;
             border: 1px solid black;
-            text-align: center;
+            text-align: left;
             color: black;
             font-size: 1rem;
             border-collapse: collapse;
@@ -70,16 +71,26 @@ ob_start()
         }
 
         .tabla-atencion table thead tr {
-            color: #232c33;
+            color: black;
             border: 1px solid black;
+            text-align: left;
+            padding-left: 5px;
 
+
+        }
+
+        .tabla-atencion table thead th {
+            padding: 5px;
+            text-align: center;
         }
 
         .tabla-atencion table tbody tr,
         td {
             color: black;
             border: 1px solid black;
-            padding: 5px
+            padding: 5px;
+            text-align: left;
+
         }
 
         .tabla-atencion textarea {
@@ -90,8 +101,14 @@ ob_start()
             height: auto;
             font-size: 16px;
             margin-bottom: 50px;
+            text-align: justify;
 
 
+        }
+
+        table .cabecero, th {
+            background-color: #828384;
+            padding-left: 5px;
         }
 
         .pulgar {
@@ -105,6 +122,11 @@ ob_start()
         .footer {
             border: 0px;
             margin-top: 50%;
+
+        }
+
+        .firma{
+            background-color: none;
         }
     </style>
 </head>
@@ -138,85 +160,83 @@ ob_start()
 
 
             <div class="container">
-              <!--  --><img src="<?php echo $imagenBase64?>" width="100%">
+                <!--  --><img src="<?php echo $imagenBase64 ?>" width="100%">
 
                 <div class="tabla-atencion" style="width: 100%; margin-top:5%">
 
+                    <h2>Certificado de entrega</h2>
 
-                    <table style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Cedula</th>
+                    <table style="width:80%; margin-left:75px;">
 
-                            </tr>
+                        <tr class="cabecero">
+                            <th style="margin: 0; text-align:left">Datos del beneficiario</th>
+                            <th></th>
+                            <th></th>
 
-                        </thead>
+                        </tr>
+
+
+
+
+
+
+
+                        <td><b>Nombre: </b> <?php echo $consulta["nombre"] ?> </td>
+                        <td><b>Apellido: </b> <?php echo $consulta["apellido"] ?> </td>
+                        <td><b>Cedula: </b> <?php echo number_format($consulta["cedula"], 0, '', '.')?> </td>
+
+
+
+
+
+                    </table>
+
+
+
+                    <table style="width:80%;margin-left:75px;">
                         <tbody>
 
 
                             <tr>
-                                <td><?php echo $consulta["nombre"] ?> </td>
-                                <td><?php echo $consulta["apellido"] ?> </td>
-                                <td><?php echo $consulta["cedula"] ?> </td>
+                                <td><b>ID de atención: </b><?php echo $consulta["numero_aten"] ?> </td>
+                                <td> <b>Discapacidad:</b> <?php echo $consulta["nombre_e"] ?> </td>
+                                <td> <b>Solicitúd:</b> <?php echo $consulta["atencion_solicitada"] ?> </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <table style="width:80%;margin-left:75px; ">
+                        
+                        <tbody>
+
+
+                            <tr>
+                                <td><b> Ayuda medica humana entregada: </b><?php echo $consulta["nombre_tipoayuda"] ?> </td>
+                                <td><b> Fecha de atención: </b><?php echo $consulta["fecha_aten"] ?> </td>
+
                             </tr>
 
                         </tbody>
                     </table>
 
-                    <table style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>ID de atención</th>
-                                <th>Fecha de atención</th>
-                                <th>Solicitud</th>
 
-                            </tr>
+                    <textarea style="margin-top: 80px; width:80%;  margin-left:75px;" name="" id="" cols="50" rows="50" placeholder="observaciones">Comprobante: Se certifica que <?php echo $consulta["nombre"] . " " . $consulta["apellido"] ?>, identificado/a con Cédula <?php echo  number_format($consulta["cedula"], 0, '', '.') ?>, ha recibido una asistencia de tecnica el <?php echo $consulta["fecha_aten"] ?>. El ID de atención N° <?php echo $consulta["numero_aten"] ?>, y corresponde a un/a <?php echo $consulta["nombre_tipoayuda"] ?>. Agradecemos su confianza en nuestros servicios.</textarea>
 
-                        </thead>
-                        <tbody>
-
-
-                            <tr>
-                                <td><?php echo $consulta["numero_aten"] ?> </td>
-                                <td><?php echo $consulta["fecha_aten"] ?> </td>
-                                <td><?php echo $consulta["atencion_solicitada"] ?> </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                    <table style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Artificio entregado</th>
-                               
-
-                            </tr>
-
-                        </thead>
-                        <tbody>
-
-
-                            <tr>
-                                <td><?php echo $consulta["nombre_tipoayuda"] ?> </td>
-                                
-                            </tr>
-
-                        </tbody>
-                    </table>
-                   
-
-                    <textarea name="" id="" cols="50" rows="50" placeholder="observaciones">Comprobante: Se certifica que <?php echo $consulta["nombre"] ." ". $consulta["apellido"]?>, identificado/a con Cédula <?php echo $consulta["cedula"] ?>, ha recibido una asistencia de tecnica el <?php echo $consulta["fecha_aten"] ?>. El ID de la asistencia es <?php echo $consulta["numero_aten"]?>, y corresponde a un/a <?php echo $consulta["nombre_tipoayuda"]?>. Agradecemos su confianza en nuestros servicios.</textarea>
-
-                    <table class="footer" style="border: 0px">
-                        <thead>
-                            <th> <label for="">Firma de beneficiario </label><br>
+                    <table class="footer" style="border: 0px; margin-top:100px">
+                        <thead >
+                            <th style="background-color: white;"> <label for="">
+                                    <div style="width:300px; margin-left:85px; border-top:1px solid black"></div>Recibido por:
+                                </label><br>
                                 <!-- <div class="pulgar">
 
                                     </div> -->
                             </th>
-                            <th> <label for="">Firma del tecnico </label><br>
+                            <th style="background-color: white;">
+                                
+                            </th>
+                            <th style="background-color: white;"> <label for="">
+                                    <div style="width:300px; margin-left:85px;  border-top:1px solid black"></div>Entregado por:
+                                </label><br>
                                 <!-- <div class="pulgar">
 
                                     </div> -->
@@ -267,7 +287,7 @@ ob_start()
 
     $dompdf->loadHtml($html);
     /* $dompdf->setPaper('letter'); */
-    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->setPaper('A4', 'landscape');
 
     $dompdf->render();
 

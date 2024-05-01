@@ -27,7 +27,17 @@ include_once("partearriba.php");
 
                 ?>
 
-              
+
+
+            </div>
+            <div class="registrador" style="display: hidde;"><?php
+
+
+                                                                ?>
+
+                <div class="gerencia" id="gerencia">
+                    <?php echo $gerencia ?>
+                </div>
 
             </div>
 
@@ -38,11 +48,12 @@ include_once("partearriba.php");
 
 
             $numero = $_REQUEST["numero_aten"];
-           
+
             $aten = new Atenciones(1);
 
             $aten->setnumero_aten($numero);
             $registro = $aten->consultarAtenciones();
+            $informe = $registro["informe"];
             ?>
 
             <header>
@@ -54,6 +65,12 @@ include_once("partearriba.php");
             ?>
                 <form action="" method="post">
                     <div class="form first">
+                        <?php if ($registro["informe"]) { ?>
+                            <a href="documentos/informes/<?php echo $registro["informe"] ?>" target="_blank">Ver informe medico</a>
+
+                        <?php } else {
+                            echo "<small style='color:red'>Esta solicitud no tiene informe medico cargado</small>";
+                        } ?>
                         <div class="details personal">
                             <span class="title">Detalles Personales</span>
                             <div class="fields">
@@ -91,8 +108,8 @@ include_once("partearriba.php");
                                 </div>
 
                                 <div class="input-field">
-                                    <label>Atencion Solicitada</label>
-                                    <input type="text" required readonly name="atencion_solicitada" id="atencion_solicitada" value="<?php echo $registro["atencion_solicitada"] ?>">
+                                    <label>Solicitud</label>
+                                    <input style="border-color: #15CD02;" type="text" required readonly name="atencion_solicitada" id="atencion_solicitada" value="<?php echo $registro["atencion_solicitada"] ?>">
                                 </div>
 
                                 <div class="input-field">
@@ -126,37 +143,35 @@ include_once("partearriba.php");
                             <div class="details personal" id="entrega_tecnica">
                                 <span class="title">Entrega</span>
                                 <div class="fields">
+                                    <div class="checkboxes">
+                                        <label class="cl-checkbox">
+                                            <input type="checkbox" name="" value="si" id="entrega_familiar">
+                                            <span>Entrega a familiar directo</span>
+                                        </label>
+
+                                    </div>
+
+
+                                    <div class="input-field" id="nombreF">
+                                        <label>Nombre del familiar</label>
+                                        <input type="text"   name="nombre_familiar" id="nombre_familiar">
+                                    </div>
+                                    <div class="input-field" id="apellidoF">
+                                        <label>Apellido del familiar</label>
+                                        <input type="text"   name="apellido_familiar" id="apellido_familiar">
+                                    </div>
+                                    <div class="input-field" id="cedulaF">
+                                        <label>Cedula del familiar</label>
+                                        <input type="text"   name="cedula_familiar" id="cedula_familiar">
+                                    </div>
+
+
 
 
                                     <div class="input-field">
                                         <label>Tipo de ayuda tecnica a ortorgar:</label>
                                         <select name="atencion_recibida" id="atencion_recibida" require>
                                             <option></option>
-                                            <!--  <option value="1-silla.r">Silla de ruedas estandar</option>
-                                            <option value="1.1-S.E16">Silla de rueda ergonomica N16</option>
-                                            <option value="1.2-S.E14">Silla de rueda ergonomica N14</option>
-                                            <option value="1.1-S.E18">Silla de rueda ergonomica N18</option>
-                                            <option value="1.4-S.R.A.">Silla de rueda reclinable adulto</option>
-                                            <option value="1.5-SRPE">Silla de rueda pediatrica hergonomica</option>
-                                            <option value="2-MuletasS">Muletas talla S</option>
-                                            <option value="2-MuletasM">Muletas talla M</option>
-                                            <option value="2-MuletasL">Muletas talla L</option>
-                                            <option value="-MuletasCa">Muletas canadienses</option>
-                                            <option value="3-baston">Baston de apoyo</option>
-                                            <option value="4-baston.p">Baston de 4 puntas</option>
-
-                                            <option value="6-andadera">Andadera</option>
-                                            <option value="7-CamaCli">Cama Clinica</option>
-                                            <option value="1.6-SRB">Silla de ruedas bariátricas</option>
-                                            <option value="1.7-COP">Coche ortopédico pediátrico</option>
-                                            <option value="8-Col-Anti">Colchon Antiescara</option>
-                                            <option value="9-felula">Felula</option>
-
-                                            <option value="11-panales">Pañales</option>
-                                            <option value="12-Pro-aud">Protesis auditivas</option>
-                                            <option value="13-Pro-cad">Protesis de Cadera</option>
-                                            <option value="14-Pro-rod">Protesis de rodilla</option>
-                                            <option value="15-Pro-den">Protesis Dental</option> -->
                                             <option value="1-silla.r">Silla de ruedas estandar</option>
                                             <option value="1.1-S.E16">Silla de rueda ergonomica N16</option>
                                             <option value="1.2-S.E14">Silla de rueda ergonomica N14</option>
@@ -180,7 +195,7 @@ include_once("partearriba.php");
                                             <option value="25-Anpp">Andadera pediatrica posterior</option>
                                             <option value="26-Anpf">Andadera pediatrica fija</option>
                                             <option value="7-CamaCli">Cama Clinica</option>
-                                            <option value="8-Col-Anti">Colchon Antiescara</option>
+                                            <option value="10-Cola">Colchon Antiescara</option>
                                             <option value="1.6-SRB">Silla de ruedas bariátricas</option>
                                             <option value="1.7-COP">Coche ortopédico pediátrico</option>
                                             <option value="28-chorm">Coche ortopedico mediano</option>
@@ -207,6 +222,7 @@ include_once("partearriba.php");
 
                                         </select>
                                     </div>
+
 
 
                                 </div>
@@ -374,6 +390,13 @@ include_once("partearriba.php");
                     var numero_aten = $("#numero_aten").val();
                     var fecha_aten = $("#fecha_aten").val();
 
+                    /* FAMILIAR */
+                    var nombre_familiar = $("#nombre_familiar").val() ?? null;
+                    var apellido_familiar = $("#apellido_familiar").val() ?? null;
+                    var cedula_familiar = $("#cedula_familiar").val() ?? null;
+
+                    
+
                     /*       console.log(fecha_aten);
                           console.log(cedula);
                           console.log(gerencia); */
@@ -441,36 +464,8 @@ include_once("partearriba.php");
 
                         },
                         success: function(data) {
-
-
-
                             console.log(data);
-
-                            if (data.mensaje == "entregado") {
-                                Swal.fire({
-                                    'icon': 'success',
-                                    'title': 'Asignacion de atencion',
-                                    'text': "Ayuda tecnica asignada",
-                                    'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.fechaU + "<br>" +
-                                        '<b>Fecha Actual:</b> ' + data.fechaA + "<br>" +
-                                        '<b>Dias de diferencia: </b>' + data.difer,
-                                }).then(function() {
-                                    window.location = "01,2-atenciones.php";
-                                })
-                            }
-                            if (data.mensaje == "Noentregado") {
-                                Swal.fire({
-                                    'icon': 'error',
-                                    'title': 'Asignacion de atencion',
-                                    'text': "Ayuda tecnica fallida",
-                                    'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.fechaU + "<br>" +
-                                        '<b>Fecha Actual:</b> ' + data.fechaA + "<br>" +
-                                        '<b>Dias de diferencia: </b>' + data.difer,
-                                    'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
-                                })
-                            }
-
-                            if (data.trim() == "primera") {
+                            if (data.oac.mensaje == "primera" && data.op.mensaje == "primera") {
                                 Swal.fire({
                                     'icon': 'success',
                                     'title': 'Asignacion de atencion por primera vez',
@@ -491,7 +486,7 @@ include_once("partearriba.php");
                                         },
                                         willClose: () => {
 
-                                            window.location.href = "01,2-atenciones.php"
+                                            window.location.href = "01,2-atenciones.php#atenciones"
                                         }
                                     });
 
@@ -504,6 +499,86 @@ include_once("partearriba.php");
                                 })
 
                             }
+
+                            if (data.i == "OP") {
+
+
+                                if (data.op.mensaje == "entregado") {
+                                    console.log(data);
+
+                                    Swal.fire({
+                                        'icon': 'success',
+                                        'title': 'Asignacion de atencion',
+                                        'text': "Ayuda tecnica asignada",
+                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.op.fechaU + "<br>" +
+                                            '<b>Fecha Actual:</b> ' + data.op.fechaA + "<br>" +
+                                            '<b>Dias de diferencia: </b>' + data.op.difer +
+                                            '<b>Entregado en: </b>' + data.op.coordinacion
+                                    }).then(function() {
+                                        window.location = "01,2-atenciones.php#atenciones";
+                                    })
+                                }
+                                if (data.op.mensaje == "Noentregado") {
+
+                                    Swal.fire({
+                                        'icon': 'error',
+                                        'title': 'Asignación de atención',
+                                        'text': "Ayuda tecnica fallida",
+                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.op.fechaU + "<br>" +
+                                            '<b>Fecha Actual:</b> ' + data.op.fechaA + "<br>" +
+                                            '<b>Dias de diferencia: </b>' + data.op.difer + "<br>" +
+                                            '<b>Entregado en: </b>' + data.op.coordinacion,
+                                        'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
+                                    })
+                                }
+
+
+                            }
+
+
+                            if (data.i == "OAC") {
+
+
+                                if (data.oac.mensaje == "entregado") {
+
+                                    console.log(data);
+
+                                    Swal.fire({
+                                        'icon': 'success',
+                                        'title': 'Asignacion de atencion',
+                                        'text': "Ayuda tecnica asignada",
+                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
+                                            '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
+                                            '<b>Dias de diferencia: </b>' + data.oac.difer,
+                                        'footer': "Ya pasaron los 6 meses de la ultima entrega de este tipo"
+                                    }).then(function() {
+                                        window.location = "01,2-atenciones.php#atenciones";
+                                    })
+                                }
+                                if (data.oac.mensaje == "Noentregado") {
+
+                                    Swal.fire({
+                                        'icon': 'error',
+                                        'title': 'Asignación de atención',
+                                        'text': "Ayuda tecnica fallida",
+                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
+                                            '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
+                                            '<b>Dias de diferencia: </b>' + data.oac.difer,
+                                        'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
+                                    })
+                                }
+
+
+                            }
+
+
+
+
+
+
+
+
+                            /* OTRAS OPCIONES */
                             if (data == "Remitido") {
                                 Swal.fire({
                                     'icon': 'success',
@@ -524,6 +599,8 @@ include_once("partearriba.php");
                             }
                         },
                         error: function(data) {
+
+                            console.log(data.responseText)
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Oops...',

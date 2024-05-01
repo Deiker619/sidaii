@@ -149,7 +149,7 @@ class Discapacitados extends ManejadorBD
 	{
 		$this->sexo = $sexo;
 	}
-	
+
 
 	/*  public function getdireccion()
 		{
@@ -282,6 +282,113 @@ class Discapacitados extends ManejadorBD
 			// Devuelve los resultados obtenidos
 			return $exito; // si es verdadero se insertó correctamente el registro	
 
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function insertarCopiaCedula($archivo, $cedula)
+	{
+		try {
+
+			$stmt = $this->cnn->prepare("INSERT INTO  copiascedula (cedula, archivo) 
+											VALUES (:cedula, :archivo)");
+
+			// Asignamos valores a los parametros
+			$stmt->bindParam(':cedula', $cedula);
+			$stmt->bindParam(':archivo', $archivo);
+
+			/* $stmt->bindParam(':direccion', $this->direccion);
+				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
+				$stmt->bindParam(':estado', $this->estado); */
+
+			// Ejecutamos
+			$exito = $stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $exito; // si es verdadero se insertó correctamente el registro	
+
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function insertarPartidaNacimiento($archivo, $cedula)
+	{
+		try {
+
+			$stmt = $this->cnn->prepare("INSERT INTO  partida_nacimiento (cedula, archivo) 
+											VALUES (:cedula, :archivo)");
+
+			// Asignamos valores a los parametros
+			$stmt->bindParam(':cedula', $cedula);
+			$stmt->bindParam(':archivo', $archivo);
+
+			/* $stmt->bindParam(':direccion', $this->direccion);
+				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
+				$stmt->bindParam(':estado', $this->estado); */
+
+			// Ejecutamos
+			$exito = $stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $exito; // si es verdadero se insertó correctamente el registro	
+
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	public function ConsultarCopiaCedula($cedula)
+	{
+		try {
+
+			$stmt = $this->cnn->prepare(" SELECT *  FROM copiascedula WHERE cedula = :cedula");
+
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Asiganmos valores a los parametros
+			$stmt->bindParam(':cedula', $cedula);
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se devolvieron: " . $stmt->rowCount() . " Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetch();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function ConsultarPartidaNacimiento($cedula)
+	{
+		try {
+
+			$stmt = $this->cnn->prepare(" SELECT *  FROM partida_nacimiento WHERE cedula = :cedula");
+
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Asiganmos valores a los parametros
+			$stmt->bindParam(':cedula', $cedula);
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se devolvieron: " . $stmt->rowCount() . " Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetch();
 		} catch (PDOException $error) {
 			// Mostramos un mensaje genérico de error.
 			echo "Error: ejecutando consulta SQL." . $error->getMessage();
@@ -637,7 +744,7 @@ class Discapacitados extends ManejadorBD
 
 			// Ejecutamos
 			$exito = $stmt->execute();
-			echo $this->getnombre()." ".$this->getapellido()." Se ha modificado correctamente";
+			echo $this->getnombre() . " " . $this->getapellido() . " Se ha modificado correctamente";
 
 			// Devuelve los resultados obtenidos
 			return $exito; // si es verdadero se modificó correctamente el registro
@@ -673,7 +780,7 @@ class Discapacitados extends ManejadorBD
 		}
 	}
 
-	
+
 
 
 	/* CODIGO DE PRUEBA */
@@ -778,6 +885,194 @@ class Discapacitados extends ManejadorBD
 			exit();
 		}
 	}
+	public function historico()
+	{
+		try {
 
-	
+			$stmt = $this->cnn->prepare("SELECT 
+			atenciones.numero_aten, 
+			tipo_ayuda_tecnica.nombre_tipoayuda, 
+			atenciones.archivo, 
+			atenciones.fecha_aten as fecha_atencion,
+			NULL as año_solicitud,
+			NULL as fecha_solicitud,
+			NULL as atencion_solicitada
+			
+		FROM 
+			
+			atenciones 
+			JOIN tipo_ayuda_tecnica ON atenciones.atencion_recibida = tipo_ayuda_tecnica.id 
+		WHERE 
+			atenciones.cedula = :cedula AND 
+			atenciones.fecha_aten IS NOT NULL 
+		UNION ALL
+		SELECT 
+			atenciones.numero_aten, 
+			NULL as nombre_tipoayuda, 
+			NULL as archivo, 
+			null as fecha_atencion,
+			YEAR(atenciones.fecha_creada) as año_solicitud, 
+			atenciones.fecha_creada as fecha_solicitud,
+			atenciones.atencion_solicitada
+		FROM 
+			atenciones
+			
+		WHERE
+			atenciones.cedula = :cedula AND
+			atenciones.fecha_aten IS NULL ");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Asiganmos valores a los parametros
+			$stmt->bindParam(':cedula', $this->cedula);
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* 			echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function historicoOP()
+	{
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT 
+			atenciones_coordinaciones.numero_aten, 
+			tipo_ayuda_tecnica.nombre_tipoayuda, 
+			atenciones_coordinaciones.archivo, 
+			atenciones_coordinaciones.fecha_aten as fecha_atencion,
+			NULL as año_solicitud,
+			NULL as fecha_solicitud,
+			NULL as atencion_solicitada,
+			coordinaciones_estadales.nombre_coordinacion
+		FROM 
+			usuario,coordinaciones_estadales,
+			atenciones_coordinaciones 
+			JOIN tipo_ayuda_tecnica ON atenciones_coordinaciones.atencion_recibida = tipo_ayuda_tecnica.id 
+		WHERE 
+			atenciones_coordinaciones.cedula = :cedula AND 
+			atenciones_coordinaciones.fecha_aten IS NOT NULL AND
+			usuario.cedula = atenciones_coordinaciones.por AND
+			usuario.coordinacion = coordinaciones_estadales.id
+		UNION ALL
+		SELECT 
+			atenciones_coordinaciones.numero_aten, 
+			NULL as nombre_tipoayuda, 
+			NULL as archivo, 
+			null as fecha_atencion,
+			YEAR(atenciones_coordinaciones.fecha_creada) as año_solicitud, 
+			atenciones_coordinaciones.fecha_creada as fecha_solicitud,
+			atenciones_coordinaciones.atencion_solicitada,
+			coordinaciones_estadales.nombre_coordinacion
+		FROM 
+			atenciones_coordinaciones, 
+			usuario, 
+			coordinaciones_estadales 
+		WHERE
+			atenciones_coordinaciones.cedula = :cedula AND
+			atenciones_coordinaciones.fecha_aten IS NULL AND
+			usuario.cedula = atenciones_coordinaciones.asignado AND
+			usuario.coordinacion = coordinaciones_estadales.id;");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Asiganmos valores a los parametros
+			$stmt->bindParam(':cedula', $this->cedula);
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* 			echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	public function SolicitudesHistoricoOP()
+	{
+
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT atenciones_coordinaciones.numero_aten, YEAR(atenciones_coordinaciones.fecha_creada) as año, atenciones_coordinaciones.fecha_creada, atenciones_coordinaciones.atencion_solicitada, 
+			coordinaciones_estadales.nombre_coordinacion
+			FROM atenciones_coordinaciones, usuario, coordinaciones_estadales WHERE
+			atenciones_coordinaciones.cedula = :cedula and
+			fecha_aten is null AND
+			usuario.cedula = atenciones_coordinaciones.asignado AND
+			usuario.coordinacion = coordinaciones_estadales.id");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Asiganmos valores a los parametros
+			$stmt->bindParam(':cedula', $this->cedula);
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* 			echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	public function EliminarFotoCedula($id)
+	{
+		try {
+
+			$stmt = $this->cnn->prepare("DELETE FROM copiascedula WHERE id = :id");
+			// Especificamos el fetch mode antes de llamar a fetch()
+
+			// Asiganmos valores a los parametros
+			$stmt->bindParam(':id', $id);
+			// Ejecutamos
+			$exito = $stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $exito;
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function EliminarPartidaNacimiento($id)
+	{
+		try {
+
+			$stmt = $this->cnn->prepare("DELETE FROM partida_nacimiento WHERE id = :id");
+			// Especificamos el fetch mode antes de llamar a fetch()
+
+			// Asiganmos valores a los parametros
+			$stmt->bindParam(':id', $id);
+			// Ejecutamos
+			$exito = $stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $exito;
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
 }

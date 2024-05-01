@@ -117,6 +117,8 @@ include_once("partearriba.php");
 
         </div>
     <?php } ?>
+
+
     <div class="reporte">
 
     </div>
@@ -460,6 +462,52 @@ include_once("partearriba.php");
 
     </div>
 
+    <div class="boxes" style="margin-top: 12px; justify-content: space-around; ">
+        <div class="cardinfo">
+            <?php
+                include_once("../php/02-jornadas.php");
+                $aten = new Jornadas(1);
+                $aten->setid("2Atc");
+                $aten->getid();
+                $consulta = $aten->consultarTodosJornadasPorGerencia();
+                $cantidadRegistros = count($consulta);
+            ?>
+            <div class="cardinfo-details">
+                <p class="cardinfo-title">Jornadas totales</p>
+                <h1 class="cardinfo-body"><?php echo $cantidadRegistros ?></h1>
+            </div>
+            <button class="cardinfo-button">More info</button>
+        </div>
+        <div class="cardinfo">
+        <?php
+                    include_once("../php/01-atenciones.php");
+                    $aten = new Atenciones(1);
+                    $consulta = $aten->consultadeSolicitudesEntregadas();
+                    $cantidadRegistros = count($consulta); 
+                    ?>
+            <div class="cardinfo-details">
+                <p class="cardinfo-title">Ayudas tecnicas en total entregadas</p>
+                <h1 class="cardinfo-body"><?php echo $cantidadRegistros ?></h1>
+            </div>
+            <button class="cardinfo-button">More info</button>
+        </div>
+        <div class="cardinfo">
+            <div class="cardinfo-details">
+                <p class="cardinfo-title">Encuentros totales</p>
+                <h1 class="cardinfo-body"><?php echo $cantidadRegistros ?></h1>
+            </div>
+            <button class="cardinfo-button">More info</button>
+        </div>
+        <div class="cardinfo">
+            <div class="cardinfo-details">
+                <p class="cardinfo-title">Beneficiarios atendidos totales</p>
+                <h1 class="cardinfo-body"><?php echo $cantidadRegistros ?></h1>
+            </div>
+            <button class="cardinfo-button">More info</button>
+        </div>
+
+    </div>
+
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-bar-chart-alt-2'></i>
@@ -510,7 +558,7 @@ include_once("partearriba.php");
         <div class="tabla-atencion">
 
 
-            <h2 style="color:green">Entregados</h2>
+            <h2 style="color:green">Artificios entregados</h2>
             <table id="atencion">
                 <thead>
                     <tr>
@@ -540,7 +588,7 @@ include_once("partearriba.php");
                             </tr>
                     <?php
                         }
-                    }else{
+                    } else {
                         echo "Ocurrió un error para mostrar datos";
                     }
                     ?>
@@ -548,8 +596,108 @@ include_once("partearriba.php");
                 </tbody>
             </table>
         </div>
-        
+
     </div>
+
+    <div class="overview">
+        <div class="titulo">
+            <i class='bx bxs-bar-chart-alt-2'></i>
+            <span class="link-name">Jornadas <b>OAC</b></span>
+        </div>
+    </div>
+
+    <div class="tabla-atencion">
+
+
+        <h2>Jornadas en total realizadas</h2>
+        <table id="atencion">
+            <thead>
+                <tr>
+
+                    <th>Gerencia</th>
+                    <th>Cantidad de Jornadas realizadas</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <?php
+                include_once("../php/02-jornadas.php");
+                $aten = new Jornadas(1);
+                $aten->setid("2Atc");
+                $aten->getid();
+                $consulta = $aten->consultarTodosJornadasPorGerencia();
+                $cantidadRegistros = count($consulta);
+
+                if ($consulta) {
+                    foreach ($consulta as $registros) {
+                ?>
+                        <tr>
+
+                            <td><?php echo $registros["Nombre"]; ?></td>
+                            <td><?php echo $registros["cantidad_jornadas"]; ?></td>
+
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="tabla-atencion">
+        <!-- <div class="personas-conatencion"><a href="01,5-atencionRecibida.php">Personas con atenciones recibidas</a></div> -->
+        <h2>JORNADAS </h2>
+        <table id="atencion">
+            <thead>
+                <tr>
+                    <th>Estado</th>
+                    <th>Municipio</th>
+                    <th>Parroquia</th>
+                    <th>Numero de Personas a atender</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <?php
+                include_once("../php/02-jornadas.php");
+                $aten = new Jornadas(1);
+                $consulta = $aten->consultarTodosJornadas();
+                $cantidadRegistros = count($consulta);
+                if ($consulta) {
+
+                    foreach ($consulta as $registros) {
+                        if ($registros["gerencia"] == "2Atc") {
+                ?>
+                            <tr>
+
+                                <td><?php echo $registros["nombre_estado"] ?></td>
+                                <td><?php echo $registros["nombre"] ?></td>
+                                <td><?php echo $registros["nombre_parroquia"] ?></td>
+                                <td><?php echo $registros["numero_personas"] ?></td>
+                                <td><a href="02-AsignarJornada.php?id=<?php echo $registros["id"] ?>">Ver jornada</a></td>
+                                <?php if ($rol == "Superusuario") { ?>
+                                    <td><a onClick="eliminar(<?php echo $registros["id"] ?>)" class="eliminar">Eliminar Reg</a></td>
+                                <?php } else {
+                                    echo "<td></td>";
+                                } ?>
+                            </tr>
+                <?php
+                        }
+                    }
+                }
+                ?>
+
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
 
 </div>
 <?php

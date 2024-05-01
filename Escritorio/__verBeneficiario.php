@@ -21,6 +21,8 @@ include_once("partearriba.php");
 
     $aten->setcedula($cedula);
     $consulta = $aten->consultarDiscapacitados();
+    $copiaCedula = $aten->ConsultarCopiaCedula($cedula);
+    $partida = $aten->ConsultarPartidaNacimiento($cedula)??null;
     $cantidadRegistros = count($consulta);
 
     if ($consulta) { ?>
@@ -29,6 +31,11 @@ include_once("partearriba.php");
 
 
             <div class="container">
+                <header>
+
+                </header>
+
+
                 <?php if ($rol == "Superusuario") { ?>
                     <div class="botones-beneficiario-sup">
                         <button class="delete-button" onclick="eliminar(<?php echo $cedula; ?>)">
@@ -45,6 +52,131 @@ include_once("partearriba.php");
                     </div>
 
                 <?php } ?>
+                <?php if ($consulta["edad"] > 9) { ?>
+                    <div class="header-beneficiario">
+                        <div class="profile_beneficiario dos">
+                            <div class="foto-beneficiario">
+                                <?php if ($copiaCedula) { ?>
+                                    <img src="documentos/cedula_beneficiarios/<?php echo $copiaCedula["archivo"]; ?>" alt="" srcset="" alt="foto dl beneficiario">
+
+                                <?php } else { ?>
+                                    <img src="profile.png" alt="" srcset="" alt="foto dl beneficiario">
+
+                                <?php } ?>
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+
+                        <hr>
+
+                        <div class="profile_beneficiario dos">
+                            <form action="documentos/cedula_beneficiarios/cargarFoto.php" method="post" enctype="multipart/form-data">
+                                <?php if (!$copiaCedula) { ?>
+                                    <input type="file" name="foto_perfil" accept="image/*" required>
+                                    <input type="text" name="cedula_beneficiario" style="display: none;" value="<?php echo $consulta["cedula"] ?>">
+                                    <button type="submit">Subir foto</button>
+                                <?php } ?>
+
+
+
+
+                            </form>
+                            <?php if ($copiaCedula) { ?>
+                                <button class="buttons" type="button" onclick="eliminarCopiaCedula('<?php echo $copiaCedula['archivo'] ?>', '<?php echo $cedula ?>', '<?php echo $copiaCedula['id'] ?>')">
+                                    <span class="buttons__text" style="transform: translateX(9px);">Eliminar foto</span>
+                                    <span class="buttons__icon">
+                                        <svg class="svg" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
+                                            <title></title>
+                                            <path d="M112,112l20,320c.95,18.49,14.4,32,32,32H348c17.67,0,30.87-13.51,32-32l20-320" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>
+                                            <line style="stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" x1="80" x2="432" y1="112" y2="112"></line>
+                                            <path d="M192,112V72h0a23.93,23.93,0,0,1,24-24h80a23.93,23.93,0,0,1,24,24h0v40" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>
+                                            <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="256" x2="256" y1="176" y2="400"></line>
+                                            <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="184" x2="192" y1="176" y2="400"></line>
+                                            <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="328" x2="320" y1="176" y2="400"></line>
+                                        </svg>
+                                    </span>
+                                </button>
+                            <?php  } ?>
+
+                        </div>
+
+
+                    </div>
+                <?php } ?>
+
+
+                <?php if ($consulta["edad"] < 9) { ?>
+                    <?php if (!$partida) { ?>
+                        <span style="color: red;"> Cargue la partida de nacimiento al menor</span>
+                    <?php }  ?>
+                    <div class="header-beneficiario">
+                        
+                        <div class="profile_beneficiario dos">
+                            <div class="foto-beneficiario">
+                                <?php if ($partida) { ?>
+                                    <img src="pdf.png" alt="" srcset="" alt="foto dl beneficiario">
+                                    <a href="documentos/partidas_nacimiento/<?php echo $partida["archivo"]; ?>">Ver partida</a>
+
+                                <?php } else { ?>
+                                    <img src="subir.png" alt="" srcset="" alt="foto dl beneficiario">
+
+                                <?php } ?>
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+
+                        <hr>
+
+                        <div class="profile_beneficiario dos">
+                            
+                            <form action="documentos/partidas_nacimiento/cargarPartida.php" method="post" enctype="multipart/form-data">
+                                <?php if (!$partida) { ?>
+                                    <input type="file" name="foto_perfil" accept="image/*,application/pdf" required>
+                                    <input type="text" name="cedula_beneficiario" style="display: none;" value="<?php echo $consulta["cedula"] ?>">
+                                    <button type="submit">Subir documento</button>
+                                <?php } ?>
+
+
+
+
+                            </form>
+                            <?php if ($partida) { ?>
+                                <button class="buttons" type="button" onclick="eliminarPartida('<?php echo $partida['archivo'] ?>', '<?php echo $cedula ?>', '<?php echo $partida['id'] ?>')">
+                                    <span class="buttons__text" style="transform: translateX(9px);">Eliminar documento</span>
+                                    <span class="buttons__icon">
+                                        <svg class="svg" height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
+                                            <title></title>
+                                            <path d="M112,112l20,320c.95,18.49,14.4,32,32,32H348c17.67,0,30.87-13.51,32-32l20-320" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>
+                                            <line style="stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px" x1="80" x2="432" y1="112" y2="112"></line>
+                                            <path d="M192,112V72h0a23.93,23.93,0,0,1,24-24h80a23.93,23.93,0,0,1,24,24h0v40" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path>
+                                            <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="256" x2="256" y1="176" y2="400"></line>
+                                            <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="184" x2="192" y1="176" y2="400"></line>
+                                            <line style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px" x1="328" x2="320" y1="176" y2="400"></line>
+                                        </svg>
+                                    </span>
+                                </button>
+                            <?php  } ?>
+
+                        </div>
+
+
+                    </div>
+                <?php } ?>
+
+
+
 
                 <form action="" method="">
                     <div class="form first">
@@ -67,8 +199,6 @@ include_once("partearriba.php");
                                     <label>Apellido</label>
                                     <input type="text" placeholder="Ingresa el nombre " required readonly name="apellido" id="apellido" value="<?php echo $consulta["apellido"] ?>">
                                 </div>
-
-                              
 
                                 <div class="input-field">
                                     <label> Correo</label>
@@ -118,9 +248,9 @@ include_once("partearriba.php");
                                     <label>Parroquia</label>
                                     <input type="text" placeholder="Ingresa el nombre " required readonly name="estado" id="estado" value="<?php echo $consulta["nombre_parroquia"] ?>">
                                 </div>
-                                <?php 
+                                <?php
                                 $consulta = $aten->consultarDirecciones() ?? "Sin dirección" ?>
-                                 <div class="input-field">
+                                <div class="input-field">
                                     <label>Dirección</label>
                                     <input type="text" placeholder="Ingresa el nombre " required readonly name="estado" id="estado" value="<?php echo $consulta["descripcion"] ?>">
                                 </div>
@@ -245,6 +375,222 @@ include_once("partearriba.php");
     ?>
 
 
+    <div class="titulo">
+        <i class='bx bxs-dashboard'> </i>
+        <span class="link-name">Historico: </span>
+
+    </div>
+
+
+    <button class="accordion2">OAC </button>
+    <div class="panel2">
+        <div class="container-time">
+            <div id="timeline">
+                <?php
+                $aten->setcedula($cedula);
+                $consulta = $aten->historico();
+
+                foreach ($consulta as $key => $registros) {
+                    $key = $key + 1; ?>
+                    <?php if ($key % 2 != 0) { ?>
+                        <div class="timeline-block">
+                            <?php if ($registros['nombre_tipoayuda']) { ?>
+                                <div class="timeline-year right" data-anime="scroll"><strong><?php echo date("Y", strtotime($registros["fecha_atencion"])) ?></strong></div> <!-- timeline-year -->
+                                <div class="timeline-content" data-anime-left="scroll-left">
+                                    <p>En la fecha <strong><?php echo date("d-m-Y", strtotime($registros["fecha_atencion"])) ?> </strong> <strong style="color:#2aa8e0"> Recibió </strong> un/a <strong><?php echo $registros["nombre_tipoayuda"]; ?></strong>. Su ID: <strong> <?php echo $registros["numero_aten"] ?></strong>
+                                        <br>
+
+                                        <small>Estatus: <strong style="color:#1AA83E"> Atendido </strong></small>
+                                    </p>
+
+                                    <br>
+                                    <div class="historico-item" style="display: flex; gap:5px; flex-wrap:wrap">
+                                        <a class="certificado" href=""> <i class='bx bx-download'></i>Certificado entrega</a>
+                                        <a class="solicitud-bene" href=""><i class='bx bx-download'></i>Solicitud</a>
+                                        <a class="informe-medico" href=""><i class='bx bx-download'></i>Informe medico</a>
+
+                                    </div>
+                                </div> <!-- timeline-content -->
+                            <?php } else { ?>
+                                <div class="timeline-year right" data-anime="scroll"><strong><?php echo date("Y", strtotime($registros["fecha_solicitud"])) ?></strong></div> <!-- timeline-year -->
+                                <div class="timeline-content dos" data-anime-left="scroll-left">
+                                    <p>En la fecha <strong> <?php echo date("d-m-Y", strtotime($registros["fecha_solicitud"]));  ?></strong> <strong style="color:#2aa8e0"> solicitó </strong> un/a <strong> <?php echo $registros["atencion_solicitada"]; ?></strong>
+                                        a las <strong> <?php echo date("H:i:s", strtotime($registros["fecha_solicitud"])) ?></strong>. Su
+                                        ID <strong> <?php echo $registros["numero_aten"] ?></strong>
+                                        <br>
+
+                                        <small>Estatus: <strong style="color:#2aa8e0">En espera </strong></small>
+                                    </p>
+                                    <br>
+                                    <div class="historico-item" style="display: flex; gap:5px; flex-wrap:wrap">
+                                        <a class="solicitud-bene" href=""><i class='bx bx-download'></i>Solicitud</a>
+
+                                    </div>
+                                </div> <!-- timeline-content -->
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+
+                    <?php if ($key % 2 == 0) { ?>
+                        <div class="timeline-block">
+                            <?php if ($registros['nombre_tipoayuda']) { ?>
+                                <div class="timeline-year left" data-anime="scroll"><strong><?php echo date("Y", strtotime($registros["fecha_atencion"])) ?></strong></div> <!-- timeline-year -->
+                                <div class="timeline-content" data-anime-right="scroll-right">
+                                    <p>En la fecha <strong><?php echo date("d-m-Y", strtotime($registros["fecha_atencion"])) ?></strong> <strong style="color:#2aa8e0"> Recibió </strong> un/a <strong><?php echo $registros["nombre_tipoayuda"]; ?></strong>
+                                        ID <strong> <?php echo $registros["numero_aten"] ?></strong>
+                                        <br>
+
+                                        <small>Estatus: <strong style="color:#1AA83E"> Atendido </strong></small>
+                                    </p>
+                                    <br>
+                                    <div class="historico-item" style="display: flex; gap:5px;  flex-wrap:wrap">
+                                        <a class="certificado" href=""> <i class='bx bx-download'></i>Certificado entrega</a>
+                                        <a class="solicitud-bene" href=""><i class='bx bx-download'></i>Solicitud</a>
+                                        <a class="informe-medico" href=""><i class='bx bx-download'></i>Informe medico</a>
+
+                                    </div>
+
+                                </div> <!-- timeline-content -->
+                            <?php } else { ?>
+                                <div class="timeline-year left" data-anime="scroll"><strong><?php echo date("Y", strtotime($registros["fecha_solicitud"])) ?></strong></div> <!-- timeline-year -->
+                                <div class="timeline-content" data-anime-right="scroll-right">
+                                    <p>En la fecha <strong> <?php echo date("d-m-Y", strtotime($registros["fecha_solicitud"]));  ?></strong> <strong style="color:#2aa8e0"> solicitó </strong>un/a <strong> <?php echo $registros["atencion_solicitada"]; ?></strong>
+                                        a las <strong> <?php echo date("H:i:s", strtotime($registros["fecha_solicitud"])) ?></strong>.
+                                        ID <strong> <?php echo $registros["numero_aten"] ?></strong>
+                                        <br>
+
+                                        <small>Estatus: <strong style="color:#2aa8e0">En espera </strong></small>
+                                    </p>
+                                    <br>
+                                    <div class="historico-item" style="display: flex; gap:5px; flex-wrap:wrap">
+                                        <a class="solicitud-bene" href=""><i class='bx bx-download'></i>Solicitud</a>
+
+                                    </div>
+                                </div> <!-- timeline-content -->
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+
+                <?php } ?>
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <button class="accordion3">Operación estadal</button>
+    <div class="panel3">
+        <div id="timeline">
+            <?php
+            $aten->setcedula($cedula);
+            $consulta = $aten->historicoOP();
+
+            foreach ($consulta as $key => $registros) {
+                $key = $key + 1; ?>
+                <?php if ($key % 2 != 0) { ?>
+                    <div class="timeline-block">
+                        <?php if ($registros['nombre_tipoayuda']) { ?>
+                            <div class="timeline-year right" data-anime="scroll"><strong><?php echo date("Y", strtotime($registros["fecha_atencion"])) ?></strong></div> <!-- timeline-year -->
+                            <div class="timeline-content" data-anime-left="scroll-left">
+                                <p>En la fecha <strong><?php echo date("d-m-Y", strtotime($registros["fecha_atencion"])) ?> </strong> <strong style="color:#2aa8e0"> Recibió </strong> un/a <strong><?php echo $registros["nombre_tipoayuda"]; ?></strong>
+                                    en la coordinacion de <strong> <?php echo $registros["nombre_coordinacion"] ?></strong>. ID <strong> <?php echo $registros["numero_aten"] ?></strong>
+                                    <br>
+
+                                    <small>Estatus: <strong style="color:#1AA83E"> Atendido </strong></small>
+                                </p>
+
+                                <br>
+                                <div class="historico-item" style="display: flex; gap:5px; flex-wrap:wrap">
+                                    <a class="certificado" href=""> <i class='bx bx-download'></i>Certificado entrega</a>
+                                    <a class="solicitud-bene" href=""><i class='bx bx-download'></i>Solicitud</a>
+                                    <a class="informe-medico" href=""><i class='bx bx-download'></i>Informe medico</a>
+
+                                </div>
+                            </div> <!-- timeline-content -->
+                        <?php } else { ?>
+                            <div class="timeline-year right" data-anime="scroll"><strong><?php echo date("Y", strtotime($registros["fecha_solicitud"])) ?></strong></div> <!-- timeline-year -->
+                            <div class="timeline-content" data-anime-left="scroll-left">
+                                <p>En la fecha <strong> <?php echo date("d-m-Y", strtotime($registros["fecha_solicitud"]));  ?></strong> <strong style="color:#2aa8e0"> solicitó </strong> un/a <strong> <?php echo $registros["atencion_solicitada"]; ?></strong>
+                                    a las <strong> <?php echo date("H:i:s", strtotime($registros["fecha_solicitud"])) ?></strong> en la Coordinación de <strong> <?php echo $registros["nombre_coordinacion"] ?></strong>.
+                                    ID <strong> <?php echo $registros["numero_aten"] ?></strong>
+                                    <br>
+
+                                    <small>Estatus: <strong style="color:#2aa8e0">En espera </strong></small>
+                                </p>
+                                <br>
+                                <div class="historico-item" style="display: flex; gap:5px; flex-wrap:wrap">
+                                    <a class="solicitud-bene" href=""><i class='bx bx-download'></i>Solicitud</a>
+
+                                </div>
+                            </div> <!-- timeline-content -->
+                        <?php } ?>
+                    </div>
+                <?php } ?>
+
+                <?php if ($key % 2 == 0) { ?>
+                    <div class="timeline-block">
+                        <?php if ($registros['nombre_tipoayuda']) { ?>
+                            <div class="timeline-year left" data-anime="scroll"><strong><?php echo date("Y", strtotime($registros["fecha_atencion"])) ?></strong></div> <!-- timeline-year -->
+                            <div class="timeline-content" data-anime-right="scroll-right">
+                                <p>En la fecha <strong><?php echo date("d-m-Y", strtotime($registros["fecha_atencion"])) ?></strong> <strong style="color:#2aa8e0"> Recibió </strong> un/a <strong><?php echo $registros["nombre_tipoayuda"]; ?></strong>
+                                    en la coordinacion de <strong> <?php echo $registros["nombre_coordinacion"] ?></strong>. ID <strong> <?php echo $registros["numero_aten"] ?></strong>
+                                    <br>
+
+                                    <small>Estatus: <strong style="color:#1AA83E"> Atendido </strong></small>
+                                </p>
+                                <br>
+                                <div class="historico-item" style="display: flex; gap:5px;  flex-wrap:wrap">
+                                    <a class="certificado" href=""> <i class='bx bx-download'></i>Certificado entrega</a>
+                                    <a class="solicitud-bene" href=""><i class='bx bx-download'></i>Solicitud</a>
+                                    <a class="informe-medico" href=""><i class='bx bx-download'></i>Informe medico</a>
+
+                                </div>
+
+                            </div> <!-- timeline-content -->
+                        <?php } else { ?>
+                            <div class="timeline-year left" data-anime="scroll"><strong><?php echo date("Y", strtotime($registros["fecha_solicitud"])) ?></strong></div> <!-- timeline-year -->
+                            <div class="timeline-content" data-anime-right="scroll-right">
+                                <p>En la fecha <strong> <?php echo date("d-m-Y", strtotime($registros["fecha_solicitud"]));  ?></strong> <strong style="color:#2aa8e0"> solicitó </strong>un/a <strong> <?php echo $registros["atencion_solicitada"]; ?></strong>
+                                    a las <strong> <?php echo date("H:i:s", strtotime($registros["fecha_solicitud"])) ?></strong> en la Coordinación de <strong> <?php echo $registros["nombre_coordinacion"] ?></strong>.
+                                    ID <strong> <?php echo $registros["numero_aten"] ?></strong>
+                                    <br>
+
+                                    <small>Estatus: <strong style="color:#2aa8e0">En espera </strong></small>
+                                </p>
+                                <br>
+                                <div class="historico-item" style="display: flex; gap:5px; flex-wrap:wrap">
+                                    <a class="solicitud-bene" href=""><i class='bx bx-download'></i>Solicitud</a>
+
+                                </div>
+                            </div> <!-- timeline-content -->
+                        <?php } ?>
+                    </div>
+                <?php } ?>
+
+            <?php } ?>
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
 
 
 
@@ -257,6 +603,7 @@ include_once("partearriba.php");
 
     <script src="../package/dist/sweetalert2.all.js"></script>
     <script src="../package/dist/sweetalert2.all.min.js"></script>
+    <script src="timeline.js"></script>
 
     <script>
         function eliminar(p1) {
@@ -309,9 +656,99 @@ include_once("partearriba.php");
             })
         }
 
+        function eliminarCopiaCedula(p1, p2, p3) {
+            console.log(p1);
+            console.log(p2);
+            eliminar = p1;
+            cedula = p2;
+            id = p3
+
+
+            $.ajax({
+                type: "POST",
+                url: "documentos/cedula_beneficiarios/cargarFoto.php",
+                data: {
+                    eliminar: eliminar,
+                    cedula: cedula,
+                    id: id
+
+
+                },
+                success: function(data) {
+                    location.reload()
+                    console.log(data)
+                },
+                error: function(data) {
+                    console.log(data)
+                }
+            })
+        }
+        function eliminarPartida(p1, p2, p3) {
+            console.log(p1);
+            console.log(p2);
+            eliminar = p1;
+            cedula = p2;
+            id = p3
+
+
+            $.ajax({
+                type: "POST",
+                url: "documentos/partidas_nacimiento/cargarPartida.php",
+                data: {
+                    eliminar: eliminar,
+                    cedula: cedula,
+                    id: id
+
+
+                },
+                success: function(data) {
+                    location.reload()
+                    console.log(data)
+                },
+                error: function(data) {
+                    console.log(data)
+                }
+            })
+        }
+
         function modificar(p1) {
             url = 'modificarBeneficiario.php?cedula=' + p1
 
             window.location.href = url;
+        }
+    </script>
+
+
+    <script>
+        var acc = document.getElementsByClassName("accordion2");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion3");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
         }
     </script>

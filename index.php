@@ -49,7 +49,7 @@
 						<input type="password" class="input" id="contraseña" requiered>
 					</div>
 				</div>
-
+			
 
 				<input type="submit" class="btn" value="Ingresar" id="inicio">
 			</form>

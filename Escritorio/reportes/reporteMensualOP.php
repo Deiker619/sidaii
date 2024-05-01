@@ -142,7 +142,7 @@ ob_start()
 
                 <!-- DADAS -->
                 <div class="tabla-atencion" style="width: 100%; margin-top:5%">
-
+                    <h1>Atenciones Total</h1>
 
                     <table style="width:100%">
                         <thead>
@@ -368,6 +368,34 @@ ob_start()
 
                                 <tr>
                                     <td><?php echo $consulta["nombre"] ?> </td>
+                                    <td><?php echo $consulta["Recibidas"] ?> </td>
+
+                                </tr>
+
+                        </tbody>
+                    <?php endforeach; ?>
+                    </table>
+
+                    <table style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Coordinación</th>
+                                <th>Número de atenciones dadas personas por coordinación</th>
+
+
+
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <?php
+                            $consultas = $aten->DatosMensuales_COORDINACION($mes, $anio);
+
+
+                            foreach ($consultas as $consulta) : ?>
+
+                                <tr>
+                                    <td><?php echo $consulta["nombre_coordinacion"] ?> </td>
                                     <td><?php echo $consulta["Recibidas"] ?> </td>
 
                                 </tr>

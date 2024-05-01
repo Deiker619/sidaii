@@ -10,6 +10,7 @@ class encuentro extends ManejadorBD{
         private $actividad;
         private $fecha_encuentro;
 		private $id;
+		private $gerencia;
 		
         private $cnn;
         /*===============================  */
@@ -29,6 +30,15 @@ class encuentro extends ManejadorBD{
 		public function setestado($estado)
 		{
 		    $this->estado = $estado;		    
+		}
+
+        public function getgerencia()
+        {
+            return $this->gerencia;
+        }
+		public function setgerencia($gerencia)
+		{
+		    $this->gerencia = $gerencia;		    
 		}
 
 
@@ -97,8 +107,8 @@ class encuentro extends ManejadorBD{
 		public function insertarEncuentro(){
 			try{	
 
-				$stmt = $this->cnn->prepare("INSERT INTO encuentros (fecha_encuentro, estado, municipio, parroquia, actividad) 
-											VALUES (:fecha_encuentro, :estado, :municipio,:parroquia, :actividad)");
+				$stmt = $this->cnn->prepare("INSERT INTO encuentros (fecha_encuentro, estado, municipio, parroquia, actividad, gerencia) 
+											VALUES (:fecha_encuentro, :estado, :municipio,:parroquia, :actividad, :gerencia)");
 				
 				// Asignamos valores a los parametros
                 $stmt->bindParam(':fecha_encuentro', $this->fecha_encuentro);
@@ -106,6 +116,7 @@ class encuentro extends ManejadorBD{
 				$stmt->bindParam(':municipio', $this->municipio);
 				$stmt->bindParam(':parroquia', $this->parroquia);
 				$stmt->bindParam(':actividad', $this->actividad);
+				$stmt->bindParam(':gerencia', $this->gerencia);
 		
 				/* $stmt->bindParam(':direccion', $this->direccion);
 				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
@@ -115,14 +126,14 @@ class encuentro extends ManejadorBD{
 				$exito = $stmt->execute();
 
 				// Numero de Filas Afectadas
-				echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>";
+				echo "1";// "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>";
 
 				// Devuelve los resultados obtenidos
 				return $exito; // si es verdadero se insertó correctamente el registro	
 
 	        }catch(PDOException $error) {
 			    // Mostramos un mensaje genérico de error.
-				echo "Error: ejecutando consulta SQL.".$error->getMessage();
+				echo "0";//"Error: ejecutando consulta SQL.".$error->getMessage();
 				exit();
 	        } 
 		}
@@ -183,7 +194,7 @@ class encuentro extends ManejadorBD{
 
 			try{	
 
-				$stmt = $this->cnn->prepare("SELECT encuentros.id, encuentros.fecha_encuentro, estados.nombre_estado, municipios.nombre, parroquia.nombre_parroquia, encuentros.actividad FROM encuentros, municipios, estados, parroquia WHERE 
+				$stmt = $this->cnn->prepare("SELECT encuentros.id, encuentros.fecha_encuentro, estados.nombre_estado, municipios.nombre, parroquia.nombre_parroquia, encuentros.actividad, encuentros.gerencia FROM encuentros, municipios, estados, parroquia WHERE 
 
 				encuentros.estado = estados.id_estados AND
 				encuentros.municipio = municipios.id_municipios AND

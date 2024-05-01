@@ -92,7 +92,7 @@ include_once("partearriba.php");
                                 <div class="input-field">
                                     <label>Elige una solicitud</label>
                                     <select name="atencion_recibida" id="atencion_recibida" require>
-                                        <option selected value=''><?php echo $registro["atencion_solicitada"] ?></option>
+                                        <option selected value=''>Ninguna (Para volver a cargarla)</option>
                                         <option value="Silla de ruedas estandar">Silla de ruedas estandar</option>
                                         <option value="Silla de rueda ergonomica N16">Silla de rueda ergonomica N16</option>
                                         <option value="Silla de rueda ergonomica N14">Silla de rueda ergonomica N14</option>

@@ -52,7 +52,7 @@ include_once("partearriba.php");
 
 
 
-    <div class="tabla-atencion">
+    <!-- <div class="tabla-atencion">
         
         <h2>Solicitudes</h2>
         <table id="atencion">
@@ -89,7 +89,7 @@ include_once("partearriba.php");
 
             </tbody>
         </table>
-    </div>
+    </div> -->
 
     <div class="tabla-atencion">
         

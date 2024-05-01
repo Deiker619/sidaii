@@ -14,6 +14,8 @@ class remitido extends ManejadorBD{
 		private $gerencia;
 		private $coordinacion;
 		private $statu;
+		private $solicitud;
+		private $informe;
         private $cnn;
         /*===============================  */
 
@@ -32,6 +34,25 @@ class remitido extends ManejadorBD{
 		public function setcedula($cedula)
 		{
 		    $this->cedula = $cedula;		    
+		}
+
+        public function getsolicitud()
+        {
+            return $this->solicitud;
+        }
+		public function setsolicitud($solicitud)
+		{
+		    $this->solicitud = $solicitud;		    
+		}
+
+
+        public function getinforme()
+        {
+            return $this->informe;
+        }
+		public function setinforme($informe)
+		{
+		    $this->informe = $informe;		    
 		}
 
         public function getcoordinacion()
@@ -134,8 +155,8 @@ class remitido extends ManejadorBD{
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO remitidos (cedula, departamento,por, gerencia_remitente, coordinacion,  fecha, motivo) 
-											VALUES (:cedula, :departamento,:por, :gerencia_remitente, :coordinacion, :fecha ,:motivo)");
+			$stmt = $this->cnn->prepare("INSERT INTO remitidos (cedula, departamento,por, gerencia_remitente, coordinacion,  fecha, motivo, solicitud, informe) 
+											VALUES (:cedula, :departamento,:por, :gerencia_remitente, :coordinacion, :fecha ,:motivo, :solicitud, :informe)");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':cedula', $this->cedula);
@@ -145,6 +166,8 @@ class remitido extends ManejadorBD{
 			$stmt->bindParam(':por', $this->registrador);
 			$stmt->bindParam(':gerencia_remitente', $this->gerencia);
 			$stmt->bindParam(':coordinacion', $this->coordinacion);
+			$stmt->bindParam(':solicitud', $this->solicitud);
+			$stmt->bindParam(':informe', $this->informe);
 
 			/* $stmt->bindParam(':direccion', $this->direccion);
 				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
@@ -346,7 +369,8 @@ class remitido extends ManejadorBD{
 
 			try{	
 
-				$stmt = $this->cnn->prepare("SELECT remitidos.departamento,remitidos.cedula, remitidos.por, remitidos.gerencia_remitente,remitidos.fecha, remitidos.motivo, beneficiario.nombre, beneficiario.apellido
+				$stmt = $this->cnn->prepare("SELECT remitidos.departamento,remitidos.cedula, remitidos.por, remitidos.gerencia_remitente,remitidos.fecha, remitidos.motivo, beneficiario.nombre, beneficiario.apellido,
+				remitidos.solicitud, remitidos.informe
 				FROM remitidos, beneficiario 
 				WHERE remitidos.id = :id and
 				beneficiario.cedula = remitidos.cedula");

@@ -24,7 +24,7 @@ $("#inicio").click(function (e) {
           intentos++;
           localStorage.setItem("intentos", intentos);
 
-          if (intentos >= 3) {
+          if (intentos >= 4) {
             $.ajax({
               type: "POST",
               url: "php/bloquearUsuario.php",

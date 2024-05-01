@@ -115,7 +115,6 @@ function mostrarEtnia() {
   }
 }
 
-
 $(document).ready(function () {
   $("#entrega_tecnica").hide();
   $("#entrega_orientado").hide();
@@ -133,6 +132,9 @@ $(document).ready(function () {
         $("#remit").prop("selectedIndex", 0);
         $("#motivo").val("");
         $("#atencion_recibida").prop("selectedIndex", 0);
+        $("#nombre_familiar").val("");
+        $("#apellido_familiar").val("");
+        $("#cedula_familiar").val("");
       }
 
       if (this.value == "-ayudatec") {
@@ -141,6 +143,7 @@ $(document).ready(function () {
         $("#entrega_tecnica").show();
         $("#remit").prop("selectedIndex", 0);
         $("#descrip_orientacion").val("");
+        entrega();
       }
 
       if (this.value == "-remitido") {
@@ -149,7 +152,30 @@ $(document).ready(function () {
         $("#entrega_tecnica").hide();
         $("#atencion_recibida").prop("selectedIndex", 0);
         $("#descrip_orientacion").val("");
+        $("#nombre_familiar").val("");
+        $("#apellido_familiar").val("");
+        $("#cedula_familiar").val("");
       }
     });
   }
 });
+
+function entrega() {
+  $("#nombreF").hide();
+  $("#apellidoF").hide();
+  $("#cedulaF").hide();
+  $("#entrega_familiar").change(function () {
+    if (this.checked) {
+      $("#nombreF").show();
+      $("#apellidoF").show();
+      $("#cedulaF").show();
+    } else {
+      $("#nombreF").hide();
+      $("#apellidoF").hide();
+      $("#cedulaF").hide();
+      $("#nombre_familiar").val("");
+        $("#apellido_familiar").val("");
+        $("#cedula_familiar").val("");
+    }
+  });
+}

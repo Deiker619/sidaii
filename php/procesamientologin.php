@@ -29,6 +29,9 @@ if ($registro['bloqueado'] == 1) {
     $_SESSION['telefono']=$registro['telefono'];
     $_SESSION['gerencia']=$registro['gerencia'];     
     $_SESSION['coordinacion']=$registro['coordinacion'];     
+    $_SESSION['email']=$registro['email'];     
+    $_SESSION['passwordd']=$registro['passwordd'];  
+    $_SESSION["profile_photo"] = $registro['profile_photo'];     
 
     echo true;
 } else {

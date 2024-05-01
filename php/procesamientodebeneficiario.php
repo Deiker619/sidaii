@@ -24,7 +24,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$consultaayuda = $atencion->autenticarAtencion();
 				/* if (!$consultaayuda) { */
-				echo "Se registro a exitosamente";
+				echo "Se registro exitosamente";
 				$atencion->insertarAtencion();
 				/* } else { */
 				/* $mens = "No puede haber personas solicitando dos atenciones ";
@@ -39,7 +39,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$consultaayuda = $atencion->autenticarAyuda();
 				if (!$consultaayuda) {
-					echo "Se registro a exitosamente";
+					echo "Se registro exitosamente";
 					$atencion->insertarAyuda_tec();
 				} else {
 					echo "Ya este Beneficiario se registro en esta area";
@@ -51,10 +51,10 @@ if (isset($_POST['registrado'])) {
 				$cita = new citas_protesis(1);
 				$cita->setcedula($cedula);
 				$consultaayuda = $cita->autenticarProtesis();
-				
-					$cita->insertarCita();
-					echo "Se registro a exitosamente";
-				
+
+				$cita->insertarCita();
+				echo "Se registro exitosamente";
+
 				break;
 
 			case "4-tomedi":
@@ -63,7 +63,7 @@ if (isset($_POST['registrado'])) {
 				$medidas->setcedula($cedula);
 				$consultamedidas = $medidas->autenticarMedidas();
 				if (!$consultamedidas) {
-					echo "Se registro a exitosamente";
+					echo "Se registro exitosamente";
 					$medidas->insertarMedidas();
 				} else {
 					echo "Ya este Beneficiario se registro en esta area";
@@ -81,7 +81,7 @@ if (isset($_POST['registrado'])) {
 
 				$ConsultaPruebas = $medidas->autenticarArtificio();
 				if (!$ConsultaPruebas) {
-					echo "Se registro a exitosamente";
+					echo "Se registro exitosamente";
 					$medidas->insertarPrueba();
 				} else {
 					echo "Ya este Beneficiario se registro en esta area";
@@ -94,7 +94,7 @@ if (isset($_POST['registrado'])) {
 				$medidas->setcedula($cedula);
 				$ConsultaPruebas = $medidas->autenticarReparacion();
 				if (!$ConsultaPruebas) {
-					echo "Se registro a exitosamente";
+					echo "Se registro exitosamente";
 					$medidas->insertarReparacion();
 				} else {
 					echo "Ya este Beneficiario se registro en esta area";
@@ -107,7 +107,7 @@ if (isset($_POST['registrado'])) {
 				$medidas->setcedula($cedula);
 				$ConsultaPruebas = $medidas->autenticarAudiometria();
 				if (!$ConsultaPruebas) {
-					echo "Se registro a exitosamente";
+					echo "Se registro exitosamente";
 					$medidas->insertarCita();
 				} else {
 					echo "Ya este Beneficiario se registro en esta area";
@@ -120,7 +120,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$atencion->setsolicitud($atencion_solicitada);
 				$atencion->insertarsolicitud();
-				echo "Se registro a exitosamente";
+				echo "Se registro exitosamente";
 				break;
 
 			case "11-partic":
@@ -129,7 +129,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$atencion->setsolicitud($atencion_solicitada);
 				$atencion->insertarsolicitud();
-				echo "Se registro a exitosamente";
+				echo "Se registro exitosamente";
 				break;
 			case "0-aten-coo":
 				require_once("../php/01-atenciones-estadales.php");
@@ -137,7 +137,8 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
 				$atencion->insertarAtencion();
-				echo "Se registró a exitosamente";
+				echo "Se registro exitosamente";
+
 				break;
 		}
 	} else {
@@ -239,7 +240,7 @@ if (isset($_POST['registrado'])) {
 		$detalles->setproteccion_social($bono);
 		$detalles->setdireccion($direccion);
 		$detalles->insertardetalles();
-		$detalles->insertardireccion();//10/01/2024
+		$detalles->insertardireccion(); //10/01/2024
 
 
 		if ($nombre_empre and $rif_emp) {
@@ -255,11 +256,11 @@ if (isset($_POST['registrado'])) {
 
 
 		if ($cedula_cui) {
-			$cuidador = new detalles_cuidador(1);
-			$cuidador->setcedula($cedula);
-			$cuidador->setnombre($cuidador);
-			$cuidador->setcedula_r($cedula_cui);
-			$cuidador->insertardetalles();
+			$cuid = new detalles_cuidador(1);
+			$cuid->setcedula($cedula);
+			$cuid->setnombre($cuidador);
+			$cuid->setcedula_r($cedula_cui);
+			$cuid->insertardetalles();
 		}
 
 
@@ -272,7 +273,7 @@ if (isset($_POST['registrado'])) {
 				$atencion = new Atenciones(1);
 				$atencion->setcedula($cedula);
 				$atencion->insertarAtencion();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "0-aten-coo":
@@ -281,7 +282,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
 				$atencion->insertarAtencion();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "2-ayudte":
@@ -289,7 +290,7 @@ if (isset($_POST['registrado'])) {
 				$atencion = new Ayudas_tec(1);
 				$atencion->setcedula($cedula);
 				$atencion->insertarAyuda_tec();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "3-orypro":
@@ -298,7 +299,7 @@ if (isset($_POST['registrado'])) {
 				$cita->setcedula($cedula);
 				$consultaayuda = $cita->autenticarProtesis();
 				$cita->insertarCita();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "4-tomedi":
@@ -306,7 +307,7 @@ if (isset($_POST['registrado'])) {
 				$medidas = new toma_medidas(1);
 				$medidas->setcedula($cedula);
 				$medidas->insertarMedidas();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "5-pruebar":
@@ -314,7 +315,7 @@ if (isset($_POST['registrado'])) {
 				$medidas = new prueba_artificio(1);
 				$medidas->setcedula($cedula);
 				$medidas->insertarPrueba();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "6-repaart":
@@ -322,7 +323,7 @@ if (isset($_POST['registrado'])) {
 				$medidas = new raparacion_artificio(1);
 				$medidas->setcedula($cedula);
 				$medidas->insertarReparacion();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "0-aten-coo":
@@ -331,7 +332,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
 				$atencion->insertarAtencion();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "7-audiom":
@@ -340,7 +341,7 @@ if (isset($_POST['registrado'])) {
 				$medidas->setcedula($cedula);
 				$ConsultaPruebas = $medidas->autenticarAudiometria();
 				$medidas->insertarCita();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "10-partic":
@@ -349,7 +350,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$atencion->setsolicitud($atencion_solicitada);
 				$atencion->insertarsolicitud();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			case "11-partic":
@@ -358,7 +359,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$atencion->setsolicitud($atencion_solicitada);
 				$atencion->insertarsolicitud();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Se registró " . $nombre . " exitosamente";
 				break;
 
 			default:
@@ -366,7 +367,7 @@ if (isset($_POST['registrado'])) {
 				break;
 		}
 	} else {
-		echo "Ya esta ".$cedula." esta registrada";
+		echo "Ya esta " . $cedula . " esta registrada";
 
 		switch ($atencion_solicitada) {
 			case "1-oac":
@@ -411,10 +412,10 @@ if (isset($_POST['registrado'])) {
 				$cita = new citas_protesis(1);
 				$cita->setcedula($cedula);
 				$consultaayuda = $cita->autenticarProtesis();
-			
-					$cita->insertarCita();
-					echo "Se registro a " . $nombre . " exitosamente";
-			
+
+				$cita->insertarCita();
+				echo "Se registro a " . $nombre . " exitosamente";
+
 				break;
 
 			case "4-tomedi":

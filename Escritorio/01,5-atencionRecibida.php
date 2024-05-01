@@ -9,7 +9,7 @@ include_once("partearriba.php");
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Atencion al Ciudadano: <?php echo $rol ?></span>
+            <span class="link-name">Atención al ciudadano: <?php echo $rol ?></span>
         </div>
     </div>
 
@@ -49,6 +49,7 @@ include_once("partearriba.php");
         <table id="atencion">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Cedula</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
@@ -57,7 +58,10 @@ include_once("partearriba.php");
                     <th>Asis. Recibida</th>
                     <th>Ayuda. tecnica</th>
                     <th>Status</th>
-                    <th></th>
+                    <th>Certificado entrega</th>
+             
+                    <th>Certificado Solicitud</th>
+                    <th>Informe medico</th>
                     <!-- <th></th>
                     <th></th> -->
                 </tr>
@@ -72,8 +76,55 @@ include_once("partearriba.php");
 
 </div>
 <canvas id="graficaxbrindada" class="chart2" style="width: 300px; height:100px"></canvas>
-
+<script src="../package/dist/sweetalert2.all.js"></script>
+<script src="../package/dist/sweetalert2.all.min.js"></script>
 <script>
+    function subirArchivo(a) {
+        var numero_aten = a;
+        Swal.fire({
+            title: 'Cargar Archivo',
+            input: 'file',
+            inputAttributes: {
+                accept: ['application/pdf'], // Limita a archivos PDF, puedes ajustar según tus necesidades
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Subir',
+            cancelButtonText: 'Cancelar',
+        }).then((file) => {
+            if (file.isConfirmed && file.value) {
+                // Crear un objeto FormData y agregar el archivo y el número
+                const formData = new FormData();
+                formData.append('archivo', file.value);
+                formData.append('numero_aten', numero_aten);
+
+                // Hacer la solicitud AJAX utilizando jQuery
+                $.ajax({
+                    url: 'documentos/cargardocumento.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        console.log(data);
+                        try {
+                            const dataJ = JSON.parse(data);
+                            Swal.fire(data, '', 'success');
+                            window.location = "01,5-atencionRecibida.php"
+                        } catch (error) {
+                            console.error('Error al analizar la respuesta del servidor como JSON:', error);
+                            Swal.fire('Error en el formato de la respuesta del servidor', '', 'error');
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error al subir el archivo:', error);
+                        Swal.fire('Error al cargar el archivo', '', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+
     function prueba() {
         const tabla = $.ajax({
             url: "prueba.php",
@@ -96,7 +147,18 @@ include_once("partearriba.php");
 
     });
 </script>
+
+
+
+
+
+
 <?php
 include_once("parteabajo.php");
 ?>
 <script src="graficas/OAC/graficasAtencionesRecibidas.js"></script>
+
+
+
+
+

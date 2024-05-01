@@ -73,17 +73,17 @@ include_once("partearriba.php");
 
                             <div class="input-field">
                                 <label>Nombre</label>
-                                <input type="text" placeholder="Ingresa el nombre " required id="nombre" name="nombre" pattern="[a-zA-ZáéíóúÁÉÍÓÚ\s]+">
+                                <input type="text" placeholder="Ingresa el nombre " required id="nombre" name="nombre">
                             </div>
 
                             <div class="input-field">
                                 <label>Apellido</label>
-                                <input type="text" placeholder="Ingresa el nombre " required id="apellido" name="apellido" pattern="[a-zA-ZáéíóúÁÉÍÓÚ\s]+">
+                                <input type="text" placeholder="Ingresa el nombre " required id="apellido" name="apellido">
                             </div>
 
                             <div class="input-field">
                                 <label>Cedula</label><span style="font-size: 13px; " id="label-chk"> Si es menor sin cedula coloque la cedula del tutor legal con un <b style="color: #38b000">1 o otro numero</b> al final</span>
-                                <input type="number" placeholder="Ingrese la cedula sin puntos ni letras" required id="cedula" name="cedula" pattern="^\d{5,9}$">
+                                <input type="text" placeholder="Ingrese la cedula sin puntos ni letras" required id="cedula" name="cedula" pattern="^\d{5,9}$">
                                 <span id="cedulaError"></span>
                             </div>
                             <div class="input-field">
@@ -101,7 +101,7 @@ include_once("partearriba.php");
 
                             <div class="input-field">
                                 <label>Telefono</label>
-                                <input type="number" placeholder="Ingresa tu numero de Telefono" required id="telefono" name="telefono">
+                                <input type="text" placeholder="Ingresa tu numero de Telefono" required id="telefono" name="telefono">
                             </div>
 
 
@@ -125,7 +125,7 @@ include_once("partearriba.php");
 
                             <div class="input-field" id="chk-hijo">
                                 <label>Numero de hijos</label>
-                                <input type="number" placeholder="Ingresa el numero de hijos" require id="hijos" name="hijos">
+                                <input type="text" placeholder="Ingresa el numero de hijos" require id="hijos" name="hijos">
                             </div>
 
                             <div class="input-field">
@@ -313,7 +313,7 @@ include_once("partearriba.php");
 
                                 <div class="input-field" id="cedula-cuidador">
                                     <label>Cedula del cuidador o representante</label>
-                                    <input type="number" placeholder="ingresa cedula cuidador" id="cedula_cui" name="cedula-cuidador">
+                                    <input type="text" placeholder="ingresa cedula cuidador" id="cedula_cui" name="cedula-cuidador">
                                 </div>
 
 
@@ -495,7 +495,7 @@ include_once("partearriba.php");
 <!-- <script src="validacion.js"></script> -->
 <script type="text/javascript">
     $(function() {
-       
+
         $("#registro").click(function(e) {
 
 
@@ -565,7 +565,7 @@ include_once("partearriba.php");
                 console.log(cuidador, cedula_cui)
 
                 /*  var nombre = $("#nombre").val(); */
-                var regexNombre = /^[a-zA-ZÁáÉéÍíÓóÚúÜüÑñ\s]{2,50}$/;
+                var regexNombre = /^[a-zA-ZÁáÉéÍíÓóÚúÜüÑñ \s]{2,50}$/;
 
                 if (!regexNombre.test(nombre)) {
                     e.preventDefault(); // Evita que se envíe el formulario si el nombre no cumple con el patrón
@@ -578,8 +578,6 @@ include_once("partearriba.php");
 
                     });
                     $("#nombre").css("border-color", "#EE092A");
-
-
 
                     return; // Sale de la función de manejo del clic si el nombre no es válido
                 } else {
@@ -620,7 +618,7 @@ include_once("partearriba.php");
                 } else {
                     $("#cedula").css("border-color", "#15CD02");
                 }
-                
+
                 /* var hijo = $("#hijos").val(); */
                 regHijos = /^-\d+(\.\d+)?$/
                 if (regHijos.test(hijos)) {
@@ -630,7 +628,7 @@ include_once("partearriba.php");
                     Swal.fire({
                         icon: 'error',
                         title: 'Error de hijos',
-                        text: 'La cédula debe contener entre 5 y 9 dígitos numéricos.'
+                        text: 'El numero de hijos debe ser 0 o mayor que 0'
                     });
 
                     $("#hijos").css("border-color", "#EE092A");
@@ -639,7 +637,7 @@ include_once("partearriba.php");
                 } else {
                     $("#hijos").css("border-color", "#15CD02");
                 }
-               /*    var telefono = $("#telefono").val(); */
+                /*    var telefono = $("#telefono").val(); */
                 var regexTelefono = /^[0-9]{4}[0-9]{7}$/;
                 if (!regexTelefono.test(telefono)) {
                     e.preventDefault(); // Evita que se envíe el formulario si el teléfono no cumple con el patrón
@@ -651,17 +649,18 @@ include_once("partearriba.php");
                         text: 'El número de teléfono no es válido.'
                     });
 
+                    $("#telefono").css("border-color", "#EE092A");
                     return; // Sale de la función de manejo del clic si el teléfono no es válido
                 } else {
                     $("#telefono").css("border-color", "#15CD02");
-                    
+
                 }
 
 
 
 
                 var edad = $("#edad").val();
-                if (/^-\d+(\.\d+)?$/.test(edad)  || edad > 122 ) {
+                if (/^-\d+(\.\d+)?$/.test(edad) || edad > 122) {
                     e.preventDefault(); // Evita que se envíe el formulario si la cédula no cumple con el patrón
 
                     // Muestra el SweetAlert con el mensaje de error
@@ -674,18 +673,18 @@ include_once("partearriba.php");
                     $("#edad").css("border-color", "#EE092A");
 
                     return; // Sale de la función de manejo del clic si la cédula no es válida
-                }else{
+                } else {
                     $("#edad").css("border-color", "#15CD02");
                 }
-                
 
 
-                
+
+
 
                 /* $("form :input").css("border-color", "#15CD02")
                 $("form :select").css("border-color", "#15CD02") */
                 e.preventDefault();
-             
+
                 Swal.fire({
                     title: '¿Desea registrar a este beneficiario/a? ' + nombre,
                     showDenyButton: true,
@@ -731,16 +730,18 @@ include_once("partearriba.php");
                                 academico: academico,
                                 cedulauser: cedulauser,
                                 sexo: sexo,
-                                direccion: direccion, 
+                                direccion: direccion,
                                 nacionalidad: nacionalidad
-                                
+
                             },
                             success: function(data) {
+                                console.log(data)
                                 Swal.fire({
                                     icon: 'success',
-                                    title: data
+                                    title: data.trim(),
+                                    footer: '<a href="__verBeneficiario.php?cedula=' + cedula + '">Ir a cargar copia de cédula</a>'
                                 }).then(function() {
-                                    window.location = "01-atencionCiu.php";
+                                      /* window.location = "01-atencionCiu.php"; */
                                 })
 
                                 if (!data) {
@@ -748,11 +749,12 @@ include_once("partearriba.php");
                                         icon: 'error',
                                         title: "No se pudo registrar el beneficiario, verifique datos"
                                     }).then(function() {
-                                        window.location = "01-atencionCiu.php";
+                                        /*   window.location = "01-atencionCiu.php"; */
                                     })
                                 }
                             },
                             error: function(data) {
+                                console.log(data)
                                 Swal.fire({
                                     'icon': 'error',
                                     'title': 'Oops...',

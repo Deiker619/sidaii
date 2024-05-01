@@ -48,6 +48,7 @@ include_once("partearriba.php");
                     <th>Fecha de remicion</th>
                     <th>remitido a</th>
                     <th>Motivo</th>
+                    <th>Solicitud</th>
                     <th>Status</th>
 
 
@@ -73,6 +74,8 @@ include_once("partearriba.php");
                                 <td><?php echo $registros["fecha"] ?></td>
                                 <td><?php echo $registros["departamento"] ?></td>
                                 <td><?php echo $registros["motivo"] ?></td>
+                                <td><?php echo $registros["solicitud"] ?></td>
+                               
 
                                 <?php if ($registros["statu"] == "Aceptado") { ?>
                                     <td style="color: #38b000"><?php echo  $registros["statu"] ?></td>
@@ -101,13 +104,16 @@ include_once("partearriba.php");
                                 <td><?php echo $registros["fecha"] ?></td>
                                 <td><?php echo $registros["departamento"] ?></td>
                                 <td><?php echo $registros["motivo"] ?></td>
-
+                                <td><?php echo $registros["solicitud"] ?></td>
+                                
                                 <?php if ($registros["statu"] == "Aceptado") { ?>
                                     <td style="color: #38b000"><?php echo  $registros["statu"] ?></td>
                                 <?php } elseif ($registros["statu"] == "Rechazado") { ?>
                                     <td style="color: #f16d64"><?php echo  $registros["statu"] ?></td>
 
-                                <?php   } ?>
+                                <?php   }else{
+                                    echo "<td></td>";
+                                } ?>
 
                             </tr>
                         <?php

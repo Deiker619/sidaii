@@ -1,10 +1,12 @@
-
 $(document).ready(function() {
-    $('#atencion').DataTable();
-    $('#atencionE').DataTable();
-    $('#atencionU').DataTable();
-});
+  $('table').each(function() {
+      // Aquí puedes realizar acciones con cada tabla
 
+     $(this).DataTable() // Imprime el ID de la tabla
+  });
+  
+ 
+});
 
 console.log("Codigo para desplegar menu side-menu");
 
@@ -70,3 +72,35 @@ document.addEventListener("mousedown", resetInactivityTimer);
 document.addEventListener("wheel", resetInactivityTimer);
 // Iniciar el temporizador de inactividad al cargar la página
 startInactivityTimer();
+
+
+
+$(document).ready(function() {
+  $('a.cedula').on("contextmenu", function(event) {
+    // Prevenir el comportamiento predeterminado del clic derecho
+    event.preventDefault();
+
+    // Obtener el valor del elemento
+    var valor = $(this).text();
+    let color = $(this).css('color')
+
+    // Copiar el valor al portapapeles
+    navigator.clipboard.writeText(valor).then(function() {
+      // Mostrar un mensaje informativo al usuario
+      console.log("¡Valor copiado al portapapeles!");
+
+      // Cambiar el texto del enlace a "Copiado"
+      $(event.target).text("Copiado");
+      $(event.target).css("color","red");
+
+      // Después de un segundo, cambiar el texto del enlace de nuevo al valor original
+      setTimeout(function() {
+        $(event.target).text(valor);
+        $(event.target).css("color", color);
+        
+      }, 1000);
+    });
+  });
+});
+
+

@@ -75,6 +75,11 @@ include_once("partearriba.php");
                                 <label>Motivo</label>
                                 <textarea readonly value=""><?php echo $consulta["motivo"] ?></textarea>
                             </div>
+                            <div class="input-field">
+                                <label>Solicitud:</label>
+                                <input type="text" placeholder="Ingresa el nombre " required readonly name="solicitud" id="solicitud" value="<?php echo $consulta["solicitud"] ?>">
+                            </div>
+
 
 
 
@@ -124,6 +129,7 @@ include_once("partearriba.php");
 
                     var status = "Aceptado";
                     var cedula = $("#cedula").val();
+                    var solicitud = $('#solicitud').val();
 
 
                     Swal.fire({

@@ -20,7 +20,7 @@ include_once("partearriba.php");
 
                                                                 ?>
 
-                <div class="gerencia" id="gerencia">
+                <div class="gerencia" id="gerencia" style="display:none">
                     <?php echo $gerencia ?>
                 </div>
 
@@ -35,6 +35,7 @@ include_once("partearriba.php");
 
             $aten->setnumero_aten($numero);
             $registro = $aten->consultarAtenciones();
+            $informe = $registro["informe"];
             ?>
 
             <header>
@@ -46,6 +47,12 @@ include_once("partearriba.php");
             ?>
                 <form action="" method="post">
                     <div class="form first">
+                        <?php if ($registro["informe"]) { ?>
+                            <a href="documentos/informes/<?php echo $registro["informe"] ?>" target="_blank">Ver informe medico</a>
+
+                        <?php } else {
+                            echo "<small style='color:red'>Esta solicitud no tiene informe medico cargado</small>";
+                        } ?>
                         <div class="details personal">
                             <span class="title">Detalles Personales</span>
                             <div class="fields">
@@ -87,10 +94,20 @@ include_once("partearriba.php");
                                     <input type="text" style="border-color: #38b000;" required readonly name="atencion_solicitada" id="atencion_solicitada" value="<?php echo $registro["atencion_solicitada"] ?>">
                                 </div>
 
+
+
                                 <div class="input-field">
-                                    <label>fecha</label>
+                                    <label>Fecha</label>
                                     <input type="text" placeholder="Ingresa el codigo de carnet" required readonly name="fecha_aten" id="fecha_aten" value="<?php echo date("Y-m-d") ?>">
                                 </div>
+                                <div class="input-field">
+                                    <label>Fecha</label>
+                                    <input type="text" placeholder="Ingresa el codigo de carnet" required readonly name="fecha_aten" id="fecha_aten" value="<?php echo date("Y-m-d") ?>">
+                                </div>
+
+
+
+
 
 
                                 <div class="checkboxes">
@@ -124,27 +141,54 @@ include_once("partearriba.php");
                                         <label>Tipo de ayuda tecnica a ortorgar:</label>
                                         <select name="atencion_recibida" id="atencion_recibida" require>
                                             <option></option>
+
                                             <option value="1-silla.r">Silla de ruedas estandar</option>
                                             <option value="1.1-S.E16">Silla de rueda ergonomica N16</option>
                                             <option value="1.2-S.E14">Silla de rueda ergonomica N14</option>
-                                            <option value="1.1-S.E18">Silla de rueda ergonomica N18</option>
+                                            <option value="1.3-S.E18">Silla de rueda ergonomica N18</option>
                                             <option value="1.4-S.R.A.">Silla de rueda reclinable adulto</option>
                                             <option value="1.5-SRPE">Silla de rueda pediatrica hergonomica</option>
+                                            <option value="1.6-SRB">Silla de rueda bariátricas</option>
+                                            <option value="21-sllm">Silla a motor</option>
+                                            <option value="27-Sllc">Silla de rueda clinica</option>
+                                            <option value="30-sllsr">Silla sanitaria sin ruedas</option>
+                                            <option value="31-sllsr">Silla sanitaria con ruedas</option>
                                             <option value="2-MuletasS">Muletas talla S</option>
                                             <option value="2-MuletasM">Muletas talla M</option>
                                             <option value="2-MuletasL">Muletas talla L</option>
-                                            <option value="-MuletasCa">Muletas canadienses</option>
-                                            <option value="3-baston">Baston de 1 punto </option>
-                                            <option value="4-baston.p">Baston de 4 puntas</option>
-                                            <option value="-bastonRas">Baston de rastreo</option>
-                                            <option value="6-andadera">Andadera</option>
+                                            <option value="-MuletasCa">Muletas canadienses adultos</option>
+                                            <option value="12-Mucp">Muletas canadienses pediatricas</option>
+                                            <option value="20-Rglp">Regleta con punzon</option>
+                                            <option value="6-andadera">Andadera adulto fija</option>
+                                            <option value="22-Apm">Andadera pediatrica multifuncional</option>
+                                            <option value="23-Apr">Andadera pediatrica con ruedas</option>
+                                            <option value="25-Anpp">Andadera pediatrica posterior</option>
+                                            <option value="26-Anpf">Andadera pediatrica fija</option>
                                             <option value="7-CamaCli">Cama Clinica</option>
+                                            <option value="10-Cola">Colchon Antiescara</option>
                                             <option value="1.6-SRB">Silla de ruedas bariátricas</option>
                                             <option value="1.7-COP">Coche ortopédico pediátrico</option>
-                                            <option value="8-Col-Anti">Colchon Antiescara</option>
-                                            <option value="9-felula">Férula</option>
-
+                                            <option value="28-chorm">Coche ortopedico mediano</option>
+                                            <option value="29-chorg">Coche ortopedico grande</option>
+                                            <option value="9-felula">Ferula</option>
+                                            <option value="8-Grab">Grabadora</option>
                                             <option value="11-panales">Pañales</option>
+                                            <option value="12-Pro-aud">Protesis auditivas</option>
+                                            <option value="13-Pro-cad">Protesis de Cadera</option>
+                                            <option value="14-Pro-rod">Protesis de rodilla</option>
+                                            <option value="15-Pro-den">Protesis Dental</option>
+                                            <option value="11-Coj">Cojin antiescaras</option>
+                                            <option value="3-baston">Baston de apoyo</option>
+                                            <option value="4-baston.p">Baston de 4 puntas</option>
+                                            <option value="21-Btrpd">Baston de rastreo pediatricos</option>
+                                            <option value="13-Brpl34">Baston de rastreo plegable numero 34</option>
+                                            <option value="14-Brpl36">Baston de rastreo plegable numero 36</option>
+                                            <option value="15-Brpl38">Baston de rastreo plegable numero 38</option>
+                                            <option value="15-Brpl44">Baston de rastreo plegable numero 44</option>
+                                            <option value="16-Brpl46">Baston de rastreo plegable numero 46</option>
+                                            <option value="-bastonRas">Baston de rastreo plegable numero 48</option>
+                                            <option value="18-Brpl50">Baston de rastreo plegable numero 50</option>
+                                            <option value="19-Brpl52">Baston de rastreo plegable numero 52</option>
 
                                         </select>
                                     </div>
@@ -166,8 +210,26 @@ include_once("partearriba.php");
                                             <option value="5Logi">Gestion logistica y infrastructura</option>
                                             <option value="3Gtnd">Gestion y desarrollo social</option>
                                             <option value="2Atc">Atencion al ciudadano (OAC)</option>
+                                            <option value="4Gtno">Gestion operativa estadal</option>
                                         </select>
 
+                                    </div>
+
+                                    <div class="input-field" id="coordinacion_div">
+                                        <label>Coordinacion estadal</label>
+                                        <select name="coordinacion" id="coordinacion">
+                                            <option value="" selected></option>
+                                            <?php include_once("../php/10-coordinaciones-estadales.php");
+                                            $dis = new Coordinacion(1);
+
+                                            $consulta = $dis->consultarCoordinaciones();
+
+                                            foreach ($consulta as $registros) {
+                                            ?>
+                                                <option value="<?php echo $registros["id"] ?>"><?php echo $registros["nombre_coordinacion"] ?></option>
+
+                                            <?php } ?>
+                                        </select>
                                     </div>
 
                                     <div class="input-field">
@@ -204,11 +266,15 @@ include_once("partearriba.php");
 
 
 
-
-                            <button class="nextBtn" name="registro" id="registro">
-                                <span class="btnText">Asignar atencion</span>
-                                <ion-icon name="send-outline"></ion-icon>
-                            </button>
+                            <div class="input-field" style="display:flex; gap:8px;">
+                                <button class="nextBtn" name="registro" id="registro" <?php if ($informe) {
+                                                                                        } else {
+                                                                                            echo "disabled";
+                                                                                        } ?>>
+                                    <span class="btnText">Asignar atención</span>
+                                    <ion-icon name="send-outline"></ion-icon>
+                                </button>
+                            </div>
 
 
                         </div>
@@ -230,10 +296,56 @@ include_once("partearriba.php");
         <script type="text/javascript">
             function redireccionar(a) {
 
+
                 url = 'reportes/reporteAtencionOP.php?numero_aten=' + a;
 
                 window.open(url, "_blank");
             }
+
+
+
+            $(function() {
+                var coordinacions = null
+
+                $("#coordinacion_div").hide();
+                mostrarCoordinacion();
+
+
+                $("#remit").change(function() {
+                    mostrarCoordinacion();
+
+
+                });
+
+                $("#coordinacion").change(function() {
+
+                });
+
+                function tomarvalor() {
+                    $("select[name='coordinacion']").change(function() {
+
+                        coordinacions = this.value
+                        console.log(coordinacions)
+                    })
+                }
+
+
+                function mostrarCoordinacion() {
+                    if ($("#remit").val() == "4Gtno") {
+                        $("#coordinacion_div").show();
+                        tomarvalor()
+
+
+                    } else {
+                        $("#coordinacion_div").hide();
+                        coordinacions = null;
+                        console.log(coordinacions)
+
+
+                    }
+                }
+
+            })
             $(function() {
 
 
@@ -252,6 +364,7 @@ include_once("partearriba.php");
                         var discapacidad = $("#discapacidad").val();
                         var numero_aten = $("#numero_aten").val();
                         var fecha_aten = $("#fecha_aten").val();
+                        var informe = <?php echo json_encode($informe); ?>
 
                         console.log(fecha_aten);
                         console.log(cedula);
@@ -278,6 +391,8 @@ include_once("partearriba.php");
                         var orientar = $("#orientar").val();
 
                         console.log(descrip_orientacion)
+                        coordinacions = $("select[name='coordinacion']").val()
+                        console.log(coordinacions);
 
 
                         e.preventDefault();
@@ -302,6 +417,8 @@ include_once("partearriba.php");
                                 remitir: remitir,
                                 remit: remit,
                                 motivo: motivo,
+                                coordinacions: coordinacions,
+                                informe: informe,
 
                                 /* descrip_orientacion */
                                 descrip_orientacion: descrip_orientacion,
@@ -314,32 +431,7 @@ include_once("partearriba.php");
                             },
                             success: function(data) {
                                 console.log(data);
-
-                                if (data.mensaje == "entregado") {
-                                    Swal.fire({
-                                        'icon': 'success',
-                                        'title': 'Asignacion de atencion',
-                                        'text': "Ayuda tecnica asignada",
-                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.fechaU + "<br>" +
-                                            '<b>Fecha Actual:</b> ' + data.fechaA + "<br>" +
-                                            '<b>Dias de diferencia: </b>' + data.difer,
-                                    }).then(function() {
-                                        window.location = "14-coordinacionesEstadales.php";
-                                    })
-                                }
-                                if (data.mensaje == "Noentregado") {
-                                    Swal.fire({
-                                        'icon': 'error',
-                                        'title': 'Asignacion de atencion',
-                                        'text': "Ayuda tecnica fallida",
-                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.fechaU + "<br>" +
-                                            '<b>Fecha Actual:</b> ' + data.fechaA + "<br>" +
-                                            '<b>Dias de diferencia: </b>' + data.difer,
-                                        'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
-                                    })
-                                }
-
-                                if (data.trim() == "primera") {
+                                if (data.oac.mensaje == "primera" && data.op.mensaje == "primera") {
                                     Swal.fire({
                                         'icon': 'success',
                                         'title': 'Asignacion de atencion por primera vez',
@@ -373,13 +465,129 @@ include_once("partearriba.php");
                                     })
 
                                 }
+
+                                if (data.i == "OP") {
+
+
+                                    if (data.op.mensaje == "entregado") {
+                                        console.log(data);
+
+                                        Swal.fire({
+                                            'icon': 'success',
+                                            'title': 'Asignacion de atencion',
+                                            'text': "Ayuda tecnica asignada",
+                                            'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.op.fechaU + "<br>" +
+                                                '<b>Fecha Actual:</b> ' + data.op.fechaA + "<br>" +
+                                                '<b>Dias de diferencia: </b>' + data.op.difer +
+                                                '<b>Entregado en: </b>' + data.op.coordinacion
+                                        }).then(function() {
+                                            window.location.href = "14-coordinacionesEstadales.php"
+                                        })
+                                    }
+                                    if (data.op.mensaje == "Noentregado") {
+
+                                        Swal.fire({
+                                            'icon': 'error',
+                                            'title': 'Asignación de atención',
+                                            'text': "Ayuda tecnica fallida",
+                                            'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.op.fechaU + "<br>" +
+                                                '<b>Fecha Actual:</b> ' + data.op.fechaA + "<br>" +
+                                                '<b>Dias de diferencia: </b>' + data.op.difer + "<br>" +
+                                                '<b>Entregado en: </b>' + data.op.coordinacion,
+                                            'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
+                                        })
+                                    }
+
+
+                                }
+
+
+                                if (data.i == "OAC") {
+
+
+                                    if (data.oac.mensaje == "entregado") {
+
+                                        console.log(data);
+
+                                        Swal.fire({
+                                            'icon': 'success',
+                                            'title': 'Asignacion de atencion',
+                                            'text': "Ayuda tecnica asignada",
+                                            'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
+                                                '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
+                                                '<b>Dias de diferencia: </b>' + data.oac.difer,
+                                            'footer': "Ya pasaron los 6 meses de la ultima entrega de este tipo"
+                                        }).then(function() {
+                                            window.location.href = "14-coordinacionesEstadales.php"
+                                        })
+                                    }
+                                    if (data.oac.mensaje == "Noentregado") {
+
+                                        Swal.fire({
+                                            'icon': 'error',
+                                            'title': 'Asignación de atención',
+                                            'text': "Ayuda tecnica fallida",
+                                            'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
+                                                '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
+                                                '<b>Dias de diferencia: </b>' + data.oac.difer,
+                                            'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
+                                        })
+                                    }
+
+
+                                }
+
+                                if (data.i == "OAC") {
+
+
+                                    if (data.oac.mensaje == "entregado") {
+
+                                        console.log(data);
+
+                                        Swal.fire({
+                                            'icon': 'success',
+                                            'title': 'Asignacion de atencion',
+                                            'text': "Ayuda tecnica asignada",
+                                            'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
+                                                '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
+                                                '<b>Dias de diferencia: </b>' + data.oac.difer,
+                                            'footer': "Ya pasaron los 6 meses de la ultima entrega de este tipo"
+                                        }).then(function() {
+                                            window.location.href = "14-coordinacionesEstadales.php"
+                                        })
+                                    }
+                                    if (data.oac.mensaje == "Noentregado") {
+
+                                        Swal.fire({
+                                            'icon': 'error',
+                                            'title': 'Asignación de atención',
+                                            'text': "Ayuda tecnica fallida",
+                                            'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
+                                                '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
+                                                '<b>Dias de diferencia: </b>' + data.oac.difer,
+                                            'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
+                                        })
+                                    }
+
+
+                                }
+
+
+
+
+
+
+
+
+
+                                /* OTRAS OPCIONES */
                                 if (data == "Remitido") {
                                     Swal.fire({
                                         'icon': 'success',
                                         'title': 'Asignacion de atencion: Remitido',
                                         'text': "Remitido exitosamente",
                                     }).then(function() {
-                                        window.location = "14-coordinacionesEstadales.php";
+                                        window.location.href = "14-coordinacionesEstadales.php"
                                     })
                                 }
                                 if (data.trim() == "Orientado") {
@@ -388,11 +596,12 @@ include_once("partearriba.php");
                                         'title': 'Asignacion de atencion: Orientado',
                                         'text': "Orientado exitosamente",
                                     }).then(function() {
-                                        window.location = "14-coordinacionesEstadales.php";
+                                        window.location.href = "14-coordinacionesEstadales.php"
                                     })
                                 }
                             },
                             error: function(data) {
+                                console.log(data)
                                 Swal.fire({
                                     'icon': 'error',
                                     'title': 'Oops...',

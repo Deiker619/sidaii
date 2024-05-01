@@ -116,10 +116,10 @@ ob_start()
     /* $numero_aten = $_REQUEST["numero_aten"]; */
     /* echo $numero_aten; */
     $consulta = $aten->atencionesDadas_por_discapacidadg();
-/*     echo $consulta["cedula"]; */
+    /*     echo $consulta["cedula"]; */
     $nombreImagen = "cintillo2.jpg";
     $imagenBase64 = "data:image/png;base64," . base64_encode(file_get_contents($nombreImagen));
-    
+
     ?>
 
 
@@ -137,7 +137,7 @@ ob_start()
 
 
             <div class="container">
-              <!--  --><img src="<?php echo $imagenBase64?>" width="100%">
+                <!--  --><img src="<?php echo $imagenBase64 ?>" width="100%">
 
                 <div class="tabla-atencion" style="width: 100%; margin-top:5%">
 
@@ -147,25 +147,25 @@ ob_start()
                             <tr>
                                 <th>Nombre discapacidad</th>
                                 <th>Cantidad</th>
-                        
+
 
                             </tr>
 
                         </thead>
                         <tbody>
 
-                       <?php foreach ($consulta as $registros) {?>
-                            <tr>
-                                <td><?php echo $registros["nombre_discapacidad"]; ?> </td>
-                                <td><?php echo $registros["cantidades"] ;?> </td>
-                            </tr>
-                        <?php } ?>
+                            <?php foreach ($consulta as $registros) { ?>
+                                <tr>
+                                    <td><?php echo $registros["nombre_discapacidad"]; ?> </td>
+                                    <td><?php echo $registros["cantidades"]; ?> </td>
+                                </tr>
+                            <?php } ?>
 
                         </tbody>
                     </table>
 
-                   
-                  
+
+
 
                 </div>
 
@@ -187,27 +187,216 @@ ob_start()
     </div>
 
 
+
+
     <?php
-
-    $html = ob_get_clean();
-        /* echo $html; */
-
     require_once("../../dompdf/autoload.inc.php");
+    $html = ob_get_clean();
 
     $dompdf = new Dompdf();
-    $option = $dompdf->getOptions();
-
-    $option->set(array('isRemoteEnable' => true));
-    $dompdf->setOptions($option);
-
     $dompdf->loadHtml($html);
-    /* $dompdf->setPaper('letter'); */
     $dompdf->setPaper('A4', 'portrait');
 
+    // Renderizar PDF
     $dompdf->render();
 
-    $nombre = "Report". date("Y-m-d H:i:s");
+    $nombre = "Report" . date("Y-m-d H:i:s");
     $dompdf->stream($nombre, array("Attachment" => false));
+
+    // Obtener contenido del PDF como string
+    $pdf_content = $dompdf->output();
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
+    //Load Composer's autoloader
+    require '../PHPMailer/src/Exception.php';
+    require '../PHPMailer/src/PHPMailer.php';
+    require '../PHPMailer/src/SMTP.php';
+
+    //Create an instance; passing `true` enables exceptions
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'rekied1842@gmail.com';                     //SMTP username
+        $mail->Password   = 'rcvheuugjdyyvzte';                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+        //Recipients
+        $mail->setFrom('sidaii@gmail.com', 'Sidaii');
+        $mail->addAddress('deiker1842@gmail.com', 'Deiker');     //Add a recipient
+        $mail->addAddress('ellen@example.com');               //Name is optional
+        $mail->addReplyTo('info@example.com', 'Information');
+        $mail->addCC('cc@example.com');
+        $mail->addBCC('bcc@example.com');
+
+        //Attachments
+        $mail->addStringAttachment($pdf_content, 'Report.pdf', 'base64', 'application/pdf');      //Add attachments
+        /*  $mail->addAttachment('/tmp/image.jpg', 'new.jpg');     */ //Optional name
+
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Here is the subject';
+        $mail->Body    = 'Hola mi amol es una prueba mia';
+        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+        $mail->send();
+        echo 'Message has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Guardar el PDF en un archivo (opcional)
+    /*  file_put_contents("documento.pdf", $pdf_content); */
+
+    // Adjuntar el PDF al correo electrónico
+    /*  $to = 'ing.jeannenava@gmail.com'; */
+    /*  $subject = 'Archivo adjunto';
+    $message = 'Aquí está tu archivo adjunto.';
+    $from = 'postmaster@localhost'; // Dirección de correo remitente
+    $reply_to = 'postmaster@localhost'; // Dirección de respuesta
+    $boundary = uniqid('np');
+
+    $headers = "From: $from" . PHP_EOL;
+    $headers .= "Reply-To: $reply_to" . PHP_EOL;
+    $headers .= "MIME-Version: 1.0" . PHP_EOL;
+    $headers .= "Content-Type: multipart/mixed; boundary=$boundary" . PHP_EOL;
+
+    // Cuerpo del mensaje
+    $body = "--$boundary" . PHP_EOL;
+    $body .= "Content-Type: text/plain; charset=UTF-8" . PHP_EOL;
+    $body .= "Content-Transfer-Encoding: 7bit" . PHP_EOL;
+    $body .= PHP_EOL . $message . PHP_EOL;
+
+    // Adjuntar el PDF
+    $body .= "--$boundary" . PHP_EOL;
+    $body .= "Content-Type: application/pdf; name=\"documento.pdf\"" . PHP_EOL;
+    $body .= "Content-Transfer-Encoding: base64" . PHP_EOL;
+    $body .= "Content-Disposition: attachment" . PHP_EOL;
+    $body .= PHP_EOL . chunk_split(base64_encode($pdf_content)) . PHP_EOL;
+
+    $body .= "--$boundary--";
+
+    // Enviar correo electrónico con el PDF adjunto
+    if (mail($to, $subject, $body, $headers)) {
+        echo "Correo enviado con éxito.";
+    } else {
+        echo "Error al enviar el correo.";
+    } */
+    /* https://www.javierrguez.com/configurar-el-correo-en-xampp-con-mercury32/
+    
+    <?php
+
+use Dompdf\Dompdf;
+
+ob_start();
+
+require_once("../../dompdf/autoload.inc.php");
+require_once("../../php/01-atenciones.php");
+
+// Obtener datos de las atenciones
+$aten = new Atenciones(1);
+$consulta = $aten->atencionesDadas_por_discapacidadg();
+
+// Generar HTML del documento
+$html = '
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Documento PDF</title>
+    <!-- Estilos CSS (puedes copiarlos del código anterior) -->
+</head>
+<body>
+    <!-- Contenido del PDF (puedes copiarlo del código anterior) -->
+</body>
+</html>';
+
+// Crear instancia de Dompdf y cargar HTML
+$dompdf = new Dompdf();
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4', 'portrait');
+
+// Renderizar PDF
+$dompdf->render();
+
+// Obtener contenido del PDF como string
+$pdf_content = $dompdf->output();
+
+// Guardar el PDF en un archivo (opcional)
+// file_put_contents("documento.pdf", $pdf_content);
+
+// Adjuntar el PDF al correo electrónico
+$to = 'deiker1842@gmail.com';
+$subject = 'Archivo adjunto';
+$message = 'Aquí está tu archivo adjunto.';
+$from = 'postmaster@localhost'; // Dirección de correo remitente
+$reply_to = 'postmaster@localhost'; // Dirección de respuesta
+$boundary = uniqid('np');
+
+$headers = "From: $from" . PHP_EOL;
+$headers .= "Reply-To: $reply_to" . PHP_EOL;
+$headers .= "MIME-Version: 1.0" . PHP_EOL;
+$headers .= "Content-Type: multipart/mixed; boundary=$boundary" . PHP_EOL;
+
+// Cuerpo del mensaje
+$body = "--$boundary" . PHP_EOL;
+$body .= "Content-Type: text/plain; charset=UTF-8" . PHP_EOL;
+$body .= "Content-Transfer-Encoding: 7bit" . PHP_EOL;
+$body .= PHP_EOL . $message . PHP_EOL;
+
+// Adjuntar el PDF
+$body .= "--$boundary" . PHP_EOL;
+$body .= "Content-Type: application/pdf; name=\"documento.pdf\"" . PHP_EOL;
+$body .= "Content-Transfer-Encoding: base64" . PHP_EOL;
+$body .= "Content-Disposition: attachment" . PHP_EOL;
+$body .= PHP_EOL . chunk_split(base64_encode($pdf_content)) . PHP_EOL;
+
+$body .= "--$boundary--";
+
+// Enviar correo electrónico con el PDF adjunto
+if (mail($to, $subject, $body, $headers)) {
+    echo "Correo enviado con éxito.";
+} else {
+    echo "Error al enviar el correo.";
+}
+
+?>
+
+     */
 
 
     ?>

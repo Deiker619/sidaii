@@ -15,7 +15,7 @@ include_once("partearriba.php");
     </div>
 
 
-   <!--  <a href="reportes/reportes_oac.php"> <button class="download-button">
+    <!--  <a href="reportes/reportes_oac.php"> <button class="download-button">
             <div class="docs"><svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                     <polyline points="14 2 14 8 20 8"></polyline>
@@ -37,7 +37,7 @@ include_once("partearriba.php");
 
 
 
-<!-- 
+        <!-- 
         <div class="group">
             <svg class="iconn" aria-hidden="true" viewBox="0 0 24 24">
                 <g>
@@ -51,9 +51,9 @@ include_once("partearriba.php");
         <h2>Personas con atencion</h2>
         <h2>Total: <?php include_once("../php/01-atenciones-estadales.php");
                     $aten = new AtencionesEstadales(1);
-                    if($rol =="Superusuario"){  /* 22/8/2023     */
+                    if ($rol == "Superusuario") {  /* 22/8/2023     */
                         $consulta = $aten->consultarTodosAtencionesa();
-                    }else{
+                    } else {
                         $aten->setcoordinacion($coordi);
                         $consulta = $aten->consultarTodosAtencionesaPOR();
                     }
@@ -62,6 +62,7 @@ include_once("partearriba.php");
         <table id="atencion">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Cedula</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
@@ -70,7 +71,10 @@ include_once("partearriba.php");
                     <th>Asis. Recibida</th>
                     <th>Ayuda. tecnica</th>
                     <th>Status</th>
-                    <th></th>
+                    <th>Certificado entrega</th>
+                    <th>Certificado Solicitud</th>
+                    <th>Informe medico</th>
+
                     <!-- <th></th>
                     <th></th> -->
                 </tr>
@@ -82,33 +86,38 @@ include_once("partearriba.php");
 
                 include_once("../php/01-atenciones-estadales.php");
                 $aten = new AtencionesEstadales(1);
-                if($rol =="Superusuario" || $rol=="Administrador"){  /* 22/8/2023     */
+                if ($rol == "Superusuario" || $rol == "Administrador") {  /* 22/8/2023     */
                     $consulta = $aten->consultarTodosAtencionesa();
-                }else{
+                } else {
                     $aten->setcoordinacion($coordi);
                     $consulta = $aten->consultarTodosAtencionesaPOR();
                 }
-                
+
                 $cantidadRegistros = count($consulta);
                 if ($consulta) {
                     foreach ($consulta as $registros) {
 
-                        echo '<tr>
-
-                             <td>' . $registros["cedula"] . '</td>' .
+                        echo '<tr>'.
+                        '<td>' . $registros["numero_aten"] . '</td>' .   
+                        '<td><a class="cedula" id="verBeneficiario" href="__verBeneficiario.php?cedula=' . $registros['cedula'] . '">' . $registros['cedula'] . '</a></td>'.
                             '<td>' . $registros["nombre"] . '</td>' .
                             '<td>' . $registros["apellido"] . '</td>' .
                             '<td>' . $registros["nombre_estado"] . '</td>' .
                             '<td>' . $registros["nombre_e"] . '</td>' .
                             '<td>' . $registros["atencion_brindada"] . '</td>' .
-                            '<td>' . $registros["atencion_recibida"] . '</td>' .
+                            '<td>' . $registros["nombre_ayuda"] . '</td>' .
                             '<td style="color: green;">Atendido</td>';
-                            if($registros["atencion_brindada"]=="-ayudatec"){?>
-                                <td style="padding: 0;"><a href="reportes/reporteAtencionOP.php?numero_aten=<?php echo $registros["numero_aten"] ?>" class="cargar" style="margin: 5px" > <i class='bx bx-download'></i></a></td>
-                                <?php
-                              }else{
-                                  echo '<td></td>';
-                              }
+                            if ($registros["atencion_brindada"] == "-ayudatec") { ?>
+                                <td style="padding: 0;"><a href="reportes/reporteAtencionOP.php?numero_aten=<?php echo $registros["numero_aten"] ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i></a></td>
+                                <td style="padding: 0;"> <a class="cargar"  style="margin: 5px"href="reportes/reporteCargarSolicitudesOP.php?numero_aten=<?php echo $registros["numero_aten"]; ?>"><i class='bx bx-download'></i></a></td>
+                                <td style="padding: 0;"> <a id="verBeneficiario" href="documentos/informes/<?php echo $registros['informe']; ?>" class="cargar"  style="margin: 5px"> <i class='bx bx-download'></i> </a></td>
+                            <?php
+                            } else {
+                                echo '<td></td>
+                                <td></td>
+                                <td></td>
+                             ';
+                            }
                     }
                 }
                 ?>
@@ -117,8 +126,10 @@ include_once("partearriba.php");
             </tbody>
         </table>
     </div>
-
+    
     <canvas id="graficaxbrindada" class="chart2" style="width: 300px; height:100px"></canvas>
+    <br>
+    <div style="height: 800px; max-width:100%;" id="containermapa"></div>
 
     <script>
         $(document).ready(function() {
@@ -135,4 +146,118 @@ include_once("partearriba.php");
     <?php
     include_once("parteabajo.php");
     ?>
-        <script src="graficas/graficasEstadales/graficasAtencionesRecibidas.js"></script>
+    <script src="graficas/graficasEstadales/graficasAtencionesRecibidas.js"></script>
+
+    
+
+
+    <?php
+$servername = "localhost";
+$username = "fmjgh";
+$password = "misionfmjgh";
+$dbname = "conapdis";
+
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+/// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificar conexión
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+$sql = "SELECT estados.codigo, COUNT(*) AS count 
+FROM (
+    SELECT beneficiario.estado, atenciones_coordinaciones.atencion_recibida 
+    FROM beneficiario 
+    JOIN atenciones_coordinaciones ON beneficiario.cedula = atenciones_coordinaciones.cedula
+) AS union_atenciones
+JOIN estados ON union_atenciones.estado = estados.id_estados
+WHERE union_atenciones.atencion_recibida IS NOT NULL
+GROUP BY estados.codigo;
+;";
+$result = $conn->query($sql);
+
+$data = [];
+if ($result->num_rows > 0) {
+  // output data of each row
+  while($row = $result->fetch_assoc()) {
+    $data[] = [$row["codigo"], $row["count"]];
+  }
+} else {
+  echo "0 results";
+}
+$conn->close();
+?>
+
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<script>
+    (async () => {
+        const topology = await fetch(
+            'https://code.highcharts.com/mapdata/countries/ve/ve-all.topo.json'
+        ).then(response => response.json());
+
+        // Use PHP to generate the data array
+        const data = <?php echo json_encode($data); ?>;
+
+        // Create the chart
+        Highcharts.mapChart('containermapa', {
+            chart: {
+                map: topology
+            },
+
+            title: {
+                text: 'Ayudas tecnicas mapa'
+            },
+
+            subtitle: {
+                text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/ve/ve-all.topo.json">Venezuela</a>'
+            },
+
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'bottom'
+                }
+            },
+
+            colorAxis: {
+    min: 0,
+    max: 1000,  // Set the maximum value for the color scale
+    stops: [
+        [0, '#68B6FA'],  // color for the minimum value
+        [0.5, '#166B9B'], // color for middle values
+        [1, '#141B75']  // color for the maximum value
+    ]
+}
+
+,
+
+            series: [{
+                data: data,
+                name: 'Ayudas tecnicas',
+                states: {
+                    hover: {
+                        color: 'silver'
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                }
+            }]
+        });
+
+    })();
+</script>
+<!-- consulta de oac y op estadal junta  SELECT estados.codigo, COUNT(*) AS count FROM (
+    SELECT beneficiario.estado, atenciones.atencion_recibida FROM beneficiario JOIN atenciones ON beneficiario.cedula = atenciones.cedula
+    UNION ALL
+    SELECT beneficiario.estado, atenciones_coordinaciones.atencion_recibida FROM beneficiario JOIN atenciones_coordinaciones ON beneficiario.cedula = atenciones_coordinaciones.cedula
+) AS union_atenciones
+JOIN estados ON union_atenciones.estado = estados.id_estados
+WHERE union_atenciones.atencion_recibida IS NOT NULL
+GROUP BY estados.codigo-->

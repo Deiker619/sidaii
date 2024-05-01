@@ -14,7 +14,7 @@ class Atenciones extends ManejadorBD
 	private $atencion_brindada;
 	private $atencion_solicitada;
 	private $por;
-
+	private $urgencia;
 
 
 
@@ -74,6 +74,15 @@ class Atenciones extends ManejadorBD
 	public function setnumero_aten($numero_aten)
 	{
 		$this->numero_aten = $numero_aten;
+	}
+
+	public function geturgencia()
+	{
+		return $this->urgencia;
+	}
+	public function seturgencia($urgencia)
+	{
+		$this->urgencia = $urgencia;
 	}
 
 
@@ -164,10 +173,10 @@ class Atenciones extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("UPDATE atenciones SET statu = :statu WHERE cedula = :cedula");
+			$stmt = $this->cnn->prepare("UPDATE atenciones SET statu = :statu WHERE numero_aten = :numero_aten");
 
 			// Asignamos valores a los parametros
-			$stmt->bindParam(':cedula', $this->cedula);
+			$stmt->bindParam(':numero_aten', $this->numero_aten);
 			$stmt->bindParam(':statu', $this->statu);
 
 
@@ -218,7 +227,7 @@ class Atenciones extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("SELECT  numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.estado,beneficiario.discapacidad, atenciones.atencion_solicitada FROM atenciones, beneficiario WHERE numero_aten = :numero_aten and beneficiario.cedula = atenciones.cedula and atenciones.fecha_aten IS NULL;");
+			$stmt = $this->cnn->prepare("SELECT  numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.estado,beneficiario.discapacidad, atenciones.atencion_solicitada, atenciones.informe FROM atenciones, beneficiario WHERE numero_aten = :numero_aten and beneficiario.cedula = atenciones.cedula and atenciones.fecha_aten IS NULL;");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Asiganmos valores a los parametros
@@ -238,6 +247,8 @@ class Atenciones extends ManejadorBD
 		}
 	}
 
+	
+
 	/* ====================================PARA CONSULTAR TODAS LAS ATENCIONES QUE NO SE LES HA DADO ATENCION, LISTAS PARA RECIBIR */
 
 	public function consultarTodosAtenciones()
@@ -246,8 +257,8 @@ class Atenciones extends ManejadorBD
 		try {
 
 			/* ACTU */
-			$stmt = $this->cnn->prepare("SELECT atenciones.atencion_solicitada,atenciones.numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones.statu 
-			FROM atenciones, beneficiario, estados, discapacid_e, tipoatencion WHERE
+			$stmt = $this->cnn->prepare("SELECT atenciones.atencion_solicitada,atenciones.numero_aten, atenciones.urgencia, beneficiario.cedula, beneficiario.email, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones.statu, 
+			atenciones.informe FROM atenciones, beneficiario, estados, discapacid_e, tipoatencion WHERE
 											beneficiario.cedula = atenciones.cedula and 
 											beneficiario.estado = estados.id_estados and 
 											beneficiario.discapacidad = discapacid_e.id_e and
@@ -301,13 +312,27 @@ class Atenciones extends ManejadorBD
 
 		try {
 
-			$stmt = $this->cnn->prepare("SELECT atenciones.numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado,discapacid_e.nombre_e, atenciones.atencion_recibida, atenciones.atencion_brindada 
-			FROM atenciones, beneficiario, estados, discapacid_e WHERE
-
-			beneficiario.cedula = atenciones.cedula and
-			beneficiario.discapacidad = discapacid_e.id_e and
-			beneficiario.estado = estados.id_estados and 
-			atenciones.fecha_aten IS NOT NULL;");
+			$stmt = $this->cnn->prepare("SELECT atenciones.numero_aten,
+			beneficiario.cedula,
+			beneficiario.nombre,
+			beneficiario.apellido,
+			estados.nombre_estado,
+			discapacid_e.nombre_e,
+			 CASE WHEN atenciones.atencion_recibida IS NOT NULL THEN
+				(SELECT tipo_ayuda_tecnica.nombre_tipoayuda
+				 FROM tipo_ayuda_tecnica
+				 WHERE atenciones.atencion_recibida = tipo_ayuda_tecnica.id)
+			END AS nombre_ayuda,
+		  
+			atenciones.atencion_solicitada,
+			atenciones.atencion_brindada,
+			atenciones.informe
+	 FROM atenciones
+	 INNER JOIN beneficiario ON beneficiario.cedula = atenciones.cedula
+	 INNER JOIN estados ON beneficiario.estado = estados.id_estados
+	 INNER JOIN discapacid_e ON beneficiario.discapacidad = discapacid_e.id_e
+	 WHERE atenciones.fecha_aten IS NOT NULL;
+	 ");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Ejecutamos
@@ -687,18 +712,73 @@ class Atenciones extends ManejadorBD
 			exit();
 		}
 	}
+	public function subirArchivo($archivo)
+	{
+
+		try {
+
+			$stmt = $this->cnn->prepare("UPDATE atenciones SET archivo = :archivo
+                                             WHERE numero_aten = :numero_aten");
+
+			// Asignamos valores a los parametros
+			$stmt->bindParam(':archivo', $archivo);
+			$stmt->bindParam(':numero_aten', $this->numero_aten);
+
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se Afecto: " . $stmt->rowCount() . " Registro<br>"; */
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			/* return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	 */
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function subirInforme($archivo)
+	{
+
+		try {
+
+			$stmt = $this->cnn->prepare("UPDATE atenciones SET informe = :informe
+                                             WHERE numero_aten = :numero_aten");
+
+			// Asignamos valores a los parametros
+			$stmt->bindParam(':informe', $archivo);
+			$stmt->bindParam(':numero_aten', $this->numero_aten);
+
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se Afecto: " . $stmt->rowCount() . " Registro<br>"; */
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			/* return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	 */
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
 
 	public function carga_solicitud()
 	{
 
 		try {
 
-			$stmt = $this->cnn->prepare("UPDATE atenciones SET atencion_solicitada = :atencion_solicitada
-                                             WHERE numero_aten = :numero_aten");
+			$stmt = $this->cnn->prepare("UPDATE atenciones SET atencion_solicitada = :atencion_solicitada,
+											urgencia = :urgencia
+											WHERE numero_aten = :numero_aten");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':atencion_solicitada', $this->atencion_solicitada);
 			$stmt->bindParam(':numero_aten', $this->numero_aten);
+			$stmt->bindParam(':urgencia', $this->urgencia);
 
 			// Ejecutamos
 			$stmt->execute();
@@ -1130,7 +1210,7 @@ class Atenciones extends ManejadorBD
 			semanas.numero_semana");
 
 			// Bind de parámetros
-				
+
 			// Ejecutamos
 			$stmt->execute();
 
@@ -1317,7 +1397,55 @@ class Atenciones extends ManejadorBD
 		}
 	}
 
-	
+	public function UltimoIdRegistrado()
+	{
+		try {
 
-	
+			$stmt = $this->cnn->prepare("SELECT MAX(numero_aten) as id FROM atenciones;");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Asiganmos valores a los parametros
+			/* $stmt->bindParam(':numero_aten', $this->numero_aten); */
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetch();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	public function CargarDatosRemitidos($informe)
+	{
+
+		try {
+
+			$stmt = $this->cnn->prepare("UPDATE atenciones SET informe = :informe, atencion_solicitada = :atencion_solicitada
+                                             WHERE numero_aten = :numero_aten");
+
+			// Asignamos valores a los parametros
+			$stmt->bindParam(':numero_aten', $this->numero_aten);
+			$stmt->bindParam(':atencion_solicitada', $this->atencion_solicitada);
+			$stmt->bindParam(':informe', $informe);
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			echo "<br>Se Afecto: " . $stmt->rowCount() . " Registro<br>";
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	
+
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
 }

@@ -17,21 +17,21 @@ include_once("partearriba.php");
     </div>
 
     <a target="_blank" href="respaldo/respaldo.php"> <button class="download-button ">
-                    <div class="docs dos"><svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line y2="13" x2="8" y1="13" x1="16"></line>
-                            <line y2="17" x2="8" y1="17" x1="16"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg> Generar respaldo</div>
-                    <div class="download">
-                        <svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" height="24" width="24" viewBox="0 0 24 24">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line y2="3" x2="12" y1="15" x1="12"></line>
-                        </svg>
-                    </div>
-                </button></a>
+            <div class="docs dos"><svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line y2="13" x2="8" y1="13" x1="16"></line>
+                    <line y2="17" x2="8" y1="17" x1="16"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg> Generar respaldo</div>
+            <div class="download">
+                <svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" height="24" width="24" viewBox="0 0 24 24">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line y2="3" x2="12" y1="15" x1="12"></line>
+                </svg>
+            </div>
+        </button></a>
 
 
     <div class="tabla-atencion">
@@ -62,7 +62,7 @@ include_once("partearriba.php");
                     <th>Rol</th>
                     <th>Cordinacion</th>
                     <th>Status</th>
-                    
+
                     <th></th>
 
 
@@ -92,7 +92,7 @@ include_once("partearriba.php");
                             <?php if ($registros["bloqueado"] == 1) { ?>
 
                                 <td>
-                                <a class="eliminar" href="../php/cambiar_estado.php?desbloquear=<?php echo $registros["cedula"]; ?>">Desbloquear</a>
+                                    <a class="eliminar" href="../php/cambiar_estado.php?desbloquear=<?php echo $registros["cedula"]; ?>">Desbloquear</a>
 
                                 </td>
 
@@ -114,7 +114,159 @@ include_once("partearriba.php");
 
             </tbody>
         </table>
+
+        
     </div>
+    <div class=" tabla-atencion">
+
+
+
+                                        <h2>Actividad de beneficiarios: <i>Eliminados</i></h2>
+
+
+
+                                        <table id="atencion">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cedula</th>
+                                                    <th>Nombre</th>
+                                                    <th>Apellido</th>
+                                                    <th>Fecha de registrado</th>
+
+
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody id="atenciones">
+
+                                                <?php
+                                                include_once("../php/03-usuario.php");
+                                                $aten = new Usuario(1);
+                                                $consulta = $aten->ben_eliminados();
+                                                $cantidadRegistros = count($consulta);
+                                                if ($consulta) {
+                                                    foreach ($consulta as $registros) {
+                                                ?>
+                                                        <tr>
+                                                            <td><?php echo $registros["cedula"] ?></td>
+                                                            <td><?php echo $registros["nombre"] ?></td>
+                                                            <td><?php echo $registros["apellido"] ?></td>
+                                                            <td><?php echo $registros["fecha_eliminacion"] ?></td>
+
+
+
+                                                        </tr>
+                                                <?php
+                                                    }
+                                                }
+                                                ?>
+
+                                            </tbody>
+                                        </table>
+
+    </div>
+
+    <div class="tabla-atencion">
+
+
+
+        <h2>Actividad de beneficiarios: <i>insertados</i></h2>
+
+        <table id="atencion">
+            <thead>
+                <tr>
+                    <th>Cedula</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Registrado por</th>
+                    <th>Fecha</th>
+
+
+
+                </tr>
+            </thead>
+            <tbody id="atenciones">
+
+                <?php
+                include_once("../php/03-usuario.php");
+                $aten = new Usuario(1);
+                $consulta = $aten->reg_beneficiario();
+                $cantidadRegistros = count($consulta);
+                if ($consulta) {
+                    foreach ($consulta as $registros) {
+                ?>
+                        <tr>
+                            <td><?php echo $registros["cedula"] ?></td>
+                            <td><?php echo $registros["nombre"] ?></td>
+                            <td><?php echo $registros["apellido"] ?></td>
+                            <td><?php echo $registros["registrado_por"] ?></td>
+                            <td><?php echo $registros["INSERTADO"] ?></td>
+
+
+
+
+
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tabla-atencion">
+
+
+
+        <h2>Actividad de beneficiarios: <i>Modificados</i></h2>
+
+        <table id="atencion">
+            <thead>
+                <tr>
+                    <th>Cedula</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Fecha</th>
+
+
+
+                </tr>
+            </thead>
+            <tbody id="atenciones">
+
+                <?php
+                include_once("../php/03-usuario.php");
+                $aten = new Usuario(1);
+                $consulta = $aten->mod_beneficiario();
+                $cantidadRegistros = count($consulta);
+                if ($consulta) {
+                    foreach ($consulta as $registros) {
+                ?>
+                        <tr>
+                            <td><?php echo $registros["cedula"] ?></td>
+                            <td><?php echo $registros["nombre"] ?></td>
+                            <td><?php echo $registros["apellido"] ?></td>
+
+                            <td><?php echo $registros["fecha"] ?></td>
+
+
+
+
+
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
+
+            </tbody>
+        </table>
+    </div>
+
+
 </div>
 
 

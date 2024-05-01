@@ -202,10 +202,10 @@ if ($consulta) {
                                         <tr>
                                             <th>ID</th>
                                             <th>Cedula</th>
-                                            <th>Fecha de inscrito</th>
+                                      
                                             <th>ID de encuentro</th>
                             
-                                            <th></th>
+                                       
 
 
                                         </tr>
@@ -216,7 +216,7 @@ if ($consulta) {
 
                                                     <td>'.$registros["id"].'</td>'.
                                                     '<td>'.$registros["cedula"].'</td>'.
-                                                    '<td>'.$registros["fecha_recibido"].'</td>'.
+                                                    
                                                     '<td>'.$registros["encuentro"].'</td>'.
                                                    /*  '<td>'.$registros["discapacidad"].'</td>'.
                                                     '<td>'.$registros["atencion_solicitada"].'</td>'. */

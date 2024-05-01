@@ -6,6 +6,7 @@ include_once("01-atenciones-estadales.php");
 
     $numero_aten = $_POST["id"];
 	$atencion_solicitada = $_POST["atencion_recibida"];
+	$urgencia = $_POST["urgencia"] ?? null;
 	
 	
 	
@@ -15,6 +16,7 @@ include_once("01-atenciones-estadales.php");
 	$escuela ->setatencion_solicitada($atencion_solicitada);
 
     $escuela ->setnumero_aten($numero_aten);
+	$escuela ->seturgencia($urgencia);
 	$escuela->carga_solicitud();
 		/* extraer cedula de esa atencion */
 	$cedula = $escuela->consultarAtenciones();

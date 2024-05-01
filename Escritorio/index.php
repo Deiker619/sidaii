@@ -13,7 +13,15 @@ include_once("partearriba.php")
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-chart'></i>
-            <span class="link-name">Resumen: </span>
+            <span class="link-name">Resumen:
+                <?php if ($user->DetectarContraseñaPorDefecto($_SESSION["cedula"])) {
+                    $verify = true;
+                    $verifyJson = json_encode($verify);
+                } else {
+                    $verify = false;
+                    $verifyJson = json_encode($verify);
+                }
+                ?></span>
         </div>
     </div>
     <br>
@@ -110,8 +118,9 @@ include_once("partearriba.php")
     </div>
 
 
+
     <div class="resumen">
-       
+
         <?php if ($gerencia == "3Gtnd" || $rol == "Superusuario" || $gerencia == "4Gtno") { ?>
             <div class="cards">
                 <?php
@@ -252,7 +261,8 @@ include_once("partearriba.php")
 
 
 
-
+    <script src="../package/dist/sweetalert2.all.js"></script>
+    <script src="../package/dist/sweetalert2.all.min.js"></script>
     <script>
         function pageLoaded() {
             let loaderSection = document.querySelector('.loader-section');
@@ -260,4 +270,35 @@ include_once("partearriba.php")
         }
 
         window.addEventListener('load', pageLoaded);
+    
+        
+       
+        function detectarContraseñaPorDefecto() {
+            var verify = <?php echo $verifyJson; ?>;
+            if (verify) {
+                console.log(verify)
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "bottom-left",
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                    showCloseButton: true,
+                    titleFontSize: '5px'
+
+                });
+
+                Toast.fire({
+                    icon: "warning",
+                    title: "Su contraseña es por defecto, cambiela para mayor seguridad",
+                    html: '<a class="cedula" href="__CambioContraseña.php">Ir</a>',
+                  
+                    
+
+                });
+            }
+        }
+        $(document).ready(function(){
+            detectarContraseñaPorDefecto();
+        })
+        
     </script>

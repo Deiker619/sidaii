@@ -6,6 +6,7 @@ $aten = new seguimiento(1);
 $cedula = $_POST["cedula"];
 $descripcion = $_POST["descripcion"];
 $fecha_seguimiento = $_POST["fecha"];
+$numero = $_POST["numero"];
 
 
 
@@ -17,7 +18,7 @@ $aten->insertarSeguimiento();
 include_once("../php/01-atenciones-estadales.php");
 
 $aten =  new AtencionesEstadales(1);
-$aten ->setcedula($cedula);
+$aten ->setnumero_aten($numero);
 $aten ->setstatu("En seguimiento");
 $aten ->insertarStatu();
 

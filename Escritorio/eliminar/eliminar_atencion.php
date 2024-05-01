@@ -24,6 +24,9 @@ if(isset($_REQUEST["id"])){
 
  $pe = new Atenciones(1);
  $pe->setnumero_aten($id);
+ $borrarInforme= $pe->consultarAtenciones();
+
+ unlink("../documentos/informes/".$borrarInforme["informe"]);
 
 
 
