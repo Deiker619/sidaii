@@ -441,6 +441,11 @@ include_once("partearriba.php");
                             numero_aten: numero_aten,
                             fecha_aten: fecha_aten,
 
+                            /*  */
+                            nombre_familiar: nombre_familiar,
+                            apellido_familiar: apellido_familiar,
+                            cedula_familiar: cedula_familiar,
+
                             /* ayuda tecnica */
                             atencion_recibida: atencion_recibida,
                             atencion_solicitada: atencion_solicitada,

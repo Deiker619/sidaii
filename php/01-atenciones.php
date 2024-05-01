@@ -14,6 +14,7 @@ class Atenciones extends ManejadorBD
 	private $atencion_brindada;
 	private $atencion_solicitada;
 	private $por;
+	private $familiar;
 	private $urgencia;
 
 
@@ -122,6 +123,15 @@ class Atenciones extends ManejadorBD
 	public function setatencion_solicitada($atencion_solicitada)
 	{
 		$this->atencion_solicitada = $atencion_solicitada;
+	}
+
+	public function getfamiliar()
+	{
+		return $this->familiar;
+	}
+	public function setfamiliar($familiar)
+	{
+		$this->familiar = $familiar;
 	}
 
 

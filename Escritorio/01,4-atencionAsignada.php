@@ -15,6 +15,11 @@ $discapacidad = $_POST["discapacidad"];
 $fecha_aten = $_POST["fecha_aten"];
 $numero_aten = $_POST["numero_aten"];
 
+/* Familiar */
+$apellido_familiar = $_POST["apellido_familiar"]??null;
+$nombre_familiar = $_POST["nombre_familiar"]??null;
+$cedula_familiar = $_POST["cedula_familiar"]??null;
+
 /* entrega */
 $atencion_recibida = $_POST["atencion_recibida"];
 $atencion_solicitada = $_POST["atencion_solicitada"];
