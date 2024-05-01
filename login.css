@@ -1,0 +1,36 @@
+.supercontainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:50px ;
+    max-width: 100%;
+}
+
+
+.container{
+    background-color: #fff;
+    max-width: 500px;
+    width: 100%;
+    border-radius: 6px;
+    padding: 30px;
+    margin: 90px 15px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.container form{
+    position: relative;
+    margin-top: 16px;
+    padding: 10px;
+    min-height: 300px;
+    background-color: #fff;
+}
+
+
+
+form .fields .input-field{ 
+    display: flex;
+    width: calc(100%/1 - 20px); /* !!!!!!!!!!!! */
+    flex-direction: column;
+    margin: 4px 0;
+}

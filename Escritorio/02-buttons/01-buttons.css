@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope&display=swap');
+
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+
+.container-buttons{
+    text-align: center;
+    margin-top: 360px;
+}
+.btn{
+    border: 1px solid #38b000;
+    background: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-family: 'Manrope', sans-serif;
+    cursor: pointer;
+    margin: 10px;
+    transition: 0.8s;
+    position: relative;
+    overflow: hidden;
+}
+
+.bt11, .bt12{
+    color:#38b000 ;
+}
+.bt13, .bt14{
+    color:#fff ;
+}
+
+.bt11:hover, .bt12:hover{
+    color: #fff;
+}
+
+.bt13:hover, .bt14:hover{
+    color: #38b000;
+}
+
+.btn::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: #38b000;
+    z-index: -1;
+    transition: 0.8s;
+}
+.bt11::before, .bt13::before{
+    top: 0;
+    border-radius: 0 0 50% 50%;
+
+}
+
+.bt12::before, .bt14::before{
+    bottom: 0;
+    border-radius: 50% 50% 0 0 ;
+    
+}
+
+.bt13::before, .bt14::before{
+    height: 100%;
+    
+}
+
+.bt11:hover::before, .bt12:hover::before{
+    height: 100%;
+}
+
+.bt13:hover::before, .bt14:hover::before{
+    height: 0%;
+}
