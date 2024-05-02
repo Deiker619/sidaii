@@ -23,8 +23,8 @@ if ($consulta) {
             '<td style="color: green;">Atendido</td>';
         if ($registros["atencion_brindada"] == "-ayudatec") { ?>
             <td style="padding: 0;"><a href="reportes/reporteAtencion.php?numero_aten=<?php echo $registros["numero_aten"] ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i></a></td>
-            <td style="padding: 0;"> <a class="cargar"  style="margin: 5px"href="reportes/reporteCargarSolicitudes.php?numero_aten=<?php echo $registros["numero_aten"]; ?>"><i class='bx bx-download'></i></a></td>
-            <td style="padding: 0;"> <a id="verBeneficiario" href="documentos/informes/<?php echo $registros['informe']; ?>" class="cargar"  style="margin: 5px"> <i class='bx bx-download'></i> </a></td>
+            <td style="padding: 0;"> <a class="cargar" style="margin: 5px" href="reportes/reporteCargarSolicitudes.php?numero_aten=<?php echo $registros["numero_aten"]; ?>"><i class='bx bx-download'></i></a></td>
+            <td style="padding: 0;"> <a id="verBeneficiario" href="documentos/informes/<?php echo $registros['informe']; ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i> </a></td>
         <?php
         } else {
             echo '<td></td>
@@ -32,7 +32,19 @@ if ($consulta) {
             <td></td>
          ';
         }
+
         ?>
+        <td>
+            <div class="enviar">
+                <?php if ($registros["atencion_solicitada"]) { ?>
+                    <div class="enviar_text"> <i class='bx bx-mail-send' onclick="enviarEmail('<?php echo $registros['numero_aten'] ?>','<?php echo $registros['email'] ?? null ?>')" style="color:#3ab556; cursor:pointer"></i></div>
+                <?php } else { ?>
+
+                    <div class="enviar_text"> <i class='bx bx-no-entry' style="color:crimson; cursor:not-allowed "></i></div>
+                <?php } ?>
+            </div>
+        </td>
+        
 <?php
 
 
@@ -52,4 +64,6 @@ if ($consulta) {
             </tr>'; */
     }
 }
+
+
 ?>

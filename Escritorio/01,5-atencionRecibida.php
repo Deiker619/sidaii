@@ -62,6 +62,7 @@ include_once("partearriba.php");
              
                     <th>Certificado Solicitud</th>
                     <th>Informe medico</th>
+                    <th></th>
                     <!-- <th></th>
                     <th></th> -->
                 </tr>
@@ -79,6 +80,149 @@ include_once("partearriba.php");
 <script src="../package/dist/sweetalert2.all.js"></script>
 <script src="../package/dist/sweetalert2.all.min.js"></script>
 <script>
+
+            function enviarEmail(a, b) {
+                let correo = b
+                let email = true;
+                let numero_aten = a;
+
+                /* No tiene correo */
+                if (correo) {
+                    Swal.fire({
+                        title: "¿Desea enviar el comprobante al correo registrado?",
+                        html: "<b>Correo: </b>" + b + "",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, enviar!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "POST",
+                                url: "reportes/enviarEmailCompleto.php",
+                                data: {
+                                    numero_aten: numero_aten,
+                                    correo: correo,
+
+                                },
+                                success: function(data) {
+                                    console.log(data)
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+
+
+
+                                        },
+                                        willClose: () => {
+
+                                            window.location.href = "01,2-atenciones.php#atenciones"
+                                        }
+                                    });
+
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Enviado exitosamente',
+                                    });
+
+
+                                },
+                                error: function(data) {
+                                    console.log(data)
+                                    Swal.fire({
+                                        'icon': 'error',
+                                        'title': 'Oops...',
+                                        'text': data
+                                    })
+                                }
+                            })
+                        }
+                    });
+                } else {
+                    const {
+                        value: atencion
+                    } = Swal.fire({
+                        title: 'Agrega el correo personalizado',
+                        input: 'email',
+                        inputLabel: 'Introduce el correo para enviar comprobante',
+                        inputValue: correo,
+                        footer: "Esta persona no tiene correo registrado",
+                        showCancelButton: true,
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'Debes escribir algo'
+                            }
+
+                            if (value) {
+                                correo = value;
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: "reportes/enviarEmail.php",
+                                    data: {
+                                        numero_aten: numero_aten,
+                                        correo: correo,
+
+                                    },
+                                    success: function(data) {
+                                        const Toast = Swal.mixin({
+                                            toast: true,
+                                            position: 'top-end',
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            didOpen: (toast) => {
+                                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+
+
+
+                                            },
+                                            willClose: () => {
+
+                                                window.location.href = "01,2-atenciones.php#atenciones"
+                                            }
+                                        });
+
+                                        Toast.fire({
+                                            icon: 'success',
+                                            title: 'Enviado exitosamente',
+                                        });
+
+                                        if (!data) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: "No se pudo registrar la solicitud, verifique datos"
+                                            }).then(function() {
+                                                window.location = "01,2-atenciones.php";
+                                            })
+                                        }
+                                    },
+                                    error: function(data) {
+                                        Swal.fire({
+                                            'icon': 'error',
+                                            'title': 'Oops...',
+                                            'text': data
+                                        })
+                                    }
+                                })
+
+                            }
+                        }
+
+                    })
+                }
+                /* Si tiene correo */
+
+            }
+        
     function subirArchivo(a) {
         var numero_aten = a;
         Swal.fire({

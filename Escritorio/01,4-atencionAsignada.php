@@ -71,6 +71,10 @@ if ($atencion_recibida) {
                 $oac->setpor($por);
                 $oac->setcedula($cedula);
                 $consulta = $oac->modificarAtenciones();
+                
+                if($cedula_familiar){
+                  /* $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten); */
+                }
                 $oac->__destruct();
             }
         }
@@ -86,7 +90,11 @@ if ($atencion_recibida) {
                 $oac->setpor($por);
                 $oac->setcedula($cedula);
                 $consulta = $oac->modificarAtenciones();
-                $oac->__destruct();
+                if($cedula_familiar){
+                    $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten);
+                    
+                  }
+                  $oac->__destruct();
             }
         }
         if ($fecha1->format('Y-m-d') == $fecha2->format('Y-m-d')) { //Son iguales
@@ -105,7 +113,10 @@ if ($atencion_recibida) {
         $oac->setpor($por);
         $oac->setcedula($cedula);
         $consulta = $oac->modificarAtenciones();
-        $oac->__destruct();
+        if($cedula_familiar){
+            $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten);
+          }
+          $oac->__destruct();
     }
 
     header('Content-Type: application/json');
@@ -131,8 +142,10 @@ if ($remit) {
         $remicion->setcoordinacion($coordinacion);
 
         $consultR = $remicion->insertarRemicion();
+        $data = array();
+        $data["i"] = "Remitido";
         header('Content-Type: application/json');
-        echo json_encode("Remitido");
+        echo json_encode($data);
     }
 }
 
@@ -143,13 +156,16 @@ if ($descrip_orientacion) {
 
     $consulta = $aten->modificarAtenciones();
     if ($consulta) {
-        echo "Orientado";
         include_once("../php/09-orientacion.php");
         $remicion = new orientacion(1);
         $remicion->setcedula($cedula);
         $remicion->setdescripcion($descrip_orientacion);
         $remicion->setfecha_orientacion($fecha_aten);
         $remicion->insertarOrientacion();
+        $data = array();
+        $data["i"] = "Orientado";
+        header('Content-Type: application/json');
+        echo json_encode($data);
     }
 }
 

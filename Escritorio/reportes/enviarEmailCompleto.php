@@ -106,7 +106,8 @@ ob_start()
 
         }
 
-        table .cabecero, th {
+        table .cabecero,
+        th {
             background-color: #828384;
             padding-left: 5px;
         }
@@ -125,7 +126,7 @@ ob_start()
 
         }
 
-        .firma{
+        .firma {
             background-color: none;
         }
     </style>
@@ -184,7 +185,7 @@ ob_start()
 
                         <td><b>Nombre: </b> <?php echo $consulta["nombre"] ?> </td>
                         <td><b>Apellido: </b> <?php echo $consulta["apellido"] ?> </td>
-                        <td><b>Cedula: </b> <?php echo number_format($consulta["cedula"], 0, '', '.')?> </td>
+                        <td><b>Cedula: </b> <?php echo number_format($consulta["cedula"], 0, '', '.') ?> </td>
 
 
 
@@ -207,7 +208,7 @@ ob_start()
                         </tbody>
                     </table>
                     <table style="width:80%;margin-left:75px; ">
-                        
+
                         <tbody>
 
 
@@ -219,38 +220,38 @@ ob_start()
 
                         </tbody>
                     </table>
-                    <?php if($familiar){ ?>
-                    <table style="width:80%; margin-left:75px;">
+                    <?php if ($familiar) { ?>
+                        <table style="width:80%; margin-left:75px;">
 
-                        <tr class="cabecero">
-                            <th style="margin: 0; text-align:left">Datos del familiar directo</th>
-                            <th></th>
-                            <th></th>
+                            <tr class="cabecero">
+                                <th style="margin: 0; text-align:left">Datos del familiar directo</th>
+                                <th></th>
+                                <th></th>
 
-                        </tr>
-
-
+                            </tr>
 
 
 
 
 
-                        <td><b>Nombre: </b> <?php echo $familiar["nombre"] ?> </td>
-                        <td><b>Apellido: </b> <?php echo $familiar["apellido"] ?> </td>
-                        <td><b>Cedula: </b> <?php echo number_format($familiar["cedula"], 0, '', '.')?> </td>
+
+
+                            <td><b>Nombre: </b> <?php echo $familiar["nombre"] ?> </td>
+                            <td><b>Apellido: </b> <?php echo $familiar["apellido"] ?> </td>
+                            <td><b>Cedula: </b> <?php echo number_format($familiar["cedula"], 0, '', '.') ?> </td>
 
 
 
 
 
-                    </table>
-                  <?php } ?>
+                        </table>
+                    <?php } ?>
 
 
                     <textarea style="margin-top: 80px; width:80%;  margin-left:75px;" name="" id="" cols="50" rows="50" placeholder="observaciones">Comprobante: Se certifica que <?php echo $consulta["nombre"] . " " . $consulta["apellido"] ?>, identificado/a con Cédula <?php echo  number_format($consulta["cedula"], 0, '', '.') ?>, ha recibido una asistencia de tecnica el <?php echo $consulta["fecha_aten"] ?>. El ID de atención N° <?php echo $consulta["numero_aten"] ?>, y corresponde a un/a <?php echo $consulta["nombre_tipoayuda"] ?>. Agradecemos su confianza en nuestros servicios.</textarea>
 
                     <table class="footer" style="border: 0px; margin-top:100px">
-                        <thead >
+                        <thead>
                             <th style="background-color: white;"> <label for="">
                                     <div style="width:300px; margin-left:85px; border-top:1px solid black"></div>Recibido por:
                                 </label><br>
@@ -259,7 +260,7 @@ ob_start()
                                     </div> -->
                             </th>
                             <th style="background-color: white;">
-                                
+
                             </th>
                             <th style="background-color: white;"> <label for="">
                                     <div style="width:300px; margin-left:85px;  border-top:1px solid black"></div>Entregado por:
@@ -319,8 +320,71 @@ ob_start()
     $dompdf->render();
 
     $nombre = $consulta["cedula"];
-    $dompdf->stream($nombre, array("Attachment" => false));
+    /* $dompdf->stream($nombre, array("Attachment" => false)); */
+    $pdf_content = $dompdf->output();
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
+    //Load Composer's autoloader
+    require '../PHPMailer/src/Exception.php';
+    require '../PHPMailer/src/PHPMailer.php';
+    require '../PHPMailer/src/SMTP.php';
+
+    //Create an instance; passing `true` enables exceptions
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                       //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'rekied1842@gmail.com';                 //SMTP username
+        $mail->Password   = 'rcvheuugjdyyvzte';                     //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to
+        $mail->addCustomHeader('Content-Language', 'es');
+        //Recipients
+        $mail->setFrom('sidaii@gmail.com', 'Sidaii');
+        $mail->addAddress($_POST["correo"], 'Deiker');        //Add a recipient
+
+        //Attachments
+        $mail->addStringAttachment($pdf_content, 'Comprobante_entrega.pdf', 'base64', 'application/pdf');      //Add attachments
+
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Comprobante de entrega';
+        $mail->Body    =  '
+    <html>
+    <head>
+        <title>Comprobante de entrega</title>
+    </head>
+    <body>
+        <p>Estimado Cliente <b>' . $consulta["nombre"] . ' ' . $consulta["apellido"] . '</b>,  </p>
+        <p>Queremos informarle que hemos recibido su solicitud, realizada el' . '. Agradecemos su confianza en nuestros servicios.</p>
+        <p>Nos complace confirmar que su solicitud ha sido recibida y está siendo procesada. Nuestro equipo está trabajando diligentemente para coordinar la entrega del producto lo antes posible.</p>
+        <p>Una vez que su solicitud haya sido atendida, recibirá una notificación con los detalles de la entrega.</p>
+        <p>Si tiene alguna pregunta adicional o necesita más información, no dude en ponerse en contacto con nosotros.</p>
+        <p>Atentamente, <b>Fundación Jose Gregorio Hernández</b></p>
+    </body>
+    </html>
+';
+        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+        $mail->send();
+
+        $mensaje = array(
+            "mensaje" => "enviado"
+        );
+
+        header('Content-Type: application/json');
+        echo json_encode($mensaje);
+    } catch (Exception $e) {
+        echo json_encode("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+    }
 
 
     ?>
-</body>
+
+

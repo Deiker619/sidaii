@@ -241,6 +241,7 @@ include_once("partearriba.php");
                                             <option value="5Logi">Gestion logistica y infrastructura</option>
                                             <option value="3Gtnd">Gestion y desarrollo social</option>
                                             <option value="4Gtno">Gestion operativa estadal</option>
+                                            <option value="otro">Otro ente </option>
 
                                         </select>
 
@@ -470,6 +471,26 @@ include_once("partearriba.php");
                         },
                         success: function(data) {
                             console.log(data);
+                            if (data.i == "Remitido") {
+                                Swal.fire({
+                                    'icon': 'success',
+                                    'title': 'Asignacion de atencion: Remitido',
+                                    'text': "Remitido exitosamente",
+                                }).then(function() {
+                                    window.location = "01,2-atenciones.php";
+                                })
+                            }
+                            
+                            if (data.i == "Orientado") {
+                                Swal.fire({
+                                    'icon': 'success',
+                                    'title': 'Asignacion de atencion: Orientado',
+                                    'text': "Orientado exitosamente",
+                                }).then(function() {
+                                    window.location = "01,2-atenciones.php";
+                                })
+                            }
+
                             if (data.oac.mensaje == "primera" && data.op.mensaje == "primera") {
                                 Swal.fire({
                                     'icon': 'success',
@@ -584,24 +605,7 @@ include_once("partearriba.php");
 
 
                             /* OTRAS OPCIONES */
-                            if (data == "Remitido") {
-                                Swal.fire({
-                                    'icon': 'success',
-                                    'title': 'Asignacion de atencion: Remitido',
-                                    'text': "Remitido exitosamente",
-                                }).then(function() {
-                                    window.location = "01,2-atenciones.php";
-                                })
-                            }
-                            if (data.trim() == "Orientado") {
-                                Swal.fire({
-                                    'icon': 'success',
-                                    'title': 'Asignacion de atencion: Orientado',
-                                    'text': "Orientado exitosamente",
-                                }).then(function() {
-                                    window.location = "01,2-atenciones.php";
-                                })
-                            }
+                            
                         },
                         error: function(data) {
 
