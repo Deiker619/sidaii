@@ -73,7 +73,7 @@ if ($atencion_recibida) {
                 $consulta = $oac->modificarAtenciones();
                 
                 if($cedula_familiar){
-                  /* $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten); */
+                   $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten); 
                 }
                 $oac->__destruct();
             }
