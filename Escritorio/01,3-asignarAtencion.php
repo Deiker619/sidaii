@@ -154,15 +154,15 @@ include_once("partearriba.php");
 
                                     <div class="input-field" id="nombreF">
                                         <label>Nombre del familiar</label>
-                                        <input type="text"   name="nombre_familiar" id="nombre_familiar">
+                                        <input type="text" name="nombre_familiar" id="nombre_familiar">
                                     </div>
                                     <div class="input-field" id="apellidoF">
                                         <label>Apellido del familiar</label>
-                                        <input type="text"   name="apellido_familiar" id="apellido_familiar">
+                                        <input type="text" name="apellido_familiar" id="apellido_familiar">
                                     </div>
                                     <div class="input-field" id="cedulaF">
                                         <label>Cedula del familiar</label>
-                                        <input type="text"   name="cedula_familiar" id="cedula_familiar">
+                                        <input type="text" name="cedula_familiar" id="cedula_familiar">
                                     </div>
 
 
@@ -396,7 +396,7 @@ include_once("partearriba.php");
                     var apellido_familiar = $("#apellido_familiar").val() ?? null;
                     var cedula_familiar = $("#cedula_familiar").val() ?? null;
 
-                    
+
 
                     /*       console.log(fecha_aten);
                           console.log(cedula);
@@ -429,6 +429,32 @@ include_once("partearriba.php");
 
 
                     e.preventDefault();
+
+                    function asignarAtencion() {
+                        // Mostrar el loader de SweetAlert
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "bottom-start",
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                Swal.showLoading();
+                            },
+                        });
+
+                        Toast.fire({
+                            icon: "success",
+                            title: "Espera mientras recibimos respuesta",
+                        });
+
+                        // Enviar la petición AJAX
+
+                    }
+
+                    asignarAtencion()
+
+
+
                     $.ajax({
                         type: "POST",
                         url: "01,4-atencionAsignada.php",
@@ -480,7 +506,7 @@ include_once("partearriba.php");
                                     window.location = "01,2-atenciones.php";
                                 })
                             }
-                            
+
                             if (data.i == "Orientado") {
                                 Swal.fire({
                                     'icon': 'success',
@@ -605,7 +631,7 @@ include_once("partearriba.php");
 
 
                             /* OTRAS OPCIONES */
-                            
+
                         },
                         error: function(data) {
 
