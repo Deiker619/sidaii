@@ -698,6 +698,7 @@ include_once("partearriba.php");
                 }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
                     if (result.isConfirmed) {
+                        asignarAtencion();
                         $.ajax({
                             type: "POST",
                             url: "../php/procesamientodebeneficiario.php",

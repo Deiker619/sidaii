@@ -624,6 +624,7 @@ include_once("partearriba.php");
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
 
+                    asignarAtencion();
                     $.ajax({
                         type: "GET",
                         url: "eliminar/eliminarbeneficiario.php",
@@ -664,6 +665,7 @@ include_once("partearriba.php");
             id = p3
 
 
+            asignarAtencion();
             $.ajax({
                 type: "POST",
                 url: "documentos/cedula_beneficiarios/cargarFoto.php",
@@ -691,6 +693,7 @@ include_once("partearriba.php");
             id = p3
 
 
+            asignarAtencion();
             $.ajax({
                 type: "POST",
                 url: "documentos/partidas_nacimiento/cargarPartida.php",

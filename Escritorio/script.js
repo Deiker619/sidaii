@@ -103,4 +103,28 @@ $(document).ready(function() {
   });
 });
 
+function asignarAtencion() {
+  // Mostrar el loader de SweetAlert
+  const Toast = Swal.mixin({
+      toast: true,
+      position: "bottom-start",
+      showConfirmButton: false,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+          Swal.showLoading();
+      },
+      
+      
+
+  });
+
+  Toast.fire({
+      icon: "success",
+      title: "Espera mientras recibimos respuesta",
+  });
+
+  // Enviar la petición AJAX
+
+}
+
 

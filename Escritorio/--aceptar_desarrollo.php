@@ -146,6 +146,7 @@ include_once("partearriba.php");
                             var atencion = $("#atencion").val();
 
 
+                            asignarAtencion();
                             $.ajax({
                                 type: "POST",
                                 url: "../php/procesamientodebeneficiario.php",
@@ -185,6 +186,7 @@ include_once("partearriba.php");
 
                     e.preventDefault();
 
+                    asignarAtencion();
                     $.ajax({
                         type: "POST",
                         url: "--cargar_aceptado_infraestructura.php",

@@ -150,6 +150,7 @@ include_once("partearriba.php");
 
 
 
+                asignarAtencion();
                 e.preventDefault();
                 $.ajax({
                     type: "POST",

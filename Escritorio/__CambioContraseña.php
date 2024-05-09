@@ -130,6 +130,7 @@ include_once("parteabajo.php");
 
 
             console.log("Enviando..")
+            asignarAtencion();
             $.ajax({
                 type: "POST",
                 url: "../php/procesamientoCambioContraseña.php",

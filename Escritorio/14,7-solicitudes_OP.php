@@ -387,6 +387,7 @@ include_once("partearriba.php");
 
 
                     e.preventDefault();
+                    asignarAtencion();
                     $.ajax({
                         type: "POST",
                         url: "01,10-seguimientoRegistrar.php",

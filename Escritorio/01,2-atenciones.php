@@ -633,6 +633,7 @@ include_once("partearriba.php");
                     confirmButtonText: "Si, enviar!"
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        asignarAtencion();
                         $.ajax({
                             type: "POST",
                             url: "reportes/enviarEmail.php",
@@ -698,6 +699,7 @@ include_once("partearriba.php");
                         if (value) {
                             correo = value;
 
+                            asignarAtencion();
                             $.ajax({
                                 type: "POST",
                                 url: "reportes/enviarEmail.php",
@@ -776,6 +778,7 @@ include_once("partearriba.php");
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
 
+                    asignarAtencion();
                     $.ajax({
                         type: "GET",
                         url: "eliminar/eliminar_atencion.php",
@@ -910,7 +913,7 @@ include_once("partearriba.php");
 
                                 if (value) {
                                     atencion_recibida = value;
-
+                                    asignarAtencion();
                                     $.ajax({
                                         type: "POST",
                                         url: "../php/procesamientodecarga_solicitud.php",
@@ -953,6 +956,7 @@ include_once("partearriba.php");
 
 
                     } else {
+                        asignarAtencion();
                         $.ajax({
                             type: "POST",
                             url: "../php/procesamientodecarga_solicitud.php",
@@ -1026,6 +1030,7 @@ include_once("partearriba.php");
                     formData.append('numero_aten', numero_aten);
 
                     // Hacer la solicitud AJAX utilizando jQuery
+                    asignarAtencion();
                     $.ajax({
                         url: 'documentos/informes/cargardocumento.php',
                         type: 'POST',

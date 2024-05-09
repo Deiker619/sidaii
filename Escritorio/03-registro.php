@@ -269,6 +269,7 @@ include_once("partearriba.php");
 
 
 
+                asignarAtencion();
                 $.ajax({
                     type: "POST",
                     url: "../php/procesamientoregistro.php",

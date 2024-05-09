@@ -183,6 +183,7 @@ include_once("partearriba.php");
                             var atencion = $("#atencion").val();
 
 
+                            asignarAtencion();
                             $.ajax({
                                 type: "POST",
                                 url: "../php/procesamientodebeneficiario.php",

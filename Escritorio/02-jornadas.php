@@ -201,6 +201,7 @@ $gerencia_json = json_encode($gerencia);
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
 
+                asignarAtencion();
                 $.ajax({
                     type: "GET",
                     url: "eliminar/jornadas.php",
@@ -275,6 +276,7 @@ $gerencia_json = json_encode($gerencia);
                         var personas_atender = $("#personas_atender").val()
 
                         console.log(estado, municipio, parroquia, personas_atender, gerencia);
+                        asignarAtencion();
                         $.ajax({
                             type: "POST",
                             url: "../php/procesamientojornada.php",

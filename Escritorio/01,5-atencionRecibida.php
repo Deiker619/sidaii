@@ -98,6 +98,7 @@ include_once("partearriba.php");
                         confirmButtonText: "Si, enviar!"
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            asignarAtencion();
                             $.ajax({
                                 type: "POST",
                                 url: "reportes/enviarEmailCompleto.php",
@@ -163,6 +164,7 @@ include_once("partearriba.php");
                             if (value) {
                                 correo = value;
 
+                                asignarAtencion();
                                 $.ajax({
                                     type: "POST",
                                     url: "reportes/enviarEmail.php",

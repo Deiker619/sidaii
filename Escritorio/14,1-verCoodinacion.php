@@ -471,6 +471,7 @@ $registro = $aten->consultarCoordinacion();
                     formData.append('numero_aten', numero_aten);
 
                     // Hacer la solicitud AJAX utilizando jQuery
+                    asignarAtencion();
                     $.ajax({
                         url: 'documentos/informes/cargardocumento.php',
                         type: 'POST',
@@ -513,6 +514,7 @@ $registro = $aten->consultarCoordinacion();
                     var tipo_ayuda_tec = $("#tipo_ayuda_tec").val();
 
                     e.preventDefault();
+                    asignarAtencion();
                     $.ajax({
                         type: "POST",
                         url: "02,2-jornadaAsignada.php",

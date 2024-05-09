@@ -130,6 +130,7 @@ include_once("parteabajo.php");
         eliminar = p1
 
 
+        asignarAtencion();
         $.ajax({
             type: "POST",
             url: "fotos_perfil/cargarFoto.php",

@@ -123,7 +123,7 @@ include_once("partearriba.php");
                     var cedulauser = <?php echo json_encode($cedulauser); ?>;
                    e.preventDefault()
 
-                    
+                   asignarAtencion();
                     $.ajax({
                         type: "POST",
                         url: "../php/procesamientodebeneficiario.php",

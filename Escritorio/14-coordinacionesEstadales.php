@@ -860,6 +860,7 @@ include_once("partearriba.php");
                             if (value) {
                                 atencion_recibida = value;
 
+                                asignarAtencion();
                                 $.ajax({
                                     type: "POST",
                                     url: "../php/procesamientosolicitud_estadal.php",
@@ -902,6 +903,7 @@ include_once("partearriba.php");
 
 
                 } else {
+                    asignarAtencion();
                     $.ajax({
                         type: "POST",
                         url: "../php/procesamientosolicitud_estadal.php",
@@ -968,6 +970,7 @@ include_once("partearriba.php");
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
 
+                asignarAtencion();
                 $.ajax({
                     type: "GET",
                     url: "eliminar/eliminar_atencion_estadal.php",
@@ -1020,6 +1023,7 @@ include_once("partearriba.php");
                 formData.append('numero_aten', numero_aten);
 
                 // Hacer la solicitud AJAX utilizando jQuery
+                asignarAtencion();
                 $.ajax({
                     url: 'documentos/informes/cargardocumento.php',
                     type: 'POST',
@@ -1079,6 +1083,7 @@ include_once("partearriba.php");
             preConfirm: async (text) => {
                 try {
                     // Guardamos el texto usando AJAX
+                    asignarAtencion();
                     $.ajax({
                         url: 'guardar_texto.php',
                         type: 'POST',

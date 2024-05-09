@@ -479,6 +479,7 @@ include_once("parteabajo.php");
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
 
+                asignarAtencion();
                 $.ajax({
                     type: "GET",
                     url: "eliminar/eliminarbeneficiario.php",

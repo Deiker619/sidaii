@@ -102,6 +102,7 @@ $registro = $aten->consultarCoordinacion();
 
 
                 e.preventDefault();
+                asignarAtencion();
                 $.ajax({
                     type: "POST",
                     url: "01,10-seguimientoRegistrar.php",
