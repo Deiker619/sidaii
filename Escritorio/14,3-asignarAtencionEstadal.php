@@ -135,13 +135,35 @@ include_once("partearriba.php");
                             <div class="details personal" id="entrega_tecnica">
                                 <span class="title">Entrega</span>
                                 <div class="fields">
+                                    <div class="checkboxes">
+                                        <label class="cl-checkbox">
+                                            <input type="checkbox" name="" value="si" id="entrega_familiar">
+                                            <span>Entrega a familiar directo</span>
+                                        </label>
+
+                                    </div>
+
+
+                                    <div class="input-field" id="nombreF">
+                                        <label>Nombre del familiar</label>
+                                        <input type="text" name="nombre_familiar" id="nombre_familiar">
+                                    </div>
+                                    <div class="input-field" id="apellidoF">
+                                        <label>Apellido del familiar</label>
+                                        <input type="text" name="apellido_familiar" id="apellido_familiar">
+                                    </div>
+                                    <div class="input-field" id="cedulaF">
+                                        <label>Cedula del familiar</label>
+                                        <input type="text" name="cedula_familiar" id="cedula_familiar">
+                                    </div>
+
+
 
 
                                     <div class="input-field">
                                         <label>Tipo de ayuda tecnica a ortorgar:</label>
                                         <select name="atencion_recibida" id="atencion_recibida" require>
                                             <option></option>
-
                                             <option value="1-silla.r">Silla de ruedas estandar</option>
                                             <option value="1.1-S.E16">Silla de rueda ergonomica N16</option>
                                             <option value="1.2-S.E14">Silla de rueda ergonomica N14</option>
@@ -192,6 +214,7 @@ include_once("partearriba.php");
 
                                         </select>
                                     </div>
+
 
 
                                 </div>

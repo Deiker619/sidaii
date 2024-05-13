@@ -286,7 +286,7 @@ public function consultarTodosAtenciones()
 		try {
 
 			/* ACTU */
-			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten,atenciones_coordinaciones.urgencia,atenciones_coordinaciones.atencion_solicitada,usuario.nombre, atenciones_coordinaciones.numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion, atenciones_coordinaciones.informe
+			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten,atenciones_coordinaciones.urgencia,atenciones_coordinaciones.atencion_solicitada,usuario.nombre, atenciones_coordinaciones.numero_aten, beneficiario.cedula, beneficiario.nombre,beneficiario.email, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion, atenciones_coordinaciones.informe
 			FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, tipoatencion, usuario, coordinaciones_estadales WHERE
 			
 			usuario.cedula = atenciones_coordinaciones.asignado and
@@ -323,7 +323,7 @@ public function consultarTodosAtenciones()
 		try {
 
 			/* ACTU */
-			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten, atenciones_coordinaciones.urgencia ,atenciones_coordinaciones.atencion_solicitada, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion
+			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten, atenciones_coordinaciones.urgencia ,atenciones_coordinaciones.atencion_solicitada, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.email, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion
 			,atenciones_coordinaciones.informe FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, tipoatencion, usuario, coordinaciones_estadales WHERE
 			atenciones_coordinaciones.asignado = usuario.cedula and 
             usuario.coordinacion = coordinaciones_estadales.id and
@@ -1607,6 +1607,63 @@ public function consultarTodosAtenciones()
 	}
 
 
+	public function insertarFamiliar($cedula, $nombre, $apellido, $id_atencion)
+	{
+		try {
+
+			$stmt = $this->cnn->prepare("INSERT INTO familiaresoac (cedula, nombre, apellido, id_atencion) 
+											VALUES (:cedula, :nombre, :apellido, :id_atencion)");
+
+			// Asignamos valores a los parametros
+			$stmt->bindParam(':cedula', $cedula);
+			$stmt->bindParam(':nombre', $nombre);
+			$stmt->bindParam(':apellido', $apellido);
+			$stmt->bindParam(':id_atencion', $id_atencion);
+
+			/* $stmt->bindParam(':direccion', $this->direccion);
+				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
+				$stmt->bindParam(':estado', $this->estado); */
+
+			// Ejecutamos
+			$exito = $stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $exito; // si es verdadero se insertó correctamente el registro	
+
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function consultarFamiliar($numero_aten)
+	{
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT * from familiaresoac WHERE familiaresoac.id_atencion = :numero_aten");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Asiganmos valores a los parametros
+			$stmt->bindParam(':numero_aten', $numero_aten);
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetch();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	
 
 
 	

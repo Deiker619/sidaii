@@ -134,13 +134,13 @@ ob_start()
 <!-- Ese documento aun no esta funcionamiento, esperando que se desarrolle la funcion de imprimir de las atenciones -->
 
 <body>
-    <?php include_once("../../php/01-atenciones.php");
-    $aten = new Atenciones(1);
+    <?php include_once("../../php/01-atenciones-estadales.php");
+    $aten = new AtencionesEstadales(1);
     $numero_aten = $_REQUEST["numero_aten"];
     /* echo $numero_aten; */
     $aten->setnumero_aten($numero_aten);
     $familiar = $aten->consultarFamiliar($numero_aten);
-    $consulta = $aten->ReportesOAC();
+    $consulta = $aten->ReportesOP();
     /*     echo $consulta["cedula"]; */
     $nombreImagen = "cintillo2.jpg";
     $imagenBase64 = "data:image/png;base64," . base64_encode(file_get_contents($nombreImagen));

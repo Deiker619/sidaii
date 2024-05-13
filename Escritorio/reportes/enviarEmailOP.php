@@ -117,12 +117,12 @@ ob_start()
 <!-- Ese documento aun no esta funcionamiento, esperando que se desarrolle la funcion de imprimir de las atenciones -->
 
 <body>
-    <?php include_once("../../php/01-atenciones.php");
-    $aten = new Atenciones(1);
+    <?php include_once("../../php/01-atenciones-estadales.php");
+    $aten = new AtencionesEstadales(1);
     $numero_aten = $_REQUEST["numero_aten"];
     echo $numero_aten;
     $aten->setnumero_aten($numero_aten);
-    $consulta = $aten->ReportesOACCargarSolicitud();
+    $consulta = $aten->ReportesOPCargarSolicitud();
     echo $consulta["cedula"];
     $nombreImagen = "cintillo2.jpg";
     $imagenBase64 = "data:image/png;base64," . base64_encode(file_get_contents($nombreImagen));
@@ -343,7 +343,7 @@ try {
         <title>Comprobante de solicitud</title>
     </head>
     <body>
-        <p>Estimado beneficiario <b>'.$consulta["nombre"].' '.$consulta["apellido"] .'</b>,  </p>
+        <p>Estimado Cliente <b>'.$consulta["nombre"].' '.$consulta["apellido"] .'</b>,  </p>
         <p>Queremos informarle que hemos recibido su solicitud, realizada el'. '. Agradecemos su confianza en nuestros servicios.</p>
         <p>Nos complace confirmar que su solicitud ha sido recibida y está siendo procesada. Nuestro equipo está trabajando diligentemente para coordinar la entrega del producto lo antes posible.</p>
         <p>Una vez que su solicitud haya sido atendida, recibirá una notificación con los detalles de la entrega.</p>
