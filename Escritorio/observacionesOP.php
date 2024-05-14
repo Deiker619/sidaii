@@ -27,7 +27,7 @@ include_once("partearriba.php");
     }
 
     // Selecciona los datos de la tabla 'observacion'
-    $sql = "SELECT id, observacion, id_atencion FROM observacion";
+    $sql = "SELECT id_observacion, observacion, id_atencion FROM observacion";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -36,7 +36,7 @@ include_once("partearriba.php");
         echo "<thead><tr><th>ID</th><th>Observación</th><th>ID Atención</th></tr></thead>";
         echo "<tbody>";
         while($row = $result->fetch_assoc()) {
-            echo "<tr><td>" . $row["id"]. "</td><td>" . $row["observacion"]. "</td><td>" . $row["id_atencion"]. "</td></tr>";
+            echo "<tr><td>" . $row["id_observacion"]. "</td><td>" . $row["observacion"]. "</td><td>" . $row["id_atencion"]. "</td></tr>";
         }
         echo "</tbody>";
         echo "</table>";

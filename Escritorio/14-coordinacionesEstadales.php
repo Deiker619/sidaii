@@ -1271,7 +1271,7 @@ include_once("partearriba.php");
                 });
             } else if (result.isDenied) {
                 // Aquí puedes agregar la lógica para cuando se hace clic en el botón de negación
-                window.location = "observacionesOAC.php?id=" + id;
+                window.location = "observacionesOPlog.php?id=" + id;
             }
         });
 
