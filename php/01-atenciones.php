@@ -16,6 +16,7 @@ class Atenciones extends ManejadorBD
 	private $por;
 	private $familiar;
 	private $urgencia;
+	private $asignado;
 
 
 
@@ -54,6 +55,16 @@ class Atenciones extends ManejadorBD
 	{
 		$this->cedula = $cedula;
 	}
+
+	public function getasignado()
+	{
+		return $this->asignado;
+	}
+	public function setasignado($asignado)
+	{
+		$this->asignado = $asignado;
+	}
+
 
 
 
@@ -152,11 +163,12 @@ class Atenciones extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO atenciones (cedula) 
-											VALUES (:cedula)");
+			$stmt = $this->cnn->prepare("INSERT INTO atenciones (cedula, asignado) 
+											VALUES (:cedula, :asignado)");
 
 			// Asignamos valores a los parametros
-			$stmt->bindParam(':cedula', $this->cedula);;
+			$stmt->bindParam(':cedula', $this->cedula);
+			$stmt->bindParam(':asignado', $this->asignado);
 
 			/* $stmt->bindParam(':direccion', $this->direccion);
 				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
@@ -271,7 +283,11 @@ class Atenciones extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("SELECT * FROM atenciones WHERE cedula = :cedula ");
+			$stmt = $this->cnn->prepare("SELECT * 
+										FROM atenciones 
+										WHERE cedula = :cedula and atencion_solicitada is not null
+										ORDER BY numero_aten DESC 
+										LIMIT 1;");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Asiganmos valores a los parametros
@@ -283,7 +299,7 @@ class Atenciones extends ManejadorBD
 			/* echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
 
 			// Devuelve los resultados obtenidos
-			return $stmt->fetchAll();
+			return $stmt->fetch();
 		} catch (PDOException $error) {
 			// Mostramos un mensaje genérico de error.
 			echo "Error: ejecutando consulta SQL." . $error->getMessage();
@@ -314,7 +330,7 @@ class Atenciones extends ManejadorBD
 		}
 	}
 
-	
+
 
 	/* ====================================PARA CONSULTAR TODAS LAS ATENCIONES QUE NO SE LES HA DADO ATENCION, LISTAS PARA RECIBIR */
 
@@ -324,8 +340,9 @@ class Atenciones extends ManejadorBD
 		try {
 
 			/* ACTU */
-			$stmt = $this->cnn->prepare("SELECT atenciones.atencion_solicitada,atenciones.numero_aten, atenciones.urgencia, beneficiario.cedula, beneficiario.email, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones.statu, 
-			atenciones.informe FROM atenciones, beneficiario, estados, discapacid_e, tipoatencion WHERE
+			$stmt = $this->cnn->prepare("SELECT atenciones.atencion_solicitada,atenciones.numero_aten, atenciones.urgencia, beneficiario.cedula, beneficiario.email, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones.statu, usuario.nombre as promotor ,
+			atenciones.informe FROM atenciones, beneficiario, estados, discapacid_e, tipoatencion, usuario WHERE
+            								usuario.cedula = atenciones.asignado and
 											beneficiario.cedula = atenciones.cedula and 
 											beneficiario.estado = estados.id_estados and 
 											beneficiario.discapacidad = discapacid_e.id_e and

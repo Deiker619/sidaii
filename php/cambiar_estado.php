@@ -6,7 +6,7 @@ if (isset($_GET['desbloquear'])) {
 
     // Creamos un nuevo objeto Usuario
     $usuario = new Usuario(1);
-    
+
     // Llamamos al método cambiarEstadoBloqueo con la cédula del usuario y el nuevo estado
     $usuario->cambiarEstadoBloqueo($_GET['desbloquear'], 0);
 
@@ -20,7 +20,7 @@ if (isset($_GET['bloquear'])) {
 
     // Creamos un nuevo objeto Usuario
     $usuario = new Usuario(1);
-    
+
     // Llamamos al método cambiarEstadoBloqueo con la cédula del usuario y el nuevo estado
     $usuario->cambiarEstadoBloqueo($_GET['bloquear'], 1);
 
@@ -28,4 +28,28 @@ if (isset($_GET['bloquear'])) {
     header("Location: ../Escritorio/tecnologia.php"); // Esto recargará la página tecnologia.php
     exit();
 }
-?>
+if (isset($_GET['bloquear'])) {
+
+    // Creamos un nuevo objeto Usuario
+    $usuario = new Usuario(1);
+
+    // Llamamos al método cambiarEstadoBloqueo con la cédula del usuario y el nuevo estado
+    $usuario->cambiarEstadoBloqueo($_GET['bloquear'], 1);
+
+    // Recargamos la página tecnologia.php
+    header("Location: ../Escritorio/tecnologia.php"); // Esto recargará la página tecnologia.php
+    exit();
+}
+
+if (isset($_GET['reiniciar'])) {
+
+    $cedula = $_GET["reiniciar"];
+
+
+    $user = new Usuario(1);
+    $user->setcedula($cedula);
+    $user->setpasswordd(password_hash('12345', PASSWORD_BCRYPT));
+    $consulta  = $user->consultarUsuarios();
+    $consulta  = $user->CambiarContraseña();
+    header("Location: ../Escritorio/tecnologia.php"); // Esto recargará la página tecnologia.php
+}

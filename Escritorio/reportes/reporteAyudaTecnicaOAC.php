@@ -146,7 +146,7 @@ ob_start()
                         <thead>
                             <tr>
                                 <th>Nombre Artificio</th>
-                                <th>Cantidad</th>
+                                <th>Cantidad entregada</th>
                         
 
                             </tr>

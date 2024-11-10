@@ -62,7 +62,7 @@ include_once("partearriba.php");
                     <th>Rol</th>
                     <th>Cordinacion</th>
                     <th>Status</th>
-
+                    <th></th>
                     <th></th>
 
 
@@ -99,12 +99,14 @@ include_once("partearriba.php");
 
                             <?php } else { ?>
                                 <td>
-                                    <a class="remitir" href="../php/cambiar_estado.php?bloquear=<?php echo $registros["cedula"]; ?>"">Bloquear</a>
+                                    <a class="remitir" href="../php/cambiar_estado.php?bloquear=<?php echo $registros["cedula"]; ?>">Bloquear</a>
 
                                 </td>
                             <?php  } ?>
+                                <td>
 
-
+                                    <a class="remitir" href="../php/cambiar_estado.php?reiniciar=<?php echo $registros["cedula"]; ?>">Reiniciar contraseña</a>
+                                </td>
 
                         </tr>
                 <?php

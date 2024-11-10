@@ -2,7 +2,7 @@ function conapdis() {
   var inputValue = "";
 
   const { value: atencion } = Swal.fire({
-    title: "Introduce la cedula para buscar en Conpdis",
+    title: "Introduce la cedula para buscar en Conapdis",
     input: "text",
     inputLabel: "Introduce la cedula a buscar y registrar",
     inputValue: inputValue,

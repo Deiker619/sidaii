@@ -18,19 +18,22 @@ if (isset($_POST['registrado'])) {
 	if ($Consulta) {
 
 		switch ($atencion_solicitada) {
+			
 			case "1-oac":
 				require_once("../php/01-atenciones.php");
 				$atencion = new Atenciones(1);
+				$atencion->setasignado($cedulauser);
 				$atencion->setcedula($cedula);
 				$consultaayuda = $atencion->autenticarAtencion();
-				/* if (!$consultaayuda) { */
-				echo "Se registro exitosamente";
+				
+				$data = [
+					'message' => 'Se registro exitosamente',
+					'others' => $consultaayuda??null
+				];
+				header('Content-Type: application/json');
+				echo json_encode($data);
 				$atencion->insertarAtencion();
-				/* } else { */
-				/* $mens = "No puede haber personas solicitando dos atenciones ";
-			json_encode($mens);
-			echo $mens;	
-		} */
+				
 				break;
 
 			case "2-ayudte":
@@ -136,8 +139,15 @@ if (isset($_POST['registrado'])) {
 				$atencion = new AtencionesEstadales(1);
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
+				$consultaayuda = $atencion->autenticarAtencion();
+				$data = [
+					'message' => 'Se registro exitosamente',
+					'others' => $consultaayuda??null
+				];
+				header('Content-Type: application/json');
+				echo json_encode($data);
 				$atencion->insertarAtencion();
-				echo "Se registro exitosamente";
+				
 
 				break;
 		}
@@ -272,6 +282,9 @@ if (isset($_POST['registrado'])) {
 				require_once("../php/01-atenciones.php");
 				$atencion = new Atenciones(1);
 				$atencion->setcedula($cedula);
+				$atencion->setasignado($cedulauser);
+				$consultaayuda = $atencion->autenticarAtencion();
+			
 				$atencion->insertarAtencion();
 				echo "Se registró " . $nombre . " exitosamente";
 				break;
@@ -367,22 +380,18 @@ if (isset($_POST['registrado'])) {
 				break;
 		}
 	} else {
-		echo "Ya esta " . $cedula . " esta registrada";
+		
 
 		switch ($atencion_solicitada) {
 			case "1-oac":
 				require_once("../php/01-atenciones.php");
 				$atencion = new Atenciones(1);
 				$atencion->setcedula($cedula);
+				$atencion->setasignado($cedulauser);
 				$consultaayuda = $atencion->autenticarAtencion();
-				/* if (!$consultaayuda) { */
-				echo "Se registro a " . $nombre . " exitosamente";
+				echo "Ya " . $nombre . " se encuentra registrado, se le cargara otra solicitud ";
 				$atencion->insertarAtencion();
-				/* } else { */
-				/* $mens = "No puede haber personas solicitando dos atenciones ";
-				json_encode($mens);
-				echo $mens;	
-			} */
+				
 				break;
 
 			case "0-aten-coo":
@@ -391,7 +400,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
 				$atencion->insertarAtencion();
-				echo "Se registró a " . $nombre . " exitosamente";
+				echo "Ya " . $nombre . " se encuentra registrado, se le cargara otra solicitud";
 				break;
 
 			case "2-ayudte":

@@ -83,7 +83,7 @@ include_once("partearriba.php");
 
                             <div class="input-field">
                                 <label>Cedula</label><span style="font-size: 13px; " id="label-chk"> Si es menor sin cedula coloque la cedula del tutor legal con un <b style="color: #38b000">1 o otro numero</b> al final</span>
-                                <input type="text" placeholder="Ingrese la cedula sin puntos ni letras" required id="cedula" name="cedula" pattern="^\d{5,9}$">
+                                <input type="text" placeholder="Ingrese la cedula sin puntos ni letras" required id="cedula" name="cedula" >
                                 <span id="cedulaError"></span>
                             </div>
                             <div class="input-field">
@@ -106,7 +106,7 @@ include_once("partearriba.php");
 
 
                             <div class="input-field">
-                                <label>fecha de nacimiento</label>
+                                <label>Fecha de nacimiento</label>
                                 <input type="date" placeholder="Ingresa fecha de nacimiento" required id="fecha_naci" name="fecha_naci">
                             </div>
 
@@ -620,7 +620,9 @@ include_once("partearriba.php");
                 }
 
                 /* var hijo = $("#hijos").val(); */
-                regHijos = /^-\d+(\.\d+)?$/
+                const regHijos = /^[1-9]\d*$/;
+
+
                 if (regHijos.test(hijos)) {
                     e.preventDefault(); // Evita que se envíe el formulario si la cédula no cumple con el patrón
 
@@ -638,7 +640,7 @@ include_once("partearriba.php");
                     $("#hijos").css("border-color", "#15CD02");
                 }
                 /*    var telefono = $("#telefono").val(); */
-                var regexTelefono = /^[0-9]{4}[0-9]{7}$/;
+                var regexTelefono = /^[0-9]{4}[0-9]{7}$/; 
                 if (!regexTelefono.test(telefono)) {
                     e.preventDefault(); // Evita que se envíe el formulario si el teléfono no cumple con el patrón
 
@@ -739,7 +741,7 @@ include_once("partearriba.php");
                                 console.log(data)
                                 Swal.fire({
                                     icon: 'success',
-                                    title: data.trim(),
+                                    title: data.trim()??'Se registro exitosamente...',
                                     footer: '<a href="__verBeneficiario.php?cedula=' + cedula + '">Ir a cargar copia de cédula</a>'
                                 }).then(function() {
                                       /* window.location = "01-atencionCiu.php"; */
@@ -759,7 +761,7 @@ include_once("partearriba.php");
                                 Swal.fire({
                                     'icon': 'error',
                                     'title': 'Oops...',
-                                    'text': data
+                                    'text': 'Ocurrió un error en el proceso'
                                 })
                             }
                         })

@@ -290,10 +290,7 @@ include_once("partearriba.php");
 
 
                             <div class="input-field" style="display:flex; gap:8px;">
-                                <button class="nextBtn" name="registro" id="registro" <?php if ($informe) {
-                                                                                        } else {
-                                                                                            echo "disabled";
-                                                                                        } ?>>
+                                <button class="nextBtn" name="registro" id="registro">
                                     <span class="btnText">Asignar atención</span>
                                     <ion-icon name="send-outline"></ion-icon>
                                 </button>

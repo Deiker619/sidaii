@@ -35,7 +35,7 @@ include_once("partearriba.php");
 
 
     <div class="tabla-atencion">
-        <div class="personas-conatencion" style="justify-content:right; align-items: baseline">
+        <!-- <div class="personas-conatencion" style="justify-content:right; align-items: baseline">
             <div class="botones__especiales">
                     <button class="Btn export">
 
@@ -50,9 +50,9 @@ include_once("partearriba.php");
                 </div>
             <a class="enlace" style="background-color: #0e9cd4; color:#fff" href="">Registros aceptados</a>
             <a class="enlace" style="background-color: #f03e31; color:#fff" href="">Registros Rechazados</a>
-        </div>
+        </div> -->
 
-        <h2>Personas remitidas</h2>
+        <h2>Personas remitidas a la gerencia</h2>
         <table id="atencionE"> 
             <thead>
                 <tr>

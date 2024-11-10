@@ -140,15 +140,15 @@ ob_start()
 
 
             <div class="container">
-                <!--  --><img src="<?php echo $imagenBase64 ?>" width="100%">
+                <img src="<?php echo $imagenBase64 ?>" width="100%">
 
 
                 <div class="tabla-atencion" style="width: 100%; margin-top:5%">
-                    <?php echo "<h3>Total de solicitudes: " . $cantidadRegistros. "</h3>" ?>
-                    <?php echo "<h3>Coordinación: " . $consulta[0]["nombre_coordinacion"]. "</h3>" ?>
-                    
+                    <?php if($consulta){?>
+                        <?php echo "<h3>Total de solicitudes: " . $cantidadRegistros. "</h3>" ?>
+                        <?php echo "<h3>Coordinación: " . $consulta[0]["nombre_coordinacion"]. "</h3>" ?>
 
-                    <table style="width:100%">
+                        <table style="width:100%">
                         <?php foreach ($consulta as $registros) { ?> 
                         <tbody>
 
@@ -160,6 +160,10 @@ ob_start()
                         </tbody>
                         <?php }?>
                     </table>
+                        <?php } ?>
+                    
+
+                    
 
 
 
