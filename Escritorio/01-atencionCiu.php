@@ -620,25 +620,28 @@ include_once("partearriba.php");
                 }
 
                 /* var hijo = $("#hijos").val(); */
-                const regHijos = /^[1-9]\d*$/;
+                var hijos = $("#hijos").val();
 
+// Expresión regular que permite solo números enteros no negativos (0 o mayores)
+const regHijos = /^[0-9]+$/;
 
-                if (regHijos.test(hijos)) {
-                    e.preventDefault(); // Evita que se envíe el formulario si la cédula no cumple con el patrón
+// Validar el valor del número de hijos
+if (!regHijos.test(hijos) || hijos === "") {
+    e.preventDefault(); // Evita que se envíe el formulario si la entrada no es válida
 
-                    // Muestra el SweetAlert con el mensaje de error
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error de hijos',
-                        text: 'El numero de hijos debe ser 0 o mayor que 0'
-                    });
+    // Muestra el SweetAlert con el mensaje de error
+    Swal.fire({
+        icon: 'error',
+        title: 'Error de hijos',
+        text: 'El número de hijos debe ser un número entero mayor o igual a 0.'
+    });
 
-                    $("#hijos").css("border-color", "#EE092A");
+    $("#hijos").css("border-color", "#EE092A");
+    return; // Sale de la función si el número no es válido
+} else {
+    $("#hijos").css("border-color", "#15CD02");
+}
 
-                    return; // Sale de la función de manejo del clic si la cédula no es válida
-                } else {
-                    $("#hijos").css("border-color", "#15CD02");
-                }
                 /*    var telefono = $("#telefono").val(); */
                 var regexTelefono = /^[0-9]{4}[0-9]{7}$/; 
                 if (!regexTelefono.test(telefono)) {
