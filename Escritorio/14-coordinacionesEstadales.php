@@ -1158,54 +1158,71 @@ include_once("partearriba.php");
     }
 </script>
 <script>
-    function subirArchivo(a) {
-        var numero_aten = a;
-        Swal.fire({
-            title: 'Cargar informe medico',
-            input: 'file',
-            inputAttributes: {
-                accept: ['application/pdf'], // Limita a archivos PDF, puedes ajustar según tus necesidades
-            },
-            showCancelButton: true,
-            confirmButtonText: 'Subir',
-            cancelButtonText: 'Cancelar',
-        }).then((file) => {
-            if (file.isConfirmed && file.value) {
-                // Crear un objeto FormData y agregar el archivo y el número
-                const formData = new FormData();
-                formData.append('archivo', file.value);
-                formData.append('numero_aten', numero_aten);
-
-                // Hacer la solicitud AJAX utilizando jQuery
-                asignarAtencion();
-                $.ajax({
-                    url: 'documentos/informes/cargardocumento.php',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(data) {
-                        console.log(data);
-                        try {
-                            const dataJ = JSON.parse(data);
-                            Swal.fire(dataJ.mensaje, '', 'success').then(function() {
-                                window.location = "14-coordinacionesEstadales.php";
-                            });
-
-
-                        } catch (error) {
-                            console.error('Error al analizar la respuesta del servidor como JSON:', error);
-                            Swal.fire('Error en el formato de la respuesta del servidor', '', 'error');
-                        }
-                    },
-                    error: function(error) {
-                        console.error('Error al subir el archivo:', error);
-                        Swal.fire('Error al cargar el archivo', '', 'error');
-                    }
-                });
+   function subirArchivo(a) {
+    var numero_aten = a;
+    Swal.fire({
+        title: 'Cargar informe médico',
+        html: `
+            <label for="customFileInput" style="cursor: pointer; padding: 10px 20px; background-color: #4CAF50; color: white; border-radius: 5px; display: inline-block;">
+                Seleccionar archivo
+            </label>
+            <input id="customFileInput" type="file" accept="application/pdf" style="display: none;">
+            <span id="fileName" style="display: block; margin-top: 10px; color: #555;">Ningún archivo seleccionado</span>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Subir',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const fileInput = document.getElementById('customFileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                Swal.showValidationMessage('Por favor, selecciona un archivo');
+                return false;
             }
-        });
-    }
+            return file;
+        }
+    }).then((file) => {
+        if (file.isConfirmed && file.value) {
+            // Crear un objeto FormData y agregar el archivo y el número
+            const formData = new FormData();
+            formData.append('archivo', document.getElementById('customFileInput').files[0]);
+            formData.append('numero_aten', numero_aten);
+
+            // Hacer la solicitud AJAX utilizando jQuery
+            asignarAtencion();
+            $.ajax({
+                url: 'documentos/informes/cargardocumento.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    console.log(data);
+                    try {
+                        const dataJ = JSON.parse(data);
+                        Swal.fire(dataJ.mensaje, '', 'success').then(function() {
+                            window.location = "14-coordinacionesEstadales.php";
+                        });
+                    } catch (error) {
+                        console.error('Error al analizar la respuesta del servidor como JSON:', error);
+                        Swal.fire('Error en el formato de la respuesta del servidor', '', 'error');
+                    }
+                },
+                error: function(error) {
+                    console.error('Error al subir el archivo:', error);
+                    Swal.fire('Error al cargar el archivo', '', 'error');
+                }
+            });
+        }
+    });
+
+    // Evento para actualizar el nombre del archivo seleccionado
+    document.getElementById('customFileInput').addEventListener('change', (event) => {
+        const fileName = event.target.files[0] ? event.target.files[0].name : 'Ningún archivo seleccionado';
+        document.getElementById('fileName').textContent = fileName;
+    });
+}
+
 </script>
 <!-- <script src="main.js"></script> -->
 <script src="mainEstadal.js"></script>
