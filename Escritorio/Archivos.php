@@ -14,31 +14,27 @@ include_once("partearriba.php");
         </div>
     </div>
 
+
     <?php
     // Define la ruta a la carpeta donde se guardan los archivos cargados
+    
     switch ($gerencia) {
         case '4Gtno':
-            $upload_dir = "uploader/OP";
-            break;
+            $upload_dir ="uploader/OP";
+          break;
         case '2Atc':
             $upload_dir = "uploader/OAC";
-            break;
+          break;
+      
         default:
-            $upload_dir = "uploader";
-            break;
-    }
+          $upload_dir = "uploader";
+          break;
+      }
+    // Lee los archivos en la carpeta
+    $files = scandir($upload_dir);
 
-    // Verifica si el directorio existe antes de escanearlo
-    if (is_dir($upload_dir)) {
-        // Lee los archivos en la carpeta
-        $files = scandir($upload_dir);
-    } else {
-        $files = [];
-        echo "<p>Error: El directorio '$upload_dir' no existe.</p>";
-    }
-
-    // Muestra cada archivo en una tabla si hay archivos disponibles
-    echo "<table id='example'>";
+    // Muestra cada archivo en una tabla
+    echo "<table id='example' >";
     echo "<thead><tr><th>Nombre del archivo</th><th>Eliminar</th></tr></thead>";
     echo "<tbody>";
     foreach ($files as $file) {
@@ -53,6 +49,7 @@ include_once("partearriba.php");
 
 </div>
 
+
 <script src="../package/dist/sweetalert2.all.js"></script>
 <script src="../package/dist/sweetalert2.all.min.js"></script>
 <script>
@@ -62,6 +59,8 @@ include_once("partearriba.php");
         // Agrega un evento de clic al botón de eliminar
         $('#example').on('click', '.delete-btn', function() {
             var file = $(this).data('file');
+
+
 
             // Elimina el archivo del servidor
             $.ajax({
@@ -76,9 +75,13 @@ include_once("partearriba.php");
                         Swal.fire({
                             icon: 'success',
                             title: "Archivo eliminado"
+
                         }).then(function() {
-                            location.reload(); // Recarga la página
-                        });
+                                location.reload();
+                            })
+                        // Recarga la página
+                        
+
                     } else {
                         alert('Error al eliminar el archivo');
                     }
