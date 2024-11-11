@@ -24,7 +24,7 @@ if ($consulta) {
         if ($registros["atencion_brindada"] == "-ayudatec") { ?>
             <td style="padding: 0;"><a href="reportes/reporteAtencion.php?numero_aten=<?php echo $registros["numero_aten"] ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i></a></td>
             <td style="padding: 0;"> <a class="cargar" style="margin: 5px" href="reportes/reporteCargarSolicitudes.php?numero_aten=<?php echo $registros["numero_aten"]; ?>"><i class='bx bx-download'></i></a></td>
-            <td style="padding: 0;"> <a id="verBeneficiario" href="documentos/informes/<?php echo $registros['informe']; ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i> </a></td>
+            <td style="padding: 0;"> <a id="verBeneficiario" href="documentos/informes/<?php echo $registros['informe']??'404'; ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i> </a></td>
         <?php
         } else {
             echo '<td></td>

@@ -46,44 +46,63 @@ ob_start()
 
     <style>
         .tabla-atencion {
-            border: 1px solid #ddd;
-            margin: 15px;
-            border-radius: 20px;
-            margin-top: 15px;
-            width: 100%;
-        }
 
-        .tabla-atencion h2 {
-            font-size: 18px;
-            text-align: left;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #707070;
-            margin-left: 20px;
-        }
+margin: 15px;
+border-radius: 20px;
+margin-top: 15px;
+width: 100%;
+}
 
-        .tabla-atencion table {
-            background-color: #fff;
-            width: 100%;
-            font-family: Arial, Helvetica, sans-serif;
-            border: 1px solid #ddd;
-            text-align: center;
-            color: black;
-            font-size: 1rem;
-            border-collapse: collapse;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
+h3 {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-        .tabla-atencion table thead tr {
-            color: #38b000;
-            border: 1px solid #ddd;
-        }
+.tabla-atencion h2 {
+font-size: 18px;
+text-align: left;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+color: #707070;
+margin-left: 20px;
+}
 
-        .tabla-atencion table tbody tr,td {
-            color: #707070;
-            border: 1px solid #ddd;
-            padding: 5px
-        }
+.tabla-atencion table {
+background-color: #fff;
+width: 100%;
+font-family: Arial, Helvetica, sans-serif;
+border: 1px solid black;
+text-align: center;
+color: black;
+font-size: 1rem;
+border-collapse: collapse;
+padding: 0px;
+margin-bottom: 15px;
+margin: 0;
+}
+
+.tabla-atencion table thead tr {
+color: #232c33;
+border: 1px solid black;
+
+}
+
+.tabla-atencion table tbody tr,
+td {
+color: black;
+border: 1px solid black;
+padding: 5px
+}
+
+.tabla-atencion textarea {
+margin-top: 25px;
+font-family: Arial, Helvetica, sans-serif;
+border: 0px;
+width: auto;
+height: auto;
+font-size: 16px;
+margin-bottom: 50px;
+
+
+}
     </style>
     <div class="dash-contenido">
         <div class="overview">
@@ -138,7 +157,7 @@ ob_start()
                                 '<td>' . $registros["apellido"] . '</td>' .
                                 '<td>' . $registros["nombre_estado"] . '</td>' .
                                 '<td>' . $registros["nombre_e"] . '</td>' .
-                                '<td>' . $registros["atencion_recibida"] . '</td>' .
+                                '<td>' . $registros["nombre_ayuda"] . '</td>' .
                                 '<td style="color: green;">Atendido</td>';
 
 
@@ -155,7 +174,7 @@ ob_start()
         </div>
         <!-- Personas sin atencion -->
 
-        <div class="tabla-atencion">
+        <!-- <div class="tabla-atencion">
             <h2>Personas sin Atencion</h2>
             <table>
                 <thead>
@@ -199,7 +218,7 @@ ob_start()
                 </tbody>
             </table>
         </div>
-
+ -->
 
 
 

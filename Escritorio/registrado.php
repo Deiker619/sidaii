@@ -139,10 +139,21 @@ include_once("partearriba.php");
                         },
                         success: function(data) {
                             if(data){
-                            console.log(data.trim())
+                            
+                            
+                            console.log(data)
+                            let html, audiometria, ortesis, protesis;
+                            
+                            if(data.others){
+                                 html = `Este beneficiario solicitó <b>${data.others.atencion_solicitada}</b>
+                                 el dia <b>${data.others.fecha_creada}</b>, evalue si no ha pasado el tiempo para otorgar de nuevo una ayuda `
+                            }else{
+                                 html = ''
+                            }
                             Swal.fire({
-                                 icon: 'success',
-                                title: data
+                                icon: 'success',
+                                title: data.message,
+                                html: html??audiometria??ortesis??protesis
                             }).then(function() {
                                 window.location = "01-atencionCiu.php";
                             })}

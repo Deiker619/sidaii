@@ -3,6 +3,8 @@ include_once("partearriba.php");
 ?>
 
 <!-- contenido -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
 
 <div class="dash-contenido">

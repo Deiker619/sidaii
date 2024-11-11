@@ -234,7 +234,10 @@ class AtencionesEstadales extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("SELECT * FROM atenciones_coordinaciones WHERE cedula = :cedula ");
+			$stmt = $this->cnn->prepare("SELECT * FROM atenciones_coordinaciones WHERE cedula = :cedula
+								and atencion_solicitada is not null
+								 ORDER BY numero_aten DESC 
+										LIMIT 1;");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Asiganmos valores a los parametros
@@ -246,7 +249,7 @@ class AtencionesEstadales extends ManejadorBD
 			/* echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
 
 			// Devuelve los resultados obtenidos
-			return $stmt->fetchAll();
+			return $stmt->fetch();
 		} catch (PDOException $error) {
 			// Mostramos un mensaje genérico de error.
 			echo "Error: ejecutando consulta SQL." . $error->getMessage();

@@ -83,7 +83,7 @@ include_once("partearriba.php");
 
                             <div class="input-field">
                                 <label>Cedula</label><span style="font-size: 13px; " id="label-chk"> Si es menor sin cedula coloque la cedula del tutor legal con un <b style="color: #38b000">1 o otro numero</b> al final</span>
-                                <input type="text" placeholder="Ingrese la cedula sin puntos ni letras" required id="cedula" name="cedula" pattern="^\d{5,9}$">
+                                <input type="text" placeholder="Ingrese la cedula sin puntos ni letras" required id="cedula" name="cedula" >
                                 <span id="cedulaError"></span>
                             </div>
                             <div class="input-field">
@@ -106,7 +106,7 @@ include_once("partearriba.php");
 
 
                             <div class="input-field">
-                                <label>fecha de nacimiento</label>
+                                <label>Fecha de nacimiento</label>
                                 <input type="date" placeholder="Ingresa fecha de nacimiento" required id="fecha_naci" name="fecha_naci">
                             </div>
 
@@ -620,25 +620,30 @@ include_once("partearriba.php");
                 }
 
                 /* var hijo = $("#hijos").val(); */
-                regHijos = /^-\d+(\.\d+)?$/
-                if (regHijos.test(hijos)) {
-                    e.preventDefault(); // Evita que se envíe el formulario si la cédula no cumple con el patrón
+                var hijos = $("#hijos").val();
 
-                    // Muestra el SweetAlert con el mensaje de error
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error de hijos',
-                        text: 'El numero de hijos debe ser 0 o mayor que 0'
-                    });
+// Expresión regular que permite solo números enteros no negativos (0 o mayores)
+const regHijos = /^[0-9]+$/;
 
-                    $("#hijos").css("border-color", "#EE092A");
+// Validar el valor del número de hijos
+if (!regHijos.test(hijos) || hijos === "") {
+    e.preventDefault(); // Evita que se envíe el formulario si la entrada no es válida
 
-                    return; // Sale de la función de manejo del clic si la cédula no es válida
-                } else {
-                    $("#hijos").css("border-color", "#15CD02");
-                }
+    // Muestra el SweetAlert con el mensaje de error
+    Swal.fire({
+        icon: 'error',
+        title: 'Error de hijos',
+        text: 'El número de hijos debe ser un número entero mayor o igual a 0.'
+    });
+
+    $("#hijos").css("border-color", "#EE092A");
+    return; // Sale de la función si el número no es válido
+} else {
+    $("#hijos").css("border-color", "#15CD02");
+}
+
                 /*    var telefono = $("#telefono").val(); */
-                var regexTelefono = /^[0-9]{4}[0-9]{7}$/;
+                var regexTelefono = /^[0-9]{4}[0-9]{7}$/; 
                 if (!regexTelefono.test(telefono)) {
                     e.preventDefault(); // Evita que se envíe el formulario si el teléfono no cumple con el patrón
 
@@ -739,7 +744,7 @@ include_once("partearriba.php");
                                 console.log(data)
                                 Swal.fire({
                                     icon: 'success',
-                                    title: data.trim(),
+                                    title: data.trim()??'Se registro exitosamente...',
                                     footer: '<a href="__verBeneficiario.php?cedula=' + cedula + '">Ir a cargar copia de cédula</a>'
                                 }).then(function() {
                                       /* window.location = "01-atencionCiu.php"; */
@@ -759,7 +764,7 @@ include_once("partearriba.php");
                                 Swal.fire({
                                     'icon': 'error',
                                     'title': 'Oops...',
-                                    'text': data
+                                    'text': 'Ocurrió un error en el proceso'
                                 })
                             }
                         })
