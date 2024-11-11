@@ -20,6 +20,7 @@ if ($consulta) {
             '<td>' . $registros["nombre_e"] . '</td>' .
             '<td>' . $registros["atencion_brindada"] . '</td>' .
             '<td>' . $registros["nombre_ayuda"] . '</td>' .
+            '<td>' . $registros["por"] . '</td>' .
             '<td style="color: green;">Atendido</td>';
         if ($registros["atencion_brindada"] == "-ayudatec") { ?>
             <td style="padding: 0;"><a href="reportes/reporteAtencion.php?numero_aten=<?php echo $registros["numero_aten"] ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i></a></td>

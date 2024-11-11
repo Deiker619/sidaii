@@ -57,6 +57,7 @@ include_once("partearriba.php");
                     <th>Discapacidad</th>
                     <th>Asis. Recibida</th>
                     <th>Ayuda. tecnica</th>
+                    <th>Promotor</th>
                     <th>Status</th>
                     <th>Certificado entrega</th>
              

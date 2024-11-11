@@ -401,6 +401,7 @@ class Atenciones extends ManejadorBD
 			beneficiario.nombre,
 			beneficiario.email,
 			beneficiario.apellido,
+            usuario.nombre as por,
 			estados.nombre_estado,
 			discapacid_e.nombre_e,
 			 CASE WHEN atenciones.atencion_recibida IS NOT NULL THEN
@@ -414,9 +415,10 @@ class Atenciones extends ManejadorBD
 			atenciones.informe
 	 FROM atenciones
 	 INNER JOIN beneficiario ON beneficiario.cedula = atenciones.cedula
+     INNER JOIN usuario ON por = usuario.cedula
 	 INNER JOIN estados ON beneficiario.estado = estados.id_estados
 	 INNER JOIN discapacid_e ON beneficiario.discapacidad = discapacid_e.id_e
-	 WHERE atenciones.fecha_aten IS NOT NULL;
+	 WHERE atenciones.fecha_aten IS NOT NULL;;
 	 ");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
