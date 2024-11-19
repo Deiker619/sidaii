@@ -129,8 +129,10 @@ if ($remit) {
         $remicion->setsolicitud($atencion_solicitada);
         $remicion->setinforme($informe);
         $consultR = $remicion->insertarRemicion();
+        $data = array();
+        $data["i"] = "Remitido";
         header('Content-Type: application/json');
-        echo json_encode("Remitido");
+        echo json_encode($data);
     }
 }
 
@@ -152,6 +154,10 @@ if ($descrip_orientacion) {
 
         $remicion->setpor($por);  /* 22/8/2023     */
         $remicion->insertarOrientacionEstadal(); /* 22/8/2023    */
+        $data = array();
+        $data["i"] = "Remitido";
+        header('Content-Type: application/json');
+        echo json_encode($data);
     }
 }
 

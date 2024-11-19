@@ -769,23 +769,90 @@ include_once("partearriba.php");
             });
         });
     });
-    function enviarEmail(a, b) {
-            let correo = b
-            let email = true;
-            let numero_aten = a;
 
-            /* No tiene correo */
-            if (correo) {
-                Swal.fire({
-                    title: "¿Desea enviar el comprobante al correo registrado?",
-                    html: "<b>Correo: </b>" + b + "",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Si, enviar!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
+    function enviarEmail(a, b) {
+        let correo = b
+        let email = true;
+        let numero_aten = a;
+
+        /* No tiene correo */
+        if (correo) {
+            Swal.fire({
+                title: "¿Desea enviar el comprobante al correo registrado?",
+                html: "<b>Correo: </b>" + b + "",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Si, enviar!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    asignarAtencion();
+                    $.ajax({
+                        type: "POST",
+                        url: "reportes/enviarEmailOP.php",
+                        data: {
+                            numero_aten: numero_aten,
+                            correo: correo,
+
+                        },
+                        success: function(data) {
+                            console.log(data)
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+
+
+
+                                },
+                                willClose: () => {
+
+                                    location.reload();  
+                                }
+                            });
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Enviado exitosamente',
+                            });
+
+
+                        },
+                        error: function(data) {
+                            console.log(data)
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Oops...',
+                                'text': data
+                            })
+                        }
+                    })
+                }
+            });
+        } else {
+            const {
+                value: atencion
+            } = Swal.fire({
+                title: 'Agrega el correo personalizado',
+                input: 'email',
+                inputLabel: 'Introduce el correo para enviar comprobante',
+                inputValue: correo,
+                footer: "Esta persona no tiene correo registrado",
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Debes escribir algo'
+                    }
+
+                    if (value) {
+                        correo = value;
+
                         asignarAtencion();
                         $.ajax({
                             type: "POST",
@@ -796,7 +863,6 @@ include_once("partearriba.php");
 
                             },
                             success: function(data) {
-                                console.log(data)
                                 const Toast = Swal.mixin({
                                     toast: true,
                                     position: 'top-end',
@@ -821,10 +887,16 @@ include_once("partearriba.php");
                                     title: 'Enviado exitosamente',
                                 });
 
-
+                                if (!data) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: "No se pudo registrar la solicitud, verifique datos"
+                                    }).then(function() {
+                                        window.location = "01,2-atenciones.php";
+                                    })
+                                }
                             },
                             error: function(data) {
-                                console.log(data)
                                 Swal.fire({
                                     'icon': 'error',
                                     'title': 'Oops...',
@@ -832,86 +904,15 @@ include_once("partearriba.php");
                                 })
                             }
                         })
+
                     }
-                });
-            } else {
-                const {
-                    value: atencion
-                } = Swal.fire({
-                    title: 'Agrega el correo personalizado',
-                    input: 'email',
-                    inputLabel: 'Introduce el correo para enviar comprobante',
-                    inputValue: correo,
-                    footer: "Esta persona no tiene correo registrado",
-                    showCancelButton: true,
-                    inputValidator: (value) => {
-                        if (!value) {
-                            return 'Debes escribir algo'
-                        }
+                }
 
-                        if (value) {
-                            correo = value;
-
-                            asignarAtencion();
-                            $.ajax({
-                                type: "POST",
-                                url: "reportes/enviarEmailOP.php",
-                                data: {
-                                    numero_aten: numero_aten,
-                                    correo: correo,
-
-                                },
-                                success: function(data) {
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: 'top-end',
-                                        showConfirmButton: false,
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-
-
-
-                                        },
-                                        willClose: () => {
-
-                                            window.location.href = "01,2-atenciones.php#atenciones"
-                                        }
-                                    });
-
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Enviado exitosamente',
-                                    });
-
-                                    if (!data) {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: "No se pudo registrar la solicitud, verifique datos"
-                                        }).then(function() {
-                                            window.location = "01,2-atenciones.php";
-                                        })
-                                    }
-                                },
-                                error: function(data) {
-                                    Swal.fire({
-                                        'icon': 'error',
-                                        'title': 'Oops...',
-                                        'text': data
-                                    })
-                                }
-                            })
-
-                        }
-                    }
-
-                })
-            }
-            /* Si tiene correo */
-
+            })
         }
+        /* Si tiene correo */
+
+    }
 
 
     function cargar(p1) {
@@ -1158,71 +1159,70 @@ include_once("partearriba.php");
     }
 </script>
 <script>
-   function subirArchivo(a) {
-    var numero_aten = a;
-    Swal.fire({
-        title: 'Cargar informe médico',
-        html: `
+    function subirArchivo(a) {
+        var numero_aten = a;
+        Swal.fire({
+            title: 'Cargar informe médico',
+            html: `
             <label for="customFileInput" style="cursor: pointer; padding: 10px 20px; background-color: #4CAF50; color: white; border-radius: 5px; display: inline-block;">
                 Seleccionar archivo
             </label>
             <input id="customFileInput" type="file" accept="application/pdf" style="display: none;">
             <span id="fileName" style="display: block; margin-top: 10px; color: #555;">Ningún archivo seleccionado</span>
         `,
-        showCancelButton: true,
-        confirmButtonText: 'Subir',
-        cancelButtonText: 'Cancelar',
-        preConfirm: () => {
-            const fileInput = document.getElementById('customFileInput');
-            const file = fileInput.files[0];
-            if (!file) {
-                Swal.showValidationMessage('Por favor, selecciona un archivo');
-                return false;
-            }
-            return file;
-        }
-    }).then((file) => {
-        if (file.isConfirmed && file.value) {
-            // Crear un objeto FormData y agregar el archivo y el número
-            const formData = new FormData();
-            formData.append('archivo', document.getElementById('customFileInput').files[0]);
-            formData.append('numero_aten', numero_aten);
-
-            // Hacer la solicitud AJAX utilizando jQuery
-            asignarAtencion();
-            $.ajax({
-                url: 'documentos/informes/cargardocumento.php',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    console.log(data);
-                    try {
-                        const dataJ = JSON.parse(data);
-                        Swal.fire(dataJ.mensaje, '', 'success').then(function() {
-                            window.location = "14-coordinacionesEstadales.php";
-                        });
-                    } catch (error) {
-                        console.error('Error al analizar la respuesta del servidor como JSON:', error);
-                        Swal.fire('Error en el formato de la respuesta del servidor', '', 'error');
-                    }
-                },
-                error: function(error) {
-                    console.error('Error al subir el archivo:', error);
-                    Swal.fire('Error al cargar el archivo', '', 'error');
+            showCancelButton: true,
+            confirmButtonText: 'Subir',
+            cancelButtonText: 'Cancelar',
+            preConfirm: () => {
+                const fileInput = document.getElementById('customFileInput');
+                const file = fileInput.files[0];
+                if (!file) {
+                    Swal.showValidationMessage('Por favor, selecciona un archivo');
+                    return false;
                 }
-            });
-        }
-    });
+                return file;
+            }
+        }).then((file) => {
+            if (file.isConfirmed && file.value) {
+                // Crear un objeto FormData y agregar el archivo y el número
+                const formData = new FormData();
+                formData.append('archivo', document.getElementById('customFileInput').files[0]);
+                formData.append('numero_aten', numero_aten);
 
-    // Evento para actualizar el nombre del archivo seleccionado
-    document.getElementById('customFileInput').addEventListener('change', (event) => {
-        const fileName = event.target.files[0] ? event.target.files[0].name : 'Ningún archivo seleccionado';
-        document.getElementById('fileName').textContent = fileName;
-    });
-}
+                // Hacer la solicitud AJAX utilizando jQuery
+                asignarAtencion();
+                $.ajax({
+                    url: 'documentos/informes/cargardocumento.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        console.log(data);
+                        try {
+                            const dataJ = JSON.parse(data);
+                            Swal.fire(dataJ.mensaje, '', 'success').then(function() {
+                                window.location = "14-coordinacionesEstadales.php";
+                            });
+                        } catch (error) {
+                            console.error('Error al analizar la respuesta del servidor como JSON:', error);
+                            Swal.fire('Error en el formato de la respuesta del servidor', '', 'error');
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error al subir el archivo:', error);
+                        Swal.fire('Error al cargar el archivo', '', 'error');
+                    }
+                });
+            }
+        });
 
+        // Evento para actualizar el nombre del archivo seleccionado
+        document.getElementById('customFileInput').addEventListener('change', (event) => {
+            const fileName = event.target.files[0] ? event.target.files[0].name : 'Ningún archivo seleccionado';
+            document.getElementById('fileName').textContent = fileName;
+        });
+    }
 </script>
 <!-- <script src="main.js"></script> -->
 <script src="mainEstadal.js"></script>

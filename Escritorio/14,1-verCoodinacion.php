@@ -159,7 +159,7 @@ $registro = $aten->consultarCoordinacion();
 
         </div> -->
     </div>
-    
+
 
     <div class="graficas">
         <div class="tarjetas-graficas">
@@ -270,9 +270,10 @@ $registro = $aten->consultarCoordinacion();
                         <th>Status</th>
                         <th></th>
                         <th></th>
-                        <?php if ($rol == "Administrador" || $rol == "Superusuario") { ?>
+                        <?php if ($rol == "Administrador" || $rol == "Superusuario" || $rol == "Coordinador") { ?>
                             <th></th>
                         <?php } ?>
+                        <th></th>
 
 
 
@@ -296,7 +297,7 @@ $registro = $aten->consultarCoordinacion();
                         foreach ($consulta as $registros) {
                     ?>
                             <tr>
-                                <td class="sorting_1 <?php echo $registros['urgencia'] ?>"><a class="cedula" id="verBeneficiario" <?php if ($rol == "Administrador" || $rol == "Superusuario") { ?> href="modificarAtencionOP.php?numero_aten=<?php echo $registros['numero_aten']; ?>" <?php } ?>> <?php echo $registros["numero_aten"] ?></a></td>
+                                <td class="sorting_1 <?php echo $registros['urgencia'] ?>"><a class="cedula" id="verBeneficiario" <?php if ($rol == "Administrador" || $rol == "Superusuario" || $rol == "Coordinador") { ?> href="modificarAtencionOP.php?numero_aten=<?php echo $registros['numero_aten']; ?>" <?php } ?>> <?php echo $registros["numero_aten"] ?></a></td>
                                 <td><a class="cedula" id="verBeneficiario" href="__verBeneficiario.php?cedula=<?php echo $registros['cedula']; ?>"><?php echo $registros['cedula']; ?> </a></td>
                                 <td><?php echo $registros["nombre"] ?></td>
                                 <td><?php echo $registros["apellido"] ?></td>
@@ -329,9 +330,19 @@ $registro = $aten->consultarCoordinacion();
                                 <?php } ?>
                                 <td><a href="14,3-asignarAtencionEstadal.php?numero_aten=<?php echo $registros["numero_aten"] ?>">Dar atención</a></td>
                                 <td><a href="01,10-seguimiento_estadal.php?numero_aten=<?php echo $registros["numero_aten"] ?>" class="remitir"> Seguimiento</a></td>
-                                <?php if ($rol == "Superusuario" || $rol == "Administrador") { ?>
+                                <?php if ($rol == "Superusuario" || $rol == "Administrador" || $rol == "Coordinador") { ?>
                                     <td><a onclick='eliminar(<?php echo $registros["numero_aten"]; ?>)' class="eliminar">Eliminar Reg</a></td>
                                 <?php } ?>
+                                <td>
+                                    <div class="enviar">
+                                        <?php if ($registros["atencion_solicitada"]) { ?>
+                                            <div class="enviar_text"> <i class='bx bx-mail-send' onclick="enviarEmail('<?php echo $registros['numero_aten'] ?>','<?php echo $registros['email'] ?? null ?>')" style="color:#3ab556; cursor:pointer"></i></div>
+                                        <?php } else { ?>
+
+                                            <div class="enviar_text"> <i class='bx bx-no-entry' style="color:crimson; cursor:not-allowed "></i></div>
+                                        <?php } ?>
+                                    </div>
+                                </td>
                             </tr>
                     <?php
                         }
@@ -452,6 +463,201 @@ $registro = $aten->consultarCoordinacion();
 
     <!-- Subir Archivos -->
     <script>
+        function eliminar(p1) {
+
+
+            var id = p1;
+            console.log(id);
+
+
+            Swal.fire({
+                icon: "question",
+                title: '¿Desea eliminar esta atencion?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Eliminar',
+                denyButtonText: `No eliminar`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    asignarAtencion();
+                    $.ajax({
+                        type: "GET",
+                        url: "eliminar/eliminar_atencion_estadal.php",
+                        data: {
+                            id: id
+
+
+                        },
+                        success: function(data) {
+                            Swal.fire({
+                                'icon': 'success',
+                                'title': 'Eliminacion de atencion',
+                                'text': 'Se elimino correctamente esta atencion',
+                                'confirmButton': 'btn btn-success'
+                            }).then(function() {
+                                location.reload();
+                            })
+                        },
+                        error: function(data) {
+                            Swal.fire({
+                                'icon': 'error',
+                                'title': 'Oops...',
+                                'text': data
+                            })
+                        }
+                    })
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not eliminated', '', 'info')
+                }
+            })
+        }
+
+        function enviarEmail(a, b) {
+            let correo = b
+            let email = true;
+            let numero_aten = a;
+
+            /* No tiene correo */
+            if (correo) {
+                Swal.fire({
+                    title: "¿Desea enviar el comprobante al correo registrado?",
+                    html: "<b>Correo: </b>" + b + "",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, enviar!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        asignarAtencion();
+                        $.ajax({
+                            type: "POST",
+                            url: "reportes/enviarEmailOP.php",
+                            data: {
+                                numero_aten: numero_aten,
+                                correo: correo,
+
+                            },
+                            success: function(data) {
+                                console.log(data)
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+
+
+
+                                    },
+                                    willClose: () => {
+
+                                        location.reload();
+                                    }
+                                });
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Enviado exitosamente',
+                                });
+
+
+                            },
+                            error: function(data) {
+                                console.log(data)
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Oops...',
+                                    'text': data
+                                })
+                            }
+                        })
+                    }
+                });
+            } else {
+                const {
+                    value: atencion
+                } = Swal.fire({
+                    title: 'Agrega el correo personalizado',
+                    input: 'email',
+                    inputLabel: 'Introduce el correo para enviar comprobante',
+                    inputValue: correo,
+                    footer: "Esta persona no tiene correo registrado",
+                    showCancelButton: true,
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'Debes escribir algo'
+                        }
+
+                        if (value) {
+                            correo = value;
+
+                            asignarAtencion();
+                            $.ajax({
+                                type: "POST",
+                                url: "reportes/enviarEmailOP.php",
+                                data: {
+                                    numero_aten: numero_aten,
+                                    correo: correo,
+
+                                },
+                                success: function(data) {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+
+
+
+                                        },
+                                        willClose: () => {
+
+                                            location.reload();
+                                        }
+                                    });
+
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Enviado exitosamente',
+                                    });
+
+                                    if (!data) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: "No se pudo registrar la solicitud, verifique datos"
+                                        }).then(function() {
+                                            location.reload();
+                                        })
+                                    }
+                                },
+                                error: function(data) {
+                                    Swal.fire({
+                                        'icon': 'error',
+                                        'title': 'Oops...',
+                                        'text': data
+                                    })
+                                }
+                            })
+
+                        }
+                    }
+
+                })
+            }
+            /* Si tiene correo */
+
+        }
+
         function subirArchivo(a) {
             var numero_aten = a;
             Swal.fire({

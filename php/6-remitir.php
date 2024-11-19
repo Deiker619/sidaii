@@ -344,7 +344,8 @@ class remitido extends ManejadorBD{
 
 			try{	
 
-				$stmt = $this->cnn->prepare("SELECT * FROM remitidos WHERE departamento = :departamento and coordinacion = :coordinacion and statu IS NULL ");
+				$stmt = $this->cnn->prepare("SELECT remitidos.id,remitidos.cedula, remitidos.coordinacion, remitidos.fecha, usuario.nombre as por, remitidos.gerencia_remitente , remitidos.motivo, remitidos.solicitud FROM remitidos, usuario
+WHERE remitidos.departamento = :departamento and remitidos.coordinacion = :coordinacion and statu IS NULL and remitidos.por = usuario.cedula");
 				// Especificamos el fetch mode antes de llamar a fetch()
 				$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 				$stmt->bindParam(':departamento', $this->departamento);

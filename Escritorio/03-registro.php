@@ -37,7 +37,7 @@ include_once("partearriba.php");
 
                             <div class="input-field">
                                 <label>Telefono</label>
-                                <input type="number" placeholder="Ingresa tu numero de Telefono" required name="telefono" id="telefone">
+                                <input type="number" placeholder="Ingresa tu numero de Telefono"  name="telefono" id="telefone">
                             </div>
 
                             <div class="input-field">

@@ -79,6 +79,7 @@ CREATE TABLE `atenciones` (
   `atencion_brindada` varchar(10) DEFAULT NULL,
   `statu` text DEFAULT 'Sin atencion',
   `por` int(12) DEFAULT NULL,
+  `asignado` int(12) DEFAULT NULL,
   `fecha_creada` timestamp NOT NULL DEFAULT current_timestamp(),
   `urgencia` text DEFAULT NULL,
   `archivo` varchar(2048) DEFAULT NULL,
@@ -88,11 +89,13 @@ CREATE TABLE `atenciones` (
   KEY `atencion_recibida` (`atencion_recibida`),
   KEY `atencion_brindada` (`atencion_brindada`),
   KEY `por` (`por`),
+  KEY `asignado` (`asignado`),
   CONSTRAINT `atenciones_ibfk_1` FOREIGN KEY (`cedula`) REFERENCES `beneficiario` (`cedula`) ON DELETE CASCADE,
   CONSTRAINT `atenciones_ibfk_2` FOREIGN KEY (`atencion_recibida`) REFERENCES `tipo_ayuda_tecnica` (`id`) ON DELETE CASCADE ON UPDATE SET NULL,
   CONSTRAINT `atenciones_ibfk_3` FOREIGN KEY (`atencion_brindada`) REFERENCES `atencion_recibida` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `atenciones_ibfk_4` FOREIGN KEY (`por`) REFERENCES `usuario` (`cedula`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=359 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `atenciones_ibfk_4` FOREIGN KEY (`por`) REFERENCES `usuario` (`cedula`) ON DELETE CASCADE,
+  CONSTRAINT `atenciones_ibfk_5` FOREIGN KEY (`asignado`) REFERENCES `usuario` (`cedula`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=431 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +104,7 @@ CREATE TABLE `atenciones` (
 
 LOCK TABLES `atenciones` WRITE;
 /*!40000 ALTER TABLE `atenciones` DISABLE KEYS */;
-INSERT INTO `atenciones` VALUES (357,8261209,'2024-04-23','Andadera','26-Anpf','-ayudatec','Atendido',30165406,'2024-04-23 13:55:33',NULL,NULL,NULL),(358,8999541,NULL,'Regleta con punzon',NULL,NULL,'En espera',NULL,'2024-04-25 13:37:26','urgente',NULL,NULL);
+INSERT INTO `atenciones` VALUES (425,0,'2024-11-11','Muletas talla L','2-MuletasL','-ayudatec','Atendido',30165406,30165406,'2024-11-10 13:37:43',NULL,NULL,NULL),(426,11111111,'2024-11-11','Silla de ruedas estandar','2-MuletasL','-ayudatec','Atendido',30165406,30165406,'2024-11-10 13:47:24','urgente',NULL,''),(429,54412515,'2024-11-18',NULL,NULL,'-remitido','Atendido',NULL,30165407,'2024-11-18 18:16:24',NULL,NULL,NULL),(430,11111111,'2024-11-18','',NULL,'-remitido','Atendido',NULL,30165407,'2024-11-18 18:25:54',NULL,NULL,'');
 /*!40000 ALTER TABLE `atenciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -137,7 +140,7 @@ CREATE TABLE `atenciones_coordinaciones` (
   CONSTRAINT `atenciones_coordinaciones_ibfk_3` FOREIGN KEY (`asignado`) REFERENCES `usuario` (`cedula`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `atenciones_coordinaciones_ibfk_4` FOREIGN KEY (`por`) REFERENCES `usuario` (`cedula`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `atenciones_coordinaciones_ibfk_5` FOREIGN KEY (`cedula`) REFERENCES `beneficiario` (`cedula`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=211 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=236 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +149,7 @@ CREATE TABLE `atenciones_coordinaciones` (
 
 LOCK TABLES `atenciones_coordinaciones` WRITE;
 /*!40000 ALTER TABLE `atenciones_coordinaciones` DISABLE KEYS */;
-INSERT INTO `atenciones_coordinaciones` VALUES (28484435,193,8261209,'2024-04-11','Silla de ruedas estandar','1-silla.r','-ayudatec','Atendido',28484435,'2024-04-11 14:15:53','urgente',NULL,'6617f0b2926a6.pdf'),(28484435,195,8261209,'2024-04-11','Muletas talla S','2-MuletasS','-ayudatec','Atendido',28484435,'2024-04-11 14:17:46','urgente',NULL,'6617f12fd63cf.pdf'),(30165406,200,8261209,'2024-04-11','Silla a motor','21-sllm','-ayudatec','Atendido',30165406,'2024-04-11 15:02:44','urgente',NULL,'6618002ccd25d.pdf'),(30165406,202,8261209,'2024-04-11',NULL,'-MuletasCa','-ayudatec','Atendido',30165406,'2024-04-11 15:28:11',NULL,NULL,'661801964a95a.pdf'),(30165406,203,8261209,'2024-04-16',NULL,'31-sllsr','-ayudatec','Atendido',30165406,'2024-04-11 15:37:24',NULL,NULL,'661803bdba63a.pdf'),(30165406,204,54545454,'2024-04-16','Silla de ruedas estandar','1-silla.r','-ayudatec','Atendido',30165406,'2024-04-16 13:19:45','urgente',NULL,'661e7e633e45f.pdf'),(30165406,205,8261209,'2024-04-16',NULL,'-bastonRas','-ayudatec','Atendido',30165406,'2024-04-16 13:20:42',NULL,NULL,'661e7b6564e5e.pdf'),(30165406,206,8261209,'2024-04-16','Silla de ruedas estandar','14-Brpl36','-ayudatec','Atendido',30165406,'2024-04-16 13:35:48','urgente',NULL,'661e7ec335a84.pdf'),(30165406,207,8261209,NULL,'Muletas talla S',NULL,NULL,'En espera',NULL,'2024-04-16 13:41:37','urgente',NULL,'661e8023644e6.pdf'),(30165406,208,301654061,NULL,'',NULL,NULL,'En espera',NULL,'2024-04-25 13:03:12',NULL,NULL,'6630f2e3c22d8.pdf'),(30165406,209,56565656,NULL,NULL,NULL,NULL,'Sin atencion',NULL,'2024-04-30 13:33:20',NULL,NULL,NULL),(30165406,210,301654061,NULL,NULL,NULL,NULL,'Sin atencion',NULL,'2024-04-30 14:07:25',NULL,NULL,NULL);
+INSERT INTO `atenciones_coordinaciones` VALUES (21204417,227,11111111,'2024-11-18','Silla de ruedas estandar',NULL,'-remitido','Atendido',21204417,'2024-11-18 17:28:39','urgente',NULL,NULL),(21204417,228,11111111,'2024-11-18','Silla de ruedas estandar','1-silla.r','-ayudatec','Atendido',21204417,'2024-11-18 17:30:42','urgente',NULL,NULL),(21204417,230,11111111,'2024-11-18',NULL,NULL,'-remitido','Atendido',21204417,'2024-11-18 17:57:15',NULL,NULL,NULL),(21549517,231,54412515,'2024-11-18',NULL,NULL,'-remitido','Atendido',21549517,'2024-11-18 18:12:02',NULL,NULL,NULL),(21204417,232,11111111,'2024-11-18',NULL,NULL,'-remitido','Atendido',21204417,'2024-11-18 18:20:50',NULL,NULL,NULL),(21204417,233,11111111,'2024-11-18',NULL,NULL,'-remitido','Atendido',21204417,'2024-11-18 18:22:35',NULL,NULL,NULL),(21204417,234,11111111,'2024-11-18',NULL,'2-MuletasS','-ayudatec','Atendido',21204417,'2024-11-18 18:24:28',NULL,NULL,NULL),(21549517,235,11111111,'2024-11-18',NULL,NULL,'-remitido','Atendido',21549517,'2024-11-18 18:27:13',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `atenciones_coordinaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,7 +167,7 @@ CREATE TABLE `audiometria` (
   PRIMARY KEY (`id`),
   KEY `cedula` (`cedula`),
   CONSTRAINT `audiometria_ibfk_1` FOREIGN KEY (`cedula`) REFERENCES `beneficiario` (`cedula`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,7 +244,7 @@ CREATE TABLE `ben_eliminados` (
   `discapacidad` varchar(10) DEFAULT NULL,
   `fecha_eliminacion` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -250,7 +253,7 @@ CREATE TABLE `ben_eliminados` (
 
 LOCK TABLES `ben_eliminados` WRITE;
 /*!40000 ALTER TABLE `ben_eliminados` DISABLE KEYS */;
-INSERT INTO `ben_eliminados` VALUES (38,30165406,'DEIKER','FERNANDEZ','TrstHemrr','2023-08-19 23:40:28'),(39,4857859,'Yaji','Lopez','Alzheimer','2023-08-20 14:46:44'),(40,30165403,'DEIKER','FERNANDEZ','Seguera_To','2023-08-20 14:46:45'),(41,30165404,'DEIKER','FERNANDEZ','Anacusia','2023-08-20 14:46:45'),(42,30165406,'deiker','Fernandez','IRC_HEMO','2023-08-20 14:46:45'),(43,30165406,'DEIKER','FERNANDEZ','Sordo','2023-08-21 10:21:36'),(44,4584875,'Miguel','Lopez','AparatoFon','2023-08-21 10:24:03'),(45,48445,'Kelvin','Pena','acondro','2023-08-21 10:24:48'),(46,34234,'valentina','corral','Sordo','2023-08-21 11:13:31'),(47,23445,'betania','herlo','acondro','2023-08-21 13:33:03'),(48,132444,'david','martinez','CegHipo','2023-08-21 13:33:17'),(49,654326,'carlos','ramirez','CegHipo','2023-08-21 14:04:25'),(50,123456,'maria','gonzalez','Baja_Visio','2023-08-22 16:06:08'),(51,301265401,'adsad','asddas','acondro','2023-08-23 12:50:31'),(52,151642,'asdasd','dadsd','acondro','2023-08-23 12:50:37'),(53,15848,'Kelvin','Pena','acondro','2023-08-24 09:38:28'),(54,62654,'Deiker','fernandez','acondro','2023-08-24 09:38:28'),(55,215154,'sdasd','sadasd','acondro','2023-08-24 09:38:28'),(56,484545,'Kelvin','Pela','AnemiaCrni','2023-08-24 09:38:28'),(57,521548,'Carol','Perez','Anacusia','2023-08-24 09:38:28'),(58,585548,'Kelvin','Pena','AnemiaCrni','2023-08-24 09:38:28'),(59,1515546,'Kelvin','Pel','acondro','2023-08-24 09:38:28'),(60,4582151,'pastor','contreras','acondro','2023-08-24 09:38:28'),(61,4584485,'Kelvin','contreras','acondro','2023-08-24 09:38:28'),(62,5145131,'Kelvin','Pelo','acondro','2023-08-24 09:38:28'),(63,20125151,'Kelvin','Plo','acondro','2023-08-24 09:38:28'),(64,30165402,'Deiker','Fernandez','Baja_Visio','2023-08-24 09:38:28'),(65,34341234,'VALENTINA','perez','acondro','2023-08-24 09:38:28'),(66,971423738,'gerardio','perez','DeficitDG','2023-08-24 09:38:28'),(67,123456,'Columba','Chapellin','1-AS/D','2023-09-02 17:12:26'),(68,10722053,'ELIBERTO ANTONIO','VAZQUEZ MEJIAS','DeficitDG','2023-09-15 20:32:09'),(69,12731757,'CAROLINA','CRESPO','1-AS/D','2023-10-26 12:31:24'),(70,28484435,'MIguel Angel','Lopez Gonzalez','1-AS/D','2023-10-26 12:31:59'),(71,124584,'Carlos','Lopez Gonzalez','AnemiaCrni','2023-11-24 10:43:36'),(72,487848,'Deiker','fuentes','motora','2023-12-18 10:40:12'),(73,1545856,'Carlos Jose','Fernandez carvajal','Baja_Visio','2024-01-10 16:24:45'),(74,484986,'Pablito Gonzalez','Fernandezz','Anacusia','2024-02-23 09:11:37'),(75,1236655,'Alguien con ','apellido doble','VIH','2024-02-23 09:11:37'),(76,4549646,'Luis samen','carvajal','VIH','2024-02-23 09:11:38'),(77,4581245,'Kelvin','Perez','1-AS/D','2024-02-23 09:11:38'),(78,4585899,'Miguel','Palacios','1-AS/D','2024-02-23 09:11:38'),(79,4858584,'Jose Miguel','Fernández Carvajal','1-AS/D','2024-02-23 09:11:38'),(80,10722053,'ELIBERTO ANTONIO','VAZQUEZ MEJIAS','DeficitDG','2024-02-23 09:11:38'),(81,12545859,'Carlos Sebastian','Perez Gonzalez','AparatoFon','2024-02-23 09:11:39'),(82,13123223,'Jose','Fernández','ESQ','2024-02-23 09:11:39'),(83,13711717,'DEIKER','FERNANDEZ','1-AS/D','2024-02-23 09:11:39'),(84,13894817,'EVELYN','FERNANDEZ','1-AS/D','2024-02-23 09:11:39'),(85,15245484,'Marco Perez','Gil Caraballo','Alzheimer','2024-02-23 09:11:39'),(86,28484465,'hsf','dsdsd','BVAnac','2024-02-23 09:11:39'),(87,30165402,'DEIKER','FERNANDEZ','1-AS/D','2024-02-23 09:11:39'),(88,30165406,'DEIKER','CHAPELLIN','insuficie','2024-02-23 09:11:39'),(89,45848412,'Carlos jose ','Torres villaroel','epoc','2024-02-23 09:11:40'),(90,48758452,'Evelyn Edidd','Chapellin Fuentes','AparatoFon','2024-02-23 09:11:40'),(91,67676767,'fty','ty','1-AS/D','2024-02-23 09:11:40'),(92,87847483,'José','Fernández','SordCeg','2024-02-23 09:11:40'),(93,137117171,'Columba','Chapellin','1-AS/D','2024-02-23 09:11:40'),(94,137117175,'Deiker','CHAPELLIN','1-AS/D','2024-02-23 09:11:40'),(95,138948169,'Jose','Fernández','DiscIntCr','2024-02-23 09:37:46'),(96,30165402,'dd','dd','Distrofia','2024-02-23 09:41:59'),(97,13894817,'Jose','Fernández','Alzheimer','2024-02-23 09:43:05'),(98,13894817,'Jose','Fernández','Baja_Visio','2024-02-23 09:45:28'),(99,13894810,'Jose','Fernández','Alzheimer','2024-02-23 09:52:55'),(100,13894812,'Jose','Fernández','Alzheimer','2024-02-23 09:52:56'),(101,13894817,'Jose','Fernández','Alzheimer','2024-02-23 09:52:56'),(102,1389443,'Jose','Fernández','Alzheimer','2024-02-23 09:53:16'),(103,13894817,'Jose','Fernández','esclerosis','2024-02-23 10:13:05'),(104,2342343,'Jose','Fernández','esclerosis','2024-03-08 10:31:41'),(105,3251545,'MIguel Angel','Lopez Gonzalez','Anacusia','2024-04-08 13:18:51'),(106,4858584,'Jose','Fernández','Baja_Visio','2024-04-08 13:18:54'),(107,8261209,'soraima','torres','epoc','2024-04-08 13:18:56'),(108,13711717,'Jose peña','Fernández','Alzheimer','2024-04-08 13:18:59'),(109,13894817,'Jose','Fernández','esclerosis','2024-04-08 13:19:01'),(110,28484435,'Gerardo','Salazar','ESQ','2024-04-08 13:19:03'),(111,30165406,'Jose Alberto','Fernández','epoc','2024-04-08 13:19:06'),(112,30165490,'Carol g','Nose q mas','VIH','2024-04-08 13:19:08'),(113,45612312,'Grecia Jose','Penalta dominguez','epoc','2024-04-08 13:19:11'),(114,45848754,'Carolina Miguelina','Herrera Gonzalez','neurofibro','2024-04-08 13:19:14'),(115,48585843,'Jose','Fernández','esclerosis','2024-04-08 13:19:16'),(116,8787878,'Marcos','hidalgo','ESQ','2024-04-09 10:44:59'),(117,28484435,'Gerardo','Salazar','Anacusia','2024-04-09 10:45:13');
+INSERT INTO `ben_eliminados` VALUES (38,30165406,'DEIKER','FERNANDEZ','TrstHemrr','2023-08-19 23:40:28'),(39,4857859,'Yaji','Lopez','Alzheimer','2023-08-20 14:46:44'),(40,30165403,'DEIKER','FERNANDEZ','Seguera_To','2023-08-20 14:46:45'),(41,30165404,'DEIKER','FERNANDEZ','Anacusia','2023-08-20 14:46:45'),(42,30165406,'deiker','Fernandez','IRC_HEMO','2023-08-20 14:46:45'),(43,30165406,'DEIKER','FERNANDEZ','Sordo','2023-08-21 10:21:36'),(44,4584875,'Miguel','Lopez','AparatoFon','2023-08-21 10:24:03'),(45,48445,'Kelvin','Pena','acondro','2023-08-21 10:24:48'),(46,34234,'valentina','corral','Sordo','2023-08-21 11:13:31'),(47,23445,'betania','herlo','acondro','2023-08-21 13:33:03'),(48,132444,'david','martinez','CegHipo','2023-08-21 13:33:17'),(49,654326,'carlos','ramirez','CegHipo','2023-08-21 14:04:25'),(50,123456,'maria','gonzalez','Baja_Visio','2023-08-22 16:06:08'),(51,301265401,'adsad','asddas','acondro','2023-08-23 12:50:31'),(52,151642,'asdasd','dadsd','acondro','2023-08-23 12:50:37'),(53,15848,'Kelvin','Pena','acondro','2023-08-24 09:38:28'),(54,62654,'Deiker','fernandez','acondro','2023-08-24 09:38:28'),(55,215154,'sdasd','sadasd','acondro','2023-08-24 09:38:28'),(56,484545,'Kelvin','Pela','AnemiaCrni','2023-08-24 09:38:28'),(57,521548,'Carol','Perez','Anacusia','2023-08-24 09:38:28'),(58,585548,'Kelvin','Pena','AnemiaCrni','2023-08-24 09:38:28'),(59,1515546,'Kelvin','Pel','acondro','2023-08-24 09:38:28'),(60,4582151,'pastor','contreras','acondro','2023-08-24 09:38:28'),(61,4584485,'Kelvin','contreras','acondro','2023-08-24 09:38:28'),(62,5145131,'Kelvin','Pelo','acondro','2023-08-24 09:38:28'),(63,20125151,'Kelvin','Plo','acondro','2023-08-24 09:38:28'),(64,30165402,'Deiker','Fernandez','Baja_Visio','2023-08-24 09:38:28'),(65,34341234,'VALENTINA','perez','acondro','2023-08-24 09:38:28'),(66,971423738,'gerardio','perez','DeficitDG','2023-08-24 09:38:28'),(67,123456,'Columba','Chapellin','1-AS/D','2023-09-02 17:12:26'),(68,10722053,'ELIBERTO ANTONIO','VAZQUEZ MEJIAS','DeficitDG','2023-09-15 20:32:09'),(69,12731757,'CAROLINA','CRESPO','1-AS/D','2023-10-26 12:31:24'),(70,28484435,'MIguel Angel','Lopez Gonzalez','1-AS/D','2023-10-26 12:31:59'),(71,124584,'Carlos','Lopez Gonzalez','AnemiaCrni','2023-11-24 10:43:36'),(72,487848,'Deiker','fuentes','motora','2023-12-18 10:40:12'),(73,1545856,'Carlos Jose','Fernandez carvajal','Baja_Visio','2024-01-10 16:24:45'),(74,484986,'Pablito Gonzalez','Fernandezz','Anacusia','2024-02-23 09:11:37'),(75,1236655,'Alguien con ','apellido doble','VIH','2024-02-23 09:11:37'),(76,4549646,'Luis samen','carvajal','VIH','2024-02-23 09:11:38'),(77,4581245,'Kelvin','Perez','1-AS/D','2024-02-23 09:11:38'),(78,4585899,'Miguel','Palacios','1-AS/D','2024-02-23 09:11:38'),(79,4858584,'Jose Miguel','Fernández Carvajal','1-AS/D','2024-02-23 09:11:38'),(80,10722053,'ELIBERTO ANTONIO','VAZQUEZ MEJIAS','DeficitDG','2024-02-23 09:11:38'),(81,12545859,'Carlos Sebastian','Perez Gonzalez','AparatoFon','2024-02-23 09:11:39'),(82,13123223,'Jose','Fernández','ESQ','2024-02-23 09:11:39'),(83,13711717,'DEIKER','FERNANDEZ','1-AS/D','2024-02-23 09:11:39'),(84,13894817,'EVELYN','FERNANDEZ','1-AS/D','2024-02-23 09:11:39'),(85,15245484,'Marco Perez','Gil Caraballo','Alzheimer','2024-02-23 09:11:39'),(86,28484465,'hsf','dsdsd','BVAnac','2024-02-23 09:11:39'),(87,30165402,'DEIKER','FERNANDEZ','1-AS/D','2024-02-23 09:11:39'),(88,30165406,'DEIKER','CHAPELLIN','insuficie','2024-02-23 09:11:39'),(89,45848412,'Carlos jose ','Torres villaroel','epoc','2024-02-23 09:11:40'),(90,48758452,'Evelyn Edidd','Chapellin Fuentes','AparatoFon','2024-02-23 09:11:40'),(91,67676767,'fty','ty','1-AS/D','2024-02-23 09:11:40'),(92,87847483,'José','Fernández','SordCeg','2024-02-23 09:11:40'),(93,137117171,'Columba','Chapellin','1-AS/D','2024-02-23 09:11:40'),(94,137117175,'Deiker','CHAPELLIN','1-AS/D','2024-02-23 09:11:40'),(95,138948169,'Jose','Fernández','DiscIntCr','2024-02-23 09:37:46'),(96,30165402,'dd','dd','Distrofia','2024-02-23 09:41:59'),(97,13894817,'Jose','Fernández','Alzheimer','2024-02-23 09:43:05'),(98,13894817,'Jose','Fernández','Baja_Visio','2024-02-23 09:45:28'),(99,13894810,'Jose','Fernández','Alzheimer','2024-02-23 09:52:55'),(100,13894812,'Jose','Fernández','Alzheimer','2024-02-23 09:52:56'),(101,13894817,'Jose','Fernández','Alzheimer','2024-02-23 09:52:56'),(102,1389443,'Jose','Fernández','Alzheimer','2024-02-23 09:53:16'),(103,13894817,'Jose','Fernández','esclerosis','2024-02-23 10:13:05'),(104,2342343,'Jose','Fernández','esclerosis','2024-03-08 10:31:41'),(105,3251545,'MIguel Angel','Lopez Gonzalez','Anacusia','2024-04-08 13:18:51'),(106,4858584,'Jose','Fernández','Baja_Visio','2024-04-08 13:18:54'),(107,8261209,'soraima','torres','epoc','2024-04-08 13:18:56'),(108,13711717,'Jose peña','Fernández','Alzheimer','2024-04-08 13:18:59'),(109,13894817,'Jose','Fernández','esclerosis','2024-04-08 13:19:01'),(110,28484435,'Gerardo','Salazar','ESQ','2024-04-08 13:19:03'),(111,30165406,'Jose Alberto','Fernández','epoc','2024-04-08 13:19:06'),(112,30165490,'Carol g','Nose q mas','VIH','2024-04-08 13:19:08'),(113,45612312,'Grecia Jose','Penalta dominguez','epoc','2024-04-08 13:19:11'),(114,45848754,'Carolina Miguelina','Herrera Gonzalez','neurofibro','2024-04-08 13:19:14'),(115,48585843,'Jose','Fernández','esclerosis','2024-04-08 13:19:16'),(116,8787878,'Marcos','hidalgo','ESQ','2024-04-09 10:44:59'),(117,28484435,'Gerardo','Salazar','Anacusia','2024-04-09 10:45:13'),(118,2625623,'desadasas','asdsadsa','AnemiaCrni','2024-11-07 14:14:10'),(119,4584852,'Jose','Fernández','cardiopati','2024-11-07 16:14:56'),(120,8261209,'soraima','torres','Baja_Visio','2024-11-07 16:14:56'),(121,8999541,'jose reinaldo','torres berriosss','Baja_Visio','2024-11-07 16:14:56'),(122,12545215,'Algo mas','algo mas','cardiopati','2024-11-07 16:14:56'),(123,25131202,'Felix Key','fuentes','VIH','2024-11-07 16:14:56'),(124,25454456,'andreina','moros','Obesidad-M','2024-11-07 16:14:56'),(125,30165406,'Deiker Jose','Fernandez Carvajal','Alzheimer','2024-11-07 16:14:56'),(126,45454545,'mario','castañeda','acondro','2024-11-07 16:14:56'),(127,45787874,'maria','delgado','1-AS/D','2024-11-07 16:14:56'),(128,54545454,'Felix Key','dfaaa','epoc','2024-11-07 16:14:56'),(129,54878785,'maria','delgado','1-AS/D','2024-11-07 16:14:56'),(130,56565656,'Felix Key','sasas','1-AS/D','2024-11-07 16:14:56'),(131,65465656,'Felix Key','lk','VIH','2024-11-07 16:14:56'),(132,301654061,'Camila ','lopez','ESQ','2024-11-07 16:14:56'),(133,5135116,'Carolna','sadsadsad','Alzheimer','2024-11-10 09:23:56'),(134,45612312,'Jose','Fernández','Anacusia','2024-11-10 09:23:56'),(135,4549646,'Deiker','Fernández','cardiopati','2024-11-10 09:27:30');
 /*!40000 ALTER TABLE `ben_eliminados` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,7 +304,7 @@ CREATE TABLE `beneficiario` (
 
 LOCK TABLES `beneficiario` WRITE;
 /*!40000 ALTER TABLE `beneficiario` DISABLE KEYS */;
-INSERT INTO `beneficiario` VALUES (8261209,'soraima','torres','1998-01-01','gerardoroyals5@gmail.com','04127010374','V',26,'M','casado/a',1,'14','223','601','Baja_Visio','0-aten-coo','','Deiker Fernandez','2024-04-08'),(8999541,'jose reinaldo','torres berriosss','1972-02-01','','04125558877','V',52,'M','casado/a',3,'3','29','81','Baja_Visio','0-aten-coo','','Deiker Fernandez','2024-04-09'),(25454456,'andreina','moros','1998-02-01','andreina88@gmail.com','04125556633','V',26,'M','soltero/a',2,'6','66','209','Obesidad-M','1-oac','57878','Deiker Fernandez','2024-04-09'),(45454545,'mario','castañeda','1998-02-02','caro3770@gmail.com','04126665587','V',26,'M','casado/a',2,'19','341','818','acondro','0-aten-coo','23232','Deiker Fernandez','2024-04-09'),(45787874,'maria','delgado','1998-01-01','gerardoroyal5@gmail.com','04125558746','V',26,'M','casado/a',0,'2','10','330','1-AS/D','0-aten-coo','','Deiker Fernandez','2024-04-08'),(54545454,'Felix Key','dfaaa','1998-02-01','caro3770@gmail.com','04125558877','V',26,'M','casado/a',0,'5','54','157','epoc','0-aten-coo','2434','Deiker Fernandez','2024-04-16'),(54878785,'maria','delgado','1998-01-02','gerardoroyal5@gmail.com','04246669874','V',26,'M','casado/a',0,'12','144','457','1-AS/D','0-aten-coo','','Deiker Fernandez','2024-04-08'),(56565656,'Felix Key','sasas','1978-02-01','caro3770@gmail.com','21212121212','V',46,'M','casado/a',2,'3','29','81','1-AS/D','0-aten-coo','','Deiker Fernandez','2024-04-30'),(65465656,'Felix Key','lk','1996-02-01','caro3770@gmail.com','04125554477','V',28,'M','casado/a',0,'9','100','309','VIH','0-aten-coo','45454545','Deiker Fernandez','2024-04-09'),(301654061,'Camila ','lopez','2015-09-18','caro3770@gmail.com','04120183670','V',8,'M','casado/a',0,'2','10','330','ESQ','0-aten-coo','','Deiker Fernandez','2024-04-25');
+INSERT INTO `beneficiario` VALUES (0,'Jose','Fernández','2002-09-18','rekied1842@gmail.com','04120183670','V',22,'M','casado/a',2,'13','179','515','Anacusia','1-oac','','Deiker Fernandez','2024-11-10'),(11111111,'Jose','Fernández','2002-09-18','rekied1842@gmail.com','04120183670','V',22,'M','casado/a',0,'2','10','330','Alzheimer','1-oac','-2','Deiker Fernandez','2024-11-10'),(54412515,'Jose','Fernández','2002-09-18','rekied1842@gmail.com','04120183670','V',22,'M','casado/a',0,'21','390','978','Anacusia','1-oac','','Felix Key','2024-11-11');
 /*!40000 ALTER TABLE `beneficiario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -313,7 +316,17 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `beneficiario_AI` AFTER INSERT ON `beneficiario` FOR EACH ROW INSERT INTO reg_beneficiario(cedula, nombre, apellido, registrado_por, INSERTADO) 
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `beneficiario_AI` AFTER INSERT ON `beneficiario` FOR EACH ROW INSERT INTO reg_beneficiario(cedula, nombre, apellido, registrado_por, INSERTADO) 
+
+
+
+
+
+
+
+
+
+
 
 
 VALUES(NEW.cedula, NEW.nombre, NEW.apellido, NEW.registrado_por, NOW()) */;;
@@ -331,16 +344,66 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `detectar_modificacion` AFTER UPDATE ON `beneficiario` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `detectar_modificacion` AFTER UPDATE ON `beneficiario` FOR EACH ROW BEGIN
+
+
+
+
+
+
+
 
 
 
 
 
-    INSERT INTO `modificaciones_beneficiarios` (nombre, apellido, cedula, fecha)
 
 
-    VALUES (OLD.nombre, OLD.apellido, OLD.cedula, NOW());
+
+
+
+
+
+
+
+
+
+
+
+    INSERT INTO `modificaciones_beneficiarios` (nombre, apellido, cedula, fecha)
+
+
+
+
+
+
+
+
+
+
+
+
+    VALUES (OLD.nombre, OLD.apellido, OLD.cedula, NOW());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -361,7 +424,17 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `ELIMBEN_AD` AFTER DELETE ON `beneficiario` FOR EACH ROW INSERT INTO ben_eliminados ( cedula, nombre, apellido, discapacidad,  fecha_eliminacion) 
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `ELIMBEN_AD` AFTER DELETE ON `beneficiario` FOR EACH ROW INSERT INTO ben_eliminados ( cedula, nombre, apellido, discapacidad,  fecha_eliminacion) 
+
+
+
+
+
+
+
+
+
+
 
 
 VALUES (OLD.cedula, OLD.nombre, OLD.apellido, OLD.discapacidad,  NOW()) */;;
@@ -419,7 +492,7 @@ CREATE TABLE `cita_ortesis_protesis` (
   KEY `cedula` (`cedula`),
   CONSTRAINT `cita_ortesis_protesis_ibfk_1` FOREIGN KEY (`cedula`) REFERENCES `beneficiario` (`cedula`) ON DELETE CASCADE,
   CONSTRAINT `cita_ortesis_protesis_ibfk_2` FOREIGN KEY (`laboratorio`) REFERENCES `laboratorio` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -472,7 +545,7 @@ CREATE TABLE `copiascedula` (
   PRIMARY KEY (`id`),
   KEY `cedula` (`cedula`),
   CONSTRAINT `copiascedula_ibfk_1` FOREIGN KEY (`cedula`) REFERENCES `beneficiario` (`cedula`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -481,7 +554,6 @@ CREATE TABLE `copiascedula` (
 
 LOCK TABLES `copiascedula` WRITE;
 /*!40000 ALTER TABLE `copiascedula` DISABLE KEYS */;
-INSERT INTO `copiascedula` VALUES (25,8261209,'662a58866153d.jpg');
 /*!40000 ALTER TABLE `copiascedula` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -524,7 +596,7 @@ CREATE TABLE `detalles_cuidador` (
   PRIMARY KEY (`id`),
   KEY `cedula` (`cedula`),
   CONSTRAINT `detalles_cuidador_ibfk_1` FOREIGN KEY (`cedula`) REFERENCES `beneficiario` (`cedula`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=138 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -580,7 +652,7 @@ CREATE TABLE `detalles_institucionales` (
   PRIMARY KEY (`id`),
   KEY `cedula` (`cedula`),
   CONSTRAINT `detalles_institucionales_ibfk_1` FOREIGN KEY (`cedula`) REFERENCES `beneficiario` (`cedula`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=264 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -589,7 +661,7 @@ CREATE TABLE `detalles_institucionales` (
 
 LOCK TABLES `detalles_institucionales` WRITE;
 /*!40000 ALTER TABLE `detalles_institucionales` DISABLE KEYS */;
-INSERT INTO `detalles_institucionales` VALUES (241,8261209,'no',NULL),(243,45787874,'no',NULL),(244,54878785,'no',NULL),(246,25454456,'no',NULL),(247,45454545,'no',NULL),(248,8999541,'no',NULL),(249,65465656,'no',NULL),(250,54545454,'no',NULL),(251,301654061,'no',NULL),(252,56565656,'no',NULL);
+INSERT INTO `detalles_institucionales` VALUES (261,0,'no',NULL),(262,11111111,'no',NULL),(263,54412515,'no',NULL);
 /*!40000 ALTER TABLE `detalles_institucionales` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -607,7 +679,7 @@ CREATE TABLE `direcciones` (
   PRIMARY KEY (`id`),
   KEY `cedula` (`cedula`),
   CONSTRAINT `direcciones_ibfk_1` FOREIGN KEY (`cedula`) REFERENCES `beneficiario` (`cedula`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -616,7 +688,7 @@ CREATE TABLE `direcciones` (
 
 LOCK TABLES `direcciones` WRITE;
 /*!40000 ALTER TABLE `direcciones` DISABLE KEYS */;
-INSERT INTO `direcciones` VALUES (27,'asa',8261209),(29,'rtert',45787874),(30,'rtert',54878785),(32,'44',25454456),(33,'asda',45454545),(34,'545',8999541),(35,'0',65465656),(36,'iko',54545454),(37,'asdasd',301654061),(38,'sd',56565656);
+INSERT INTO `direcciones` VALUES (47,'sadasda',0),(48,'Petare',11111111),(49,'dfvdv',54412515);
 /*!40000 ALTER TABLE `direcciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -804,6 +876,34 @@ INSERT INTO `estados` VALUES ('1','Amazonas','ve-am'),('10','Falcón','ve-fa'),(
 UNLOCK TABLES;
 
 --
+-- Table structure for table `familiaresoac`
+--
+
+DROP TABLE IF EXISTS `familiaresoac`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `familiaresoac` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` text NOT NULL,
+  `apellido` text NOT NULL,
+  `cedula` int(12) NOT NULL,
+  `id_atencion` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_atencion` (`id_atencion`),
+  CONSTRAINT `familiaresoac_ibfk_1` FOREIGN KEY (`id_atencion`) REFERENCES `atenciones` (`numero_aten`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `familiaresoac`
+--
+
+LOCK TABLES `familiaresoac` WRITE;
+/*!40000 ALTER TABLE `familiaresoac` DISABLE KEYS */;
+/*!40000 ALTER TABLE `familiaresoac` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `gerencia`
 --
 
@@ -823,7 +923,7 @@ CREATE TABLE `gerencia` (
 
 LOCK TABLES `gerencia` WRITE;
 /*!40000 ALTER TABLE `gerencia` DISABLE KEYS */;
-INSERT INTO `gerencia` VALUES ('1Tec','Tecnologia'),('2Atc','Atencion Ciudadano'),('3Gtnd','Gestion y desarrollo social'),('4Gtno','Gestion operativa estadal'),('5Logi','Gestion logistica y infrastructura'),('6Plan','Planificación y presupuesto');
+INSERT INTO `gerencia` VALUES ('1Tec','Tecnologia'),('2Atc','Atencion Ciudadano'),('3Gtnd','Gestion y desarrollo social'),('4Gtno','Gestion operativa estadal'),('5Logi','Gestion logistica y infrastructura'),('6Plan','Planificación y presupuesto'),('otro','Otro ente');
 /*!40000 ALTER TABLE `gerencia` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -853,7 +953,7 @@ CREATE TABLE `historia_medica` (
   KEY `cedula` (`cedula`),
   KEY `artificio` (`artificio`),
   KEY `codigo_cita` (`codigo_cita`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -862,7 +962,7 @@ CREATE TABLE `historia_medica` (
 
 LOCK TABLES `historia_medica` WRITE;
 /*!40000 ALTER TABLE `historia_medica` DISABLE KEYS */;
-INSERT INTO `historia_medica` VALUES (27,4549646,'-ortesis','ort-super','convencional','Derecho','hombro','Paralisis de plexo braquial',NULL,'2002-09-18','2023-10-19','Inmovulizador de hombro',NULL,60),(28,1545856,'-ortesis','ort-infe',NULL,NULL,NULL,NULL,NULL,'2002-09-18','2023-10-19','Aparato largo con banda pelvica',NULL,61);
+INSERT INTO `historia_medica` VALUES (27,4549646,'-ortesis','ort-super','convencional','Derecho','hombro','Paralisis de plexo braquial',NULL,'2002-09-18','2023-10-19','Inmovulizador de hombro',NULL,60),(28,1545856,'-ortesis','ort-infe',NULL,NULL,NULL,NULL,NULL,'2002-09-18','2023-10-19','Aparato largo con banda pelvica',NULL,61),(29,4549646,'-ortesis','ort-infe',NULL,NULL,NULL,NULL,NULL,'2002-09-18','2024-11-10','Aparato largo con banda pelvica',NULL,64);
 /*!40000 ALTER TABLE `historia_medica` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -961,7 +1061,6 @@ CREATE TABLE `jornada` (
 
 LOCK TABLES `jornada` WRITE;
 /*!40000 ALTER TABLE `jornada` DISABLE KEYS */;
-INSERT INTO `jornada` VALUES (32,'1','1','2',20,'4Gtno'),(33,'4','36','107',2,'2Atc');
 /*!40000 ALTER TABLE `jornada` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1033,7 +1132,7 @@ CREATE TABLE `modificaciones_beneficiarios` (
   `apellido` text NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1042,7 +1141,7 @@ CREATE TABLE `modificaciones_beneficiarios` (
 
 LOCK TABLES `modificaciones_beneficiarios` WRITE;
 /*!40000 ALTER TABLE `modificaciones_beneficiarios` DISABLE KEYS */;
-INSERT INTO `modificaciones_beneficiarios` VALUES (1,'484986','Pablito Gonzalez','Fernandez','2024-02-20 20:10:00'),(2,'30165406','Jose','Fernández','2024-03-21 15:47:56'),(3,'8999541','jose reinaldo','torres berrios','2024-04-16 15:20:28'),(4,'8261209','soraima','torres','2024-04-16 15:20:57'),(5,'8261209','soraima','torres','2024-04-16 15:21:27'),(6,'301654061','Camila ','lopez','2024-04-25 13:03:36'),(7,'301654061','Camila ','lopez','2024-04-25 15:40:38'),(8,'301654061','Camila ','lopez','2024-04-25 15:41:07'),(9,'301654061','Camila ','lopez','2024-04-25 15:41:27'),(10,'301654061','Camila ','lopez','2024-04-25 15:41:50'),(11,'301654061','Camila ','lopez','2024-04-25 15:41:58'),(12,'301654061','Camila ','lopez','2024-04-25 15:42:10'),(13,'8999541','jose reinaldo','torres berriosss','2024-04-30 13:02:26'),(14,'8999541','jose reinaldo','torres berriosss','2024-04-30 13:49:33'),(15,'8999541','jose reinaldo','torres berriosss','2024-04-30 13:52:10');
+INSERT INTO `modificaciones_beneficiarios` VALUES (23,'45612312','Jose','Fernández','2024-11-07 20:24:41'),(24,'4549646','Deiker','Fernández','2024-11-07 20:27:13'),(25,'4549646','Deiker','Fernández','2024-11-07 20:27:24'),(26,'4549646','Deiker','Fernández','2024-11-07 20:28:15'),(27,'4549646','Deiker','Fernández','2024-11-07 20:28:31'),(28,'0','Jose','Fernández','2024-11-10 13:40:55');
 /*!40000 ALTER TABLE `modificaciones_beneficiarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1125,7 +1224,6 @@ CREATE TABLE `observacion` (
 
 LOCK TABLES `observacion` WRITE;
 /*!40000 ALTER TABLE `observacion` DISABLE KEYS */;
-INSERT INTO `observacion` VALUES (519420466,'dcgfdgfdg',210);
 /*!40000 ALTER TABLE `observacion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1145,7 +1243,7 @@ CREATE TABLE `orientaciones` (
   PRIMARY KEY (`id`),
   KEY `cedula` (`cedula`),
   KEY `por` (`por`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1154,7 +1252,7 @@ CREATE TABLE `orientaciones` (
 
 LOCK TABLES `orientaciones` WRITE;
 /*!40000 ALTER TABLE `orientaciones` DISABLE KEYS */;
-INSERT INTO `orientaciones` VALUES (17,'kk','2024-02-08',30165406,NULL),(18,'Vino buscando un televisor','2024-03-08',30165406,NULL);
+INSERT INTO `orientaciones` VALUES (17,'kk','2024-02-08',30165406,NULL),(18,'Vino buscando un televisor','2024-03-08',30165406,NULL),(19,'asdasdasdsad','2024-05-02',8261209,NULL),(20,'asdasdas','2024-05-02',8999541,NULL);
 /*!40000 ALTER TABLE `orientaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1260,7 +1358,7 @@ CREATE TABLE `participante_encuentro` (
   KEY `cedula` (`cedula`),
   KEY `discapacidad` (`discapacidad`),
   CONSTRAINT `participante_encuentro_ibfk_1` FOREIGN KEY (`discapacidad`) REFERENCES `discapacid_e` (`id_e`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1269,7 +1367,6 @@ CREATE TABLE `participante_encuentro` (
 
 LOCK TABLES `participante_encuentro` WRITE;
 /*!40000 ALTER TABLE `participante_encuentro` DISABLE KEYS */;
-INSERT INTO `participante_encuentro` VALUES (2,487848,'Felix Key','fuentes','0412018637','0000-00-00',21,'M','V','Anacusia','978',23,''),(3,30165406,'Felix Key','fuentes','04120183670','0000-00-00',21,'M','V','Alzheimer','601',23,''),(4,13711175,'Felix Key','fuentes','04120183670','2002-09-18',21,'M','V','epoc','515',23,''),(5,1545856,'Felix Key','fuentes','04120183670','2002-09-18',21,'M','V','esclerosis','978',23,''),(6,6347858,'Felix Key','fuentes','04120183670','2002-01-18',22,'M','V','ESQ','515',23,'caro3770@gmail.com'),(7,485858410,'Jose','Fernández','04120183670','2002-09-18',21,'M','V','Anacusia','656',23,'rekied1842@gmail.com');
 /*!40000 ALTER TABLE `participante_encuentro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1314,7 +1411,6 @@ CREATE TABLE `participante_escuela` (
 
 LOCK TABLES `participante_escuela` WRITE;
 /*!40000 ALTER TABLE `participante_escuela` DISABLE KEYS */;
-INSERT INTO `participante_escuela` VALUES (13894817,'Jose','Fernández','23-weaver',22,'22','0000-00-00',21,'M','V','rekied1842@gmail.com','12','144','457'),(30165402,'Jose','Fernández','1-AS/D',22,'22','0000-00-00',21,'M','V','rekied1842@gmail.com','11','129','417'),(30165406,'Jose','Fernández','1-AS/D',22,'22','0000-00-00',294,'M','V','rekied1842@gmail.com','8','91','294');
 /*!40000 ALTER TABLE `participante_escuela` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1368,7 +1464,6 @@ CREATE TABLE `partida_nacimiento` (
 
 LOCK TABLES `partida_nacimiento` WRITE;
 /*!40000 ALTER TABLE `partida_nacimiento` DISABLE KEYS */;
-INSERT INTO `partida_nacimiento` VALUES (2,301654061,'662a71e089491.pdf');
 /*!40000 ALTER TABLE `partida_nacimiento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1403,7 +1498,6 @@ CREATE TABLE `personas_jornadas` (
 
 LOCK TABLES `personas_jornadas` WRITE;
 /*!40000 ALTER TABLE `personas_jornadas` DISABLE KEYS */;
-INSERT INTO `personas_jornadas` VALUES (14,3243243,'Jose','Fernández','Anacusia','6-andadera','2024-03-20',32),(15,23423543,'sadasd','fsdfds','Alzheimer','2-MuletasS','2024-03-20',32),(16,30165406,'Felix Key','asdsadas','VIH','S/N','2024-04-16',33),(17,487848,'sadasds','asdasdas','1-AS/D','S/N','2024-04-16',33);
 /*!40000 ALTER TABLE `personas_jornadas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1426,7 +1520,7 @@ CREATE TABLE `porcentajes` (
 
 LOCK TABLES `porcentajes` WRITE;
 /*!40000 ALTER TABLE `porcentajes` DISABLE KEYS */;
-INSERT INTO `porcentajes` VALUES ('2023-07-27',15.2),('2023-07-28',2.9),('2023-07-30',0),('2023-07-31',0),('2023-08-02',0),('2023-08-05',3.7),('2023-08-06',0),('2023-08-07',0),('2023-08-09',0),('0000-00-00',100),('August',100),('September',85.7),('October',23.5),('November',11.1),('December',0),('January',20),('February',100),('March',0),('April',100);
+INSERT INTO `porcentajes` VALUES ('2023-07-27',15.2),('2023-07-28',2.9),('2023-07-30',0),('2023-07-31',0),('2023-08-02',0),('2023-08-05',3.7),('2023-08-06',0),('2023-08-07',0),('2023-08-09',0),('0000-00-00',100),('August',100),('September',85.7),('October',0),('November',100),('December',0),('January',20),('February',100),('March',0),('April',100),('May',9.1);
 /*!40000 ALTER TABLE `porcentajes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1498,7 +1592,7 @@ CREATE TABLE `reg_beneficiario` (
   `registrado_por` tinytext DEFAULT NULL,
   `INSERTADO` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1507,7 +1601,7 @@ CREATE TABLE `reg_beneficiario` (
 
 LOCK TABLES `reg_beneficiario` WRITE;
 /*!40000 ALTER TABLE `reg_beneficiario` DISABLE KEYS */;
-INSERT INTO `reg_beneficiario` VALUES (12,30165406,'DEIKER','FERNANDEZ','Deiker fernandez','2023-08-19 20:50:31'),(13,30165406,'deiker','Fernandez','Deiker fernandez','2023-08-20 09:15:15'),(14,30165404,'DEIKER','FERNANDEZ','Deiker fernandez','2023-08-20 10:45:03'),(15,30165403,'DEIKER','FERNANDEZ','Deiker fernandez','2023-08-20 10:50:18'),(16,4857859,'Yaji','Lopez','Deiker fernandez','2023-08-20 13:26:34'),(17,30165406,'DEIKER','FERNANDEZ','Deiker fernandez','2023-08-20 17:13:09'),(18,4584875,'Miguel','Lopez','Deiker fernandez','2023-08-20 17:26:57'),(19,48445,'Kelvin','Pena','Deiker fernandez','2023-08-21 09:43:08'),(20,654326,'carlos','ramirez','Deiker fernandez','2023-08-21 10:31:20'),(21,34234,'valentina','corral','Deiker fernandez','2023-08-21 10:35:15'),(22,132444,'david','martinez','alexander','2023-08-21 10:38:18'),(23,23445,'betania','herlo','alexander','2023-08-21 10:39:52'),(24,971423738,'gerardio','perez','alexander','2023-08-21 10:44:29'),(25,62654,'Deiker','fernandez','alexander','2023-08-21 14:13:47'),(26,123456,'maria','gonzalez','erika jimenez','2023-08-22 15:49:34'),(27,15848,'Kelvin','Pena','Deiker fernandez','2023-08-23 10:20:13'),(28,585548,'Kelvin','Pena','Deiker fernandez','2023-08-23 10:36:14'),(29,484545,'Kelvin','Pela','Deiker fernandez','2023-08-23 10:37:01'),(30,1515546,'Kelvin','Pel','Deiker fernandez','2023-08-23 10:39:01'),(31,34341234,'VALENTINA','perez','Daniel ','2023-08-23 11:29:37'),(32,521548,'Carol','Perez','Deiker fernandez','2023-08-23 12:01:26'),(33,4584485,'Kelvin','contreras','Deiker fernandez','2023-08-23 12:37:55'),(34,5145131,'Kelvin','Pelo','Deiker fernandez','2023-08-23 12:40:27'),(35,4582151,'pastor','contreras','Deiker fernandez','2023-08-23 12:41:13'),(36,151642,'asdasd','dadsd','Deiker fernandez','2023-08-23 12:46:34'),(37,301265401,'adsad','asddas','Deiker fernandez','2023-08-23 12:47:02'),(38,20125151,'Kelvin','Plo','Deiker fernandez','2023-08-23 13:01:32'),(39,215154,'sdasd','sadasd','Deiker fernandez','2023-08-23 13:02:04'),(40,30165402,'Deiker','Fernandez','Yohanna Ballesteros','2023-08-23 13:54:02'),(41,4581245,'Kelvin','Perez','Deiker fernandez','2023-08-24 09:38:12'),(42,12731757,'CAROLINA','CRESPO','felix key','2023-08-28 10:38:24'),(43,30165406,'DEIKER','CHAPELLIN','Deiker fernandez','2023-09-02 16:45:44'),(44,13894817,'EVELYN','FERNANDEZ','Deiker fernandez','2023-09-02 16:46:56'),(45,13711717,'DEIKER','FERNANDEZ','Deiker fernandez','2023-09-02 16:48:11'),(46,123456,'Columba','Chapellin','Deiker fernandez','2023-09-02 16:50:08'),(47,137117175,'Deiker','CHAPELLIN','Deiker fernandez','2023-09-03 15:37:52'),(48,4585899,'Miguel','Palacios','Deiker fernandez','2023-09-03 15:39:06'),(49,1545856,'Carlos Jose','Fernandez carvajal','Deiker fernandez','2023-09-04 08:00:13'),(50,4858584,'Deiker José','Fernández Carvajal','Deiker fernandez','2023-09-04 08:02:39'),(51,30165402,'DEIKER','FERNANDEZ','Deiker fernandez','2023-09-06 12:03:27'),(52,137117171,'Columba','Chapellin','Deiker fernandez','2023-09-06 12:09:58'),(53,12545859,'Carlos Sebastian','Perez Gonzalez','alexander','2023-09-09 10:12:35'),(54,4549646,'Luis samen','carvajal','alexander','2023-09-09 10:43:30'),(55,10722053,'ELIBERTO ANTONIO','VAZQUEZ MEJIAS','Deiker fernandez','2023-09-14 19:11:27'),(56,10722053,'ELIBERTO ANTONIO','VAZQUEZ MEJIAS','Deiker fernandez','2023-09-15 20:38:46'),(57,124584,'Carlos','Lopez Gonzalez','Deiker fernandez','2023-10-03 12:10:34'),(58,28484465,'hsf','dsdsd','Deiker fernandez','2023-10-05 14:08:01'),(59,28484435,'MIguel Angel','Lopez Gonzalez','Deiker fernandez','2023-10-05 14:50:38'),(60,48758452,'Evelyn Edidd','Chapellin Fuentes','Deiker fernandez','2023-10-23 12:02:07'),(61,487848,'Maria Inalda','Gonzalez Torrealba','Deiker fernandez','2023-10-26 12:24:03'),(62,1236655,'Alguien con ','apellido doble','Deiker fernandez','2023-11-02 11:35:17'),(63,45848412,'Carlos jose ','Torres villaroel','Deiker Fernandez','2023-11-24 10:45:13'),(64,15245484,'Marco Perez','Gil Caraballo','Deiker Fernandez','2024-01-10 12:14:57'),(65,484986,'Pablito Gonzalez','Fernandez','Deiker Fernandez','2024-01-10 15:47:15'),(66,87847483,'José','Fernández','Deiker Fernandez','2024-01-10 15:55:09'),(67,13123223,'Jose','Fernández','Deiker Fernandez','2024-01-10 16:33:10'),(68,67676767,'fty','ty','Deiker Fernandez','2024-02-08 09:53:05'),(69,30165402,'dd','dd','Deiker Fernandez','2024-02-23 09:21:05'),(70,13894810,'Jose','Fernández','Deiker Fernandez','2024-02-23 09:25:11'),(71,4858584,'Jose','Fernández','Deiker Fernandez','2024-02-23 09:29:42'),(72,138948169,'Jose','Fernández','Deiker Fernandez','2024-02-23 09:36:35'),(73,13894817,'Jose','Fernández','Deiker Fernandez','2024-02-23 09:39:23'),(74,13894817,'Jose','Fernández','Deiker Fernandez','2024-02-23 09:43:52'),(75,13894817,'Jose','Fernández','Deiker Fernandez','2024-02-23 09:48:48'),(76,13894812,'Jose','Fernández','Deiker Fernandez','2024-02-23 09:49:46'),(77,1389443,'Jose','Fernández','Deiker Fernandez','2024-02-23 09:51:01'),(78,13894817,'Jose','Fernández','Deiker Fernandez','2024-02-23 10:11:03'),(79,13894817,'Jose','Fernández','Deiker Fernandez','2024-02-23 10:13:23'),(80,30165406,'Jose','Fernández','Deiker Fernandez','2024-02-23 10:18:33'),(81,48585843,'Jose','Fernández','Deiker Fernandez','2024-02-23 10:21:37'),(82,45612312,'Grecia Jose','Penalta dominguez','Deiker Fernandez','2024-02-23 10:30:11'),(83,13711717,'Jose peña','Fernández','Deiker Fernandez','2024-02-23 10:35:36'),(84,2342343,'Jose','Fernández','Deiker Fernandez','2024-02-23 10:52:16'),(85,45848754,'Carolina Miguelina','Herrera Gonzalez','Deiker Fernandez','2024-04-02 11:50:04'),(86,3251545,'MIguel Angel','Lopez Gonzalez','Deiker Fernandez','2024-04-02 12:00:13'),(87,30165490,'Carol g','Nose q mas','Deiker Fernandez','2024-04-02 12:02:37'),(88,28484435,'Gerardo','Salazar','Deiker Fernandez','2024-04-08 13:10:09'),(89,8261209,'soraima','torres','Deiker Fernandez','2024-04-08 13:14:24'),(90,8261209,'soraima','torres','Deiker Fernandez','2024-04-08 13:20:03'),(91,28484435,'Gerardo','Salazar','Deiker Fernandez','2024-04-08 13:24:17'),(92,45787874,'maria','delgado','Deiker Fernandez','2024-04-08 13:32:42'),(93,54878785,'maria','delgado','Deiker Fernandez','2024-04-08 13:34:31'),(94,8787878,'Marcos','hidalgo','Deiker Fernandez','2024-04-08 14:07:34'),(95,25454456,'andreina','moros','Deiker Fernandez','2024-04-08 18:56:05'),(96,45454545,'mario','castañeda','Deiker Fernandez','2024-04-09 08:45:10'),(97,8999541,'jose reinaldo','torres berrios','Deiker Fernandez','2024-04-09 08:48:58'),(98,65465656,'Felix Key','lk','Deiker Fernandez','2024-04-09 10:51:47'),(99,54545454,'Felix Key','dfaaa','Deiker Fernandez','2024-04-16 09:19:45'),(100,301654061,'Camila ','lopez','Deiker Fernandez','2024-04-25 09:03:12'),(101,56565656,'Felix Key','sasas','Deiker Fernandez','2024-04-30 09:33:20');
+INSERT INTO `reg_beneficiario` VALUES (108,45612312,'Jose','Fernández','Deiker Fernandez','2024-11-07 16:22:35'),(109,5135116,'Carolna','sadsadsad','Deiker Fernandez','2024-11-09 17:19:58'),(110,0,'Jose','Fernández','Deiker Fernandez','2024-11-10 09:37:43'),(111,11111111,'Jose','Fernández','Deiker Fernandez','2024-11-10 09:47:24'),(112,54412515,'Jose','Fernández','Felix Key','2024-11-11 08:19:30');
 /*!40000 ALTER TABLE `reg_beneficiario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1537,7 +1631,7 @@ CREATE TABLE `remitidos` (
   KEY `coordinacion` (`coordinacion`),
   CONSTRAINT `remitidos_ibfk_1` FOREIGN KEY (`departamento`) REFERENCES `gerencia` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `remitidos_ibfk_2` FOREIGN KEY (`gerencia_remitente`) REFERENCES `gerencia` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1546,7 +1640,7 @@ CREATE TABLE `remitidos` (
 
 LOCK TABLES `remitidos` WRITE;
 /*!40000 ALTER TABLE `remitidos` DISABLE KEYS */;
-INSERT INTO `remitidos` VALUES (104,30165406,'2Atc','','30165406','4Gtno','2024-04-02','Nueva remicion 2','Aceptado','660c2571d3777.pdf','Silla de ruedas estandar'),(105,30165406,'2Atc','','30165406','4Gtno','2024-04-02','AJA','Aceptado','660c26200ecee.pdf','Silla de ruedas estandar'),(106,30165406,'2Atc','','30165406','4Gtno','2024-04-02','Nueva remicion 4','Aceptado','660c270f1b8a4.pdf','Silla de ruedas estandar'),(107,30165406,'2Atc','','30165406','4Gtno','2024-04-04','Nueva remicion 2','Aceptado','660ea11560b98.pdf','Muletas talla L');
+INSERT INTO `remitidos` VALUES (116,11111111,'4Gtno','C-amaz','21204417','4Gtno','2024-11-18','wdads','Aceptado','','Silla de ruedas estandar'),(117,11111111,'4Gtno','C-amaz','21204417','4Gtno','2024-11-18','wdads','Aceptado','',''),(118,54412515,'4Gtno','C-lar','21549517','4Gtno','2024-11-18','Remitido por busqueda de aparato de audiometria',NULL,'',''),(119,54412515,'4Gtno','C-amaz','30165407','2Atc','2024-11-18','a',NULL,NULL,''),(120,11111111,'4Gtno','C-amaz','21204417','4Gtno','2024-11-18','aa','Aceptado','',''),(121,11111111,'4Gtno','C-amaz','21204417','4Gtno','2024-11-18','aaa','Aceptado','',''),(122,11111111,'4Gtno','C-amaz','30165407','2Atc','2024-11-18','Porque quiere un curso','Aceptado',NULL,''),(123,11111111,'2Atc','','21549517','4Gtno','2024-11-18','Porque quiere un curso',NULL,'','');
 /*!40000 ALTER TABLE `remitidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1783,7 +1877,7 @@ CREATE TABLE `toma_medidas` (
   KEY `cedula` (`cedula`),
   KEY `codigo_cita` (`codigo_cita`),
   CONSTRAINT `toma_medidas_ibfk_1` FOREIGN KEY (`cedula`) REFERENCES `beneficiario` (`cedula`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1807,7 +1901,7 @@ CREATE TABLE `usuario` (
   `nombre` text NOT NULL,
   `passwordd` varchar(60) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `telefono` varchar(11) NOT NULL,
+  `telefono` varchar(11) DEFAULT NULL,
   `sexo` char(1) NOT NULL,
   `gerencia` varchar(5) NOT NULL,
   `rol` varchar(5) NOT NULL,
@@ -1830,7 +1924,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (8683522,'Felix Key','$2y$10$4zpI/TuhnI0XjG6k1M6qqO2dmpcOnwehERiosa6RMhpyizRCt4yAi','key522@gmail.com','04267705580','m','4Gtno','3supe','C-Dct',0,NULL),(12345678,'Pablo Contreras','$2y$10$VpYbwICgDHbc2JtlKCkmMuW04wvyoQa0W38JsY2wN4s3CbEmKVmma','payne118black@chimuelo.net','04263059427','m','2Atc','2coor','C-falc',0,NULL),(16598577,'Jeanne Nava','$2y$10$GeWU8xO.A1mf7VKswXMkKOz.ghv.Rbr0iQfyQa60otGyoIKDloJYa','ing.jeannenava@gmail.com','04265189725','m','4Gtno','3supe','C-Dct',0,NULL),(19586392,'Felix Key','$2y$10$3wNV0jMujb1QH6uTPGUaGuWgMBU9fHL3cKfO7zNqVoMfPnUtHdr6i','caro3770@gmail.com','04142275277','m','2Atc','2coor','C-miran',0,NULL),(28484435,'Gerardo','$2y$10$yVNSeXZG/y9vzDZXxBEmF..RFHZ/RTUfKlHfLYhtt7IClYM2BSK62','torresanibal388@gmail.com','04129058612','m','4Gtno','2coor','C-Bolv',0,NULL),(30165406,'Deiker Fernandez','$2y$10$OGKFdl5UGIK.B5npYxybpeoddUutIR8Hm4KGZlKACTv0uQ087HOFa','deiker1842@gmail.com','04120183670','m','4Gtno','3supe','C-Dct',0,'65f06739d6d22.png'),(45454545,'Administrador OP','$2y$10$e92MC5KEUoRirJSgWIY7gOiN0p6Q.wNR4qvUjnQWLq/nVfkDnCpsC','fmjgh@gmail.com','04120183670','m','4Gtno','1adm','C-Dct',0,NULL);
+INSERT INTO `usuario` VALUES (5760216,'JOSE JESUS GODOY ARAUJO','$2y$10$..yst.6xN.XmcyBgs9iFo.l2UQZRUjO9G3xd.knnn2m.jOwNhh2NS','TRUJILLO.CONAPDIS@GMAIL.COM','04120183669','m','4Gtno','2coor','C-Trujillo',0,NULL),(6219863,' MERLIN DEL CARMEN RODRIGUEZ','$2y$10$fNTq3uPo2FlINFEYzFIcM.z0oFzUfQTW5Bjw/NgMEz.1qVbfGBYsG','REGIONFALCON.MISIONJGH@GMAIL.COM','04120183670','f','4Gtno','2coor','C-falc',0,NULL),(7872081,'CARMEN JOSEFINA SUAREZ URDANETA','$2y$10$g1EMrU4ko3P6PpVYgOiGGOlPJ78CFm8HTeLi4QgglLgEoUNYhTHda','FMJGHZULIA@gmail.com','04120183670','f','4Gtno','2coor','C-Zla',0,NULL),(8180312,'MERIDA YRALI LOPEZ GUEVARA','$2y$10$hP.Dm/86iQ/Rx2tJfByBRuxueIqNgfUkbbWwn1Aa2XKKSppUtgybm','FMJGHBOLIVAR@GMAIL.COM','04120183670','f','4Gtno','2coor','C-Bolv',0,NULL),(8294635,'SOLANGE CURPA','$2y$10$WPr0gT1IZLYWT1nLtUHGt..SS/Q4dn8sXPDgh7mbTA2J7sb096YXy','FMJGHANZOATEGUI@GMAIL.COM','04120183670','f','4Gtno','2coor','C-Anzo',0,NULL),(8836547,'GLENDA CANTILLO ','$2y$10$INNhy0rTt55Oj3imKTZ4Du78xiFyHXqPhFgS4ryInov/wMy0PnJLW','FMJGHCARABOBO@GMAIL.COM','04120183670','f','4Gtno','2coor','C-Cbb',0,NULL),(11786348,'JORGE MONTERO','$2y$10$UFu/Z/9sNDBKFkimjqTZ9OFE9BJNvXKbS59uTtVfKdTCQVFTb/fx2','LARAFMJGH@GMAIL.COM','04120183670','m','4Gtno','2coor','C-lar',0,NULL),(12728049,'FABRICIO FIGUEREDO','$2y$10$HFihv/SpgoRblz6AIu0V4OmlWB/E1NKQX6WlJKyTfnVzMRIBkFG7W','FMJGH.BARINAS1@GMAIL.COM','04120183670','m','4Gtno','2coor','C-Bar',0,NULL),(13908781,'OSWALDO APONTE','$2y$10$XNFfhn33/xtL1LnXi/KRT.DhPXJ2F7kFElHpuQ80/wnmj1jYQSEVW','FMJGHLAGUAIRA@GMAIL.COM','04120183670','m','4Gtno','2coor','C-Lguai',0,NULL),(13985230,'ARELIS ZALAZAR','$2y$10$PIesbf9J8ECx5qTsP7a80eThdhxYqkHfpjl/aEGF2IYp78mGMt5QO','FMJGHYARACUY@GMAIL.COM','04120183670','f','4Gtno','2coor','C-Yarac',0,NULL),(14054729,'RAMON ENRIQUE GONZALEZ LOPEZ','$2y$10$TYex.N3YM7rbdGAQEC5L8eLYBrSyzeEC0ee06mgjbP4xpUJBtP4UW','NUEVAESPARTA.CONAPDIS@GMAIL.COM','04120183670','m','4Gtno','2coor','C-Nva-es',0,NULL),(14614716,'FRANKLIN SALAS ','$2y$10$95fp3LGzcbGemy5V3yrYYeMPLkMA1h3m.wUGBXqU7Z2O49ZuMMbJ.','REGIONCOJEDES.FMJGH@GMAIL.COM','04120183670','m','4Gtno','2coor','C-Coj',0,NULL),(15621127,'ADRIAN DAVID RODRIGUEZ','$2y$10$5xw832dH0ZvvphbfB/o.NuhY18W4NIL.m/ujBJhJGo7I2x8z3gf4S','merida2023fmjgh@gmail.com','04120183670','m','4Gtno','2coor','C-merid',0,NULL),(16751291,'ANDY JAVIER SUAREZ ','$2y$10$AgkfuMU5qE3qPZG20JsJK.ESY8Y7NW.uEioZlOarrrXfop9ugzF6G','FMJGHPORTUGUESA@GMAIL.COM','04120183670','m','4Gtno','2coor','C-port',0,NULL),(17240163,'GREGORIA YDROGO','$2y$10$u34RKTfWuoHiu08cNbhaA.Kj.mwisufanzX4xOaOv/N.Gxx30H2OS','FMJGHMONAGAS1@GMAIL.COM','04120183670','f','4Gtno','2coor','C-monag',0,NULL),(17646043,'MARILYN ISABEL VERA DE BOTELLO','$2y$10$isjDKikuItKQbpZQMuSF3.ObFOkGco1eFxkp2oMntYJPyskkGJXT6','FMJGHTACHIRA@GMAIL.COM','04120183670','f','4Gtno','2coor','C-tach',0,NULL),(18022997,'FABRICIO JOSE SALAZAR CRESPO','$2y$10$h9aSYiuauYFGhf0S5MKFLu4q6495LMG6pX5hNil2ITXn40ANp.sze','FMJGHDISTRITOCAPITAL@GMAIL.COM','04120183668','m','4Gtno','2coor','C-Dct',0,NULL),(18212377,'JOSE MARQUEZ','$2y$10$6Xx36nbg9.wi2MMCQIBGbu/DTBXVCYsUykqg4kKBXVlshTWPE86jC','FMJGHSUCRE@GMAIL.COM','04120183670','m','4Gtno','2coor','C-sucr',0,NULL),(19266038,'KERVIN REINA','$2y$10$Lw57vFNIATJXPOSh9UZQYeW.NMHXgPmNK9ZoOZygepZPpb9bMZlBS','FMJGHGUARICO@GMAIL.COM','04120183670','m','4Gtno','2coor','C-guar',0,NULL),(19470290,'LILIANA  OROZCO ','$2y$10$xQK46cO062tJn875xDlO1e8btbVjL1X.koEj.Mhea6iYLZ5RSo/u2','APURE.FMJGH@GMAIL.COM','04120183670','f','4Gtno','2coor','C-Apu',0,NULL),(21204417,'YARIBETH YORSELYN BONACI RODRIGUEZ','$2y$10$/lnblV0KvF3dTIJi17aKju0Lm/GKeCEklvw4kiP8Yd/d29/Fy.pcm','FMJGHARAGUA@GMAIL.COM','04120183670','f','4Gtno','2coor','C-Arag',0,NULL),(21549517,'JOSE GREGORIO ROJAS','$2y$10$I3DZMexhOnkhYxhpVWsAe.m5TJ4klyLRswmLG9CgvaKOUzOsuCpju','AMAZONASFMJGH0103@GMAIL.COM',NULL,'m','4Gtno','2coor','C-amaz',0,NULL),(22200486,'ELIEZER ALEJANDRO COLMENAREZ','$2y$10$/9kr33o7CaEuJts9d0BEfOXXiIhD1Vz7BztZUAFlIEdSYkRgIWmDi','FMJGHMIRANDA@GMAIL.COM','04120183670','m','4Gtno','2coor','C-miran',0,NULL),(24118205,'LUIS MIGUEL VELASQUEZ RODRIGUEZ','$2y$10$9J/TdxjCZTL.5qWfzUBtH.IpJAmIyikk1CCEms0ZbkMuzY8XZAX3i','REGIONDELTAAMACURO.FMJGH@GMAIL.COM','04120183670','m','4Gtno','2coor','C-Dlta',0,NULL),(30165406,'Deiker Fernandez','$2y$10$OGKFdl5UGIK.B5npYxybpeoddUutIR8Hm4KGZlKACTv0uQ087HOFa','deiker1842@gmail.com','04120183670','m','4Gtno','3supe','C-Dct',0,'65f06739d6d22.png'),(30165407,'Prueba OAC','$2y$10$ISYhGw6F7AF3KuR/dOMeDerWb77QGm7.4cNAQaEBPAT6FH1yyxc6e','de184@gmail.com','04120183670','m','2Atc','2coor',NULL,0,NULL);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1843,4 +1937,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-30 11:24:54
+-- Dump completed on 2024-11-18 14:52:06
