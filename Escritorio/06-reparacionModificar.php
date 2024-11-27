@@ -6,7 +6,7 @@ include_once("partearriba.php");
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Asignar cita de audimetria: <?php echo $rol ?></span>
+            <span class="link-name">Reparacion de artificio: <?php echo $rol ?></span>
         </div>
     </div>
 
@@ -17,7 +17,7 @@ include_once("partearriba.php");
 
             <?php
             /* session_start(); */
-            include_once("../php/01-06-audiometria.php");
+            include_once("../php/01-05-reparacionArtificio.php");
 
             /*  if (isset($_SESSION['cedula'])){  // Si el usuario inicio sesion correctamente
                  $cedulauser = $_SESSION['cedula']; 
@@ -25,14 +25,14 @@ include_once("partearriba.php");
              } */
 
             $numero = $_REQUEST["id"];
-            $aten = new audiometria(1);
+            $aten = new raparacion_artificio(1);
 
             $aten->setid($numero);
-            $registro = $aten->consultarCita();
+            $registro = $aten->consultarReparacionModificar();
             ?>
 
             <header>
-                Asignar cita a <?php echo $registro["nombre"] ?>
+                Reparar artificio a <?php echo $registro["nombre"] ?>
             </header>
             <?php
 
@@ -62,50 +62,38 @@ include_once("partearriba.php");
 
                                 <div class="input-field">
                                     <label>Discapacidad</label>
-                                    <input type="email" placeholder="Ingresa tu correo electronico" required readonly name="discapacidad" id="discapacidad" value="<?php echo $registro["discapacidad"] ?>">
+                                    <input type="text" placeholder="Ingresa tu correo electronico" required readonly name="discapacidad" id="discapacidad" value="<?php echo $registro["discapacidad"] ?>">
                                 </div>
 
-                                <!-- <div class="input-field">
-                                <label>Numero Atencion</label>
-                                <input type="number"  required readonly name="numero_aten" id="numero_aten" value="<?php echo $registro["numero_aten"] ?>" >
-                            </div> -->
+
 
 
 
                                 <div class="input-field">
-                                    <label>Codigo de cita</label>
-                                    <input type="text" required readonly name="id" id="id" value="<?php echo $registro["id"] ?>">
+                                    <label>Codigo de reparacion</label>
+                                    <input type="number" required readonly name="idee" id="idee" value="<?php echo $registro["id"] ?>">
                                 </div>
 
 
-                                <!-- 
-                            <div class="input-field">
-                                <label>fecha de entrega</label>
-                                <input type="text" placeholder="Ingresa el codigo de carnet" required readonly name="fecha_aten" id="fecha_aten" value="<?php echo date("Y-m-d") ?>" >
-                            </div>
- -->
+                                <div class="input-field">
+                                    <label>Artificio a reparar</label>
+                                    <input type="text" required name="artificio" id="artificio" value="<?php echo $registro["artificio"] ?>">
+                                </div>
 
                                 <div class="input-field">
-                                    <label>Fecha de la cita</label>
-                                    <input type="date" required name="fecha_cita" id="fecha_cita">
-                                    <!--   <select name="laboratorio" id="laboratorio" require>
-                                        <option value="ortesis2">Laboratorio ortesis</option>
-                                        <option value="protesis1">Laboratorio Protesis</option>
-                                    </select> -->
+                                    <label>Asignar fecha para la reparacion</label>
+                                    <input type="date" required name="fecha_reparacion" id="fecha_reparacion" value="<?php echo $registro["fecha_reparacion"] ?>">
                                 </div>
 
                                 
-
-
                             </div>
-
                             <div class="details personal">
                                 <span class="title">Observaciones</span>
                                 <div class="fields">
 
                                     <div class="input-field" id="art-ort">
                                         <label>Ingrese la observacion</label>
-                                        <textarea name="descripcion" cols="40" rows="10" id="descripcion"></textarea>
+                                        <textarea name="descripcion" cols="40" rows="10" id="descripcion"><?php echo $registro["descripcion"] ?> </textarea>
 
                                     </div>
 
@@ -116,7 +104,7 @@ include_once("partearriba.php");
 
 
                             <button class="nextBtn" name="registro" id="registro">
-                                <span class="btnText">Dar cita</span>
+                                <span class="btnText">Asignar</span>
                                 <ion-icon name="send-outline"></ion-icon>
                             </button>
 
@@ -131,8 +119,6 @@ include_once("partearriba.php");
                 ?>
 
                 </form>
-
-
         </div>
         <script src="../package/dist/sweetalert2.all.js"></script>
         <script src="../package/dist/sweetalert2.all.min.js"></script>
@@ -142,28 +128,32 @@ include_once("partearriba.php");
                 $("#registro").click(function(e) {
                     var valid = this.form.checkValidity();
                     if (valid) {
-                        var fecha_cita = $("#fecha_cita").val();
-                        var id = $("#id").val();
-                        var descripcion = $('#descripcion').val();
+                        var idee = $("#idee").val();
+                        var fecha_reparacion = $("#fecha_reparacion").val();
+                        let artificio = $('#artificio').val();
+                        let descripcion = $("#descripcion").val();
+
+                        console.log(idee)
+                        console.log(fecha_reparacion, artificio, descripcion)
+
 
                         e.preventDefault();
                         $.ajax({
                             type: "POST",
-                            url: "07-asignadaAudiometria.php",
+                            url: "06-asignadaReparacion.php",
                             data: {
-                                id: id,
-                                fecha_cita: fecha_cita,
+                                idee: idee,
+                                fecha_reparacion: fecha_reparacion,
+                                artificio: artificio,
                                 descripcion: descripcion
                             },
                             success: function(data) {
-                                console.log(data)
                                 Swal.fire({
                                     'icon': 'success',
                                     'title': 'Asignacion de atencion',
                                     'text': 'Se asigno asistencia correctamente',
-                                    'confirmButton': 'btn btn-success'
                                 }).then(function() {
-                                    window.location = "07-audiometria.php";
+                                    window.location = "06-reparacionArtificio.php";
                                 })
                             },
                             error: function(data) {
@@ -180,7 +170,6 @@ include_once("partearriba.php");
                 })
             })
         </script>
-
 
         <?php
         include_once("parteabajo.php");

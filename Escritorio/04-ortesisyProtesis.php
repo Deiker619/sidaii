@@ -81,7 +81,7 @@
                     ?>
                             <tr>
 
-                                <td><?php echo $registros["cedula"] ?></td>
+                            <td> <a class="cedula" name="enlace" id="verBeneficiario" href="__verBeneficiario.php?cedula=<?php echo $registros['cedula']; ?>"><?php echo $registros['cedula']; ?> </a></td>
                                 <td><?php echo $registros["nombre"] ?></td>
                                 <td><?php echo $registros["apellido"] ?></td>
                                 <td><?php echo $registros["id"] ?></td>

@@ -152,7 +152,7 @@ include_once("partearriba.php");
         </div>
         <script src="../package/dist/sweetalert2.all.js"></script>
         <script src="../package/dist/sweetalert2.all.min.js"></script>
-    
+
 
         <script type="text/javascript">
             $(function() {

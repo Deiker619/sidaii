@@ -56,7 +56,12 @@ if (isset($_POST['registrado'])) {
 				$consultaayuda = $cita->autenticarProtesis();
 
 				$cita->insertarCita();
-				echo "Se registro exitosamente";
+				$data = [
+					'message' => 'Se registro exitosamente para citas de ortesis y protesis',
+					'others' => null
+				];
+				header('Content-Type: application/json');
+				echo json_encode($data);
 
 				break;
 
@@ -65,12 +70,15 @@ if (isset($_POST['registrado'])) {
 				$medidas = new toma_medidas(1);
 				$medidas->setcedula($cedula);
 				$consultamedidas = $medidas->autenticarMedidas();
-				if (!$consultamedidas) {
-					echo "Se registro exitosamente";
+				
 					$medidas->insertarMedidas();
-				} else {
-					echo "Ya este Beneficiario se registro en esta area";
-				}
+					$data = [
+						'message' => 'Se registro exitosamente',
+						'others' => $consultaayuda??null
+					];
+					header('Content-Type: application/json');
+					echo json_encode($data);
+				
 				break;
 
 			case "5-pruebar":
@@ -96,12 +104,16 @@ if (isset($_POST['registrado'])) {
 				$medidas = new raparacion_artificio(1);
 				$medidas->setcedula($cedula);
 				$ConsultaPruebas = $medidas->autenticarReparacion();
-				if (!$ConsultaPruebas) {
-					echo "Se registro exitosamente";
+				
+				
 					$medidas->insertarReparacion();
-				} else {
-					echo "Ya este Beneficiario se registro en esta area";
-				}
+					$data = [
+						'message' => 'Se registro exitosamente en reparaciones',
+					
+					];
+					header('Content-Type: application/json');
+					echo json_encode($data);
+				
 				break;
 
 			case "7-audiom":

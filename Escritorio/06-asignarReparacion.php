@@ -67,10 +67,7 @@ include_once("partearriba.php");
 
 
 
-                                <div class="input-field">
-                                    <label>Atencion Solicitada</label>
-                                    <input type="text" required readonly name="atencion_solicitada" id="atencion_solicitada" value="<?php echo $registro["atencion_solicitada"] ?>">
-                                </div>
+
 
                                 <div class="input-field">
                                     <label>Codigo de reparacion</label>
@@ -79,16 +76,35 @@ include_once("partearriba.php");
 
 
                                 <div class="input-field">
-                                    <label>reparar:</label>
+                                    <label>Artificio a reparar</label>
                                     <input type="text" required name="artificio" id="artificio">
                                 </div>
 
+                                <div class="input-field">
+                                    <label>Asignar fecha para la reparacion</label>
+                                    <input type="date" required name="fecha_reparacion" id="fecha_reparacion">
+                                </div>
+
+
+                            </div>
+                            <div class="details personal">
+                                <span class="title">Observaciones</span>
+                                <div class="fields">
+
+                                    <div class="input-field" id="art-ort">
+                                        <label>Ingrese la observacion</label>
+                                        <textarea name="descripcion" cols="40" rows="10" id="descripcion"></textarea>
+
+                                    </div>
+
+
+                                </div>
 
                             </div>
 
 
                             <button class="nextBtn" name="registro" id="registro">
-                                <span class="btnText">Tomar medidas</span>
+                                <span class="btnText">Asignar</span>
                                 <ion-icon name="send-outline"></ion-icon>
                             </button>
 
@@ -99,7 +115,7 @@ include_once("partearriba.php");
 
                 <?php
 
-                }
+            }
                 ?>
 
                 </form>
@@ -113,10 +129,12 @@ include_once("partearriba.php");
                     var valid = this.form.checkValidity();
                     if (valid) {
                         var idee = $("#idee").val();
-                        var artificio = $("#artificio").val();
+                        var fecha_reparacion = $("#fecha_reparacion").val();
+                        let artificio = $('#artificio').val();
+                        let descripcion = $("#descripcion").val();
 
                         console.log(idee)
-                        console.log(artificio)
+                        console.log(fecha_reparacion, artificio, descripcion)
 
 
                         e.preventDefault();
@@ -125,7 +143,9 @@ include_once("partearriba.php");
                             url: "06-asignadaReparacion.php",
                             data: {
                                 idee: idee,
-                                artificio: artificio
+                                fecha_reparacion: fecha_reparacion,
+                                artificio: artificio,
+                                descripcion: descripcion
                             },
                             success: function(data) {
                                 Swal.fire({
@@ -151,6 +171,6 @@ include_once("partearriba.php");
             })
         </script>
 
-<?php
-include_once("parteabajo.php");
-?>
+        <?php
+        include_once("parteabajo.php");
+        ?>

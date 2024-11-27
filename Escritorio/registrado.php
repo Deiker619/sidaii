@@ -152,7 +152,7 @@ include_once("partearriba.php");
                             }
                             Swal.fire({
                                 icon: 'success',
-                                title: data.message,
+                                title: data.message??'Registro exitoso',
                                 html: html??audiometria??ortesis??protesis
                             }).then(function() {
                                 window.location = "01-atencionCiu.php";
@@ -169,6 +169,7 @@ include_once("partearriba.php");
 
                         },
                         error: function(data) {
+                            console.log(data)
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Oops...',

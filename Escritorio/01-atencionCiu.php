@@ -83,7 +83,7 @@ include_once("partearriba.php");
 
                             <div class="input-field">
                                 <label>Cedula</label><span style="font-size: 13px; " id="label-chk"> Si es menor sin cedula coloque la cedula del tutor legal con un <b style="color: #38b000">1 o otro numero</b> al final</span>
-                                <input type="text" placeholder="Ingrese la cedula sin puntos ni letras" required id="cedula" name="cedula" >
+                                <input type="text" placeholder="Ingrese la cedula sin puntos ni letras" required id="cedula" name="cedula">
                                 <span id="cedulaError"></span>
                             </div>
                             <div class="input-field">
@@ -291,158 +291,160 @@ include_once("partearriba.php");
 
                         </div>
 
+                        <fieldset style="border-radius: 10px; border: 1px solid #ddd">
+                        <legend style="color: gray;">Datos opcionales</legend>
                         <div class="details personal">
-                            <span class="title">¿Posee Cuidador o representante?</span>
-                            <div class="fields">
+                                <span class="title">¿Posee Cuidador o representante?</span>
+                                <div class="fields">
 
 
-                                <div class="input-field">
-                                    <label>¿Posee cuidador o representante?</label>
-                                    <select name="respuesta-cuidador" id="respuesta-cuidador">
-                                        <option value="no">No</option>
-                                        <option value="si">Si</option>
+                                    <div class="input-field">
+                                        <label>¿Posee cuidador o representante?</label>
+                                        <select name="respuesta-cuidador" id="respuesta-cuidador">
+                                            <option value="no">No</option>
+                                            <option value="si">Si</option>
 
-                                    </select>
-                                </div>
+                                        </select>
+                                    </div>
 
-                                <div class="input-field" id="nombre-cuidador">
-                                    <label>Nombre del cuidador o representante</label>
-                                    <input type="text" placeholder="Ingresa el nombre de cuidador" name="nombre-cuidador" id="cuidador">
+                                    <div class="input-field" id="nombre-cuidador">
+                                        <label>Nombre del cuidador o representante</label>
+                                        <input type="text" placeholder="Ingresa el nombre de cuidador" name="nombre-cuidador" id="cuidador">
 
-                                </div>
+                                    </div>
 
-                                <div class="input-field" id="cedula-cuidador">
-                                    <label>Cedula del cuidador o representante</label>
-                                    <input type="text" placeholder="ingresa cedula cuidador" id="cedula_cui" name="cedula-cuidador">
-                                </div>
+                                    <div class="input-field" id="cedula-cuidador">
+                                        <label>Cedula del cuidador o representante</label>
+                                        <input type="text" placeholder="ingresa cedula cuidador" id="cedula_cui" name="cedula-cuidador">
+                                    </div>
 
 
-
-                            </div>
-                        </div>
-
-                        <div class="details personal">
-                            <span class="title">Nivel academico </span>
-                            <div class="fields">
-
-                                <div class="input-field" id="nombre-cuidador">
-                                    <label>Nivel académico</label>
-                                    <select name="academico" id="academico">
-
-                                        <option value="preescolar">Educación preescolar</option>
-                                        <option value="primaria">Educación primaria</option>
-                                        <option value="secundaria">Educación secundaria</option>
-                                        <option value="media">Técnico Superior</option>
-                                        <option value="superior">Educación superior</option>
-                                        <option value="S/N" selected>Ninguno</option>
-                                    </select>
 
                                 </div>
-
                             </div>
 
-                        </div>
+                            <div class="details personal">
+                                <span class="title">Nivel academico </span>
+                                <div class="fields">
 
-                        <div class="details personal" id="chk-menor">
-                            <span class="title">Profesión u oficio</span>
-                            <div class="fields">
+                                    <div class="input-field" id="nombre-cuidador">
+                                        <label>Nivel académico</label>
+                                        <select name="academico" id="academico">
 
-                                <div class="input-field" id="nombre-cuidador">
-                                    <label>Profesión u oficio</label>
-                                    <input type="text" placeholder="Ingresa la profesión u oficio" name="profesion" id="profesion">
+                                            <option value="preescolar">Educación preescolar</option>
+                                            <option value="primaria">Educación primaria</option>
+                                            <option value="secundaria">Educación secundaria</option>
+                                            <option value="media">Técnico Superior</option>
+                                            <option value="superior">Educación superior</option>
+                                            <option value="S/N" selected>Ninguno</option>
+                                        </select>
 
-                                </div>
-                                <div class="input-field">
-                                    <label>¿Labora actualmente</label>
-                                    <select name="area-comercial" id="">
-                                        <option value="no">No</option>
-                                        <option value="si">Si</option>
+                                    </div>
 
-
-                                    </select>
                                 </div>
 
                             </div>
 
-                        </div>
-                        <div class="details personal" id="chk-menor2">
-                            <span class="title">¿Posee emprendimiento?</span>
-                            <div class="fields">
+                            <div class="details personal" id="chk-menor">
+                                <span class="title">Profesión u oficio</span>
+                                <div class="fields">
 
-                                <div class="input-field">
-                                    <label>¿Posee emprendimiento</label>
-                                    <select name="empre" id="respuesta-emprendimiento">
-                                        <option value="no">No</option>
-                                        <option value="si">Si</option>
+                                    <div class="input-field" id="nombre-cuidador">
+                                        <label>Profesión u oficio</label>
+                                        <input type="text" placeholder="Ingresa la profesión u oficio" name="profesion" id="profesion">
 
-                                    </select>
-                                </div>
-                                <div class="input-field" id="nombre-emprendimiento">
-                                    <label>Nombre del emprendimiento</label>
-                                    <input type="text" placeholder="Ingresa el nombre del emprendimiento" id="nombre_empre" name="nombre-emprendimiento">
+                                    </div>
+                                    <div class="input-field">
+                                        <label>¿Labora actualmente</label>
+                                        <select name="area-comercial" id="">
+                                            <option value="no">No</option>
+                                            <option value="si">Si</option>
 
-                                </div>
 
-                                <div class="input-field" id="rifff">
-                                    <label>¿Posee rif?</label>
-                                    <select name="rf" id="respuesta-rif">
-                                        <option value="no">No</option>
-                                        <option value="si">Si</option>
-
-                                    </select>
-                                </div>
-
-                                <div class="input-field" id="rif-emprendimiento">
-                                    <label>Rif del emprendimiento</label>
-                                    <input type="text" placeholder="Ingresa el nombre de cuidador" id="rif_emp" name="rif-emprendimiento">
+                                        </select>
+                                    </div>
 
                                 </div>
-
-                                <div class="input-field" id="area-comercial">
-                                    <label>Area comercial</label>
-                                    <select name="area-comercial" id="area_comerc">
-                                        <option value="" selected></option>
-                                        <option value="Textil">Textil</option>
-                                        <option value="Alimentos">Alimentos</option>
-                                        <option value="Artesanal">Artesanal</option>
-                                        <option value="Transporte">Transporte</option>
-                                    </select>
-
-                                </div>
-
-                                <div class="input-field" id="credito-bancario">
-                                    <label>¿Uso credito bancario?</label>
-                                    <select name="respuesta-banco" id="respuesta-banco">
-                                        <option value="no">No</option>
-                                        <option value="si">Si</option>
-                                    </select>
-                                </div>
-
-                                <div class="input-field" id="nombre-banco">
-                                    <label>Nombre del banco</label>
-                                    <input type="text" placeholder="Ingresa el nombre de cuidador" id="banco" name="nombre_banco">
-                                </div>
-
-
-
 
                             </div>
-                        </div>
+                            <div class="details personal" id="chk-menor2">
+                                <span class="title">¿Posee emprendimiento?</span>
+                                <div class="fields">
 
-                        <div class="details personal">
-                            <span class="title"> Protección social</span>
-                            <div class="fields">
+                                    <div class="input-field">
+                                        <label>¿Posee emprendimiento</label>
+                                        <select name="empre" id="respuesta-emprendimiento">
+                                            <option value="no">No</option>
+                                            <option value="si">Si</option>
 
-                                <div class="input-field">
-                                    <label>¿Recibe ud el Bono de José Gregorio Hernández?</label>
-                                    <select name="bono" id="bono">
-                                        <option value="no">No</option>
-                                        <option value="si">Si</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-field" id="nombre-emprendimiento">
+                                        <label>Nombre del emprendimiento</label>
+                                        <input type="text" placeholder="Ingresa el nombre del emprendimiento" id="nombre_empre" name="nombre-emprendimiento">
 
-                                    </select>
+                                    </div>
+
+                                    <div class="input-field" id="rifff">
+                                        <label>¿Posee rif?</label>
+                                        <select name="rf" id="respuesta-rif">
+                                            <option value="no">No</option>
+                                            <option value="si">Si</option>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="input-field" id="rif-emprendimiento">
+                                        <label>Rif del emprendimiento</label>
+                                        <input type="text" placeholder="Ingresa el nombre de cuidador" id="rif_emp" name="rif-emprendimiento">
+
+                                    </div>
+
+                                    <div class="input-field" id="area-comercial">
+                                        <label>Area comercial</label>
+                                        <select name="area-comercial" id="area_comerc">
+                                            <option value="" selected></option>
+                                            <option value="Textil">Textil</option>
+                                            <option value="Alimentos">Alimentos</option>
+                                            <option value="Artesanal">Artesanal</option>
+                                            <option value="Transporte">Transporte</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="input-field" id="credito-bancario">
+                                        <label>¿Uso credito bancario?</label>
+                                        <select name="respuesta-banco" id="respuesta-banco">
+                                            <option value="no">No</option>
+                                            <option value="si">Si</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="input-field" id="nombre-banco">
+                                        <label>Nombre del banco</label>
+                                        <input type="text" placeholder="Ingresa el nombre de cuidador" id="banco" name="nombre_banco">
+                                    </div>
+
+
+
+
                                 </div>
+                            </div>
 
-                                <!--<div class="input-field">
+                            <div class="details personal">
+                                <span class="title"> Protección social</span>
+                                <div class="fields">
+
+                                    <div class="input-field">
+                                        <label>¿Recibe ud el Bono de José Gregorio Hernández?</label>
+                                        <select name="bono" id="bono">
+                                            <option value="no">No</option>
+                                            <option value="si">Si</option>
+
+                                        </select>
+                                    </div>
+
+                                    <!--<div class="input-field">
                                     <label>¿Posee registro en otra Mision?</label>
                                     <select name="respuesta-institucional" id="respuesta-institucional">
                                         <option value="no">No</option>
@@ -457,10 +459,16 @@ include_once("partearriba.php");
                                 </div>-->
 
 
+                                </div>
+
+
                             </div>
+                        </fieldset>
+                        
 
 
-                        </div>
+                            
+                        
 
                         <button class="nextBtn" name="registro" id="registro">
                             <span class="btnText">Registrar</span>
@@ -622,28 +630,28 @@ include_once("partearriba.php");
                 /* var hijo = $("#hijos").val(); */
                 var hijos = $("#hijos").val();
 
-// Expresión regular que permite solo números enteros no negativos (0 o mayores)
-const regHijos = /^[0-9]+$/;
+                // Expresión regular que permite solo números enteros no negativos (0 o mayores)
+                const regHijos = /^[0-9]+$/;
 
-// Validar el valor del número de hijos
-if (!regHijos.test(hijos) || hijos === "") {
-    e.preventDefault(); // Evita que se envíe el formulario si la entrada no es válida
+                // Validar el valor del número de hijos
+                if (!regHijos.test(hijos) || hijos === "") {
+                    e.preventDefault(); // Evita que se envíe el formulario si la entrada no es válida
 
-    // Muestra el SweetAlert con el mensaje de error
-    Swal.fire({
-        icon: 'error',
-        title: 'Error de hijos',
-        text: 'El número de hijos debe ser un número entero mayor o igual a 0.'
-    });
+                    // Muestra el SweetAlert con el mensaje de error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de hijos',
+                        text: 'El número de hijos debe ser un número entero mayor o igual a 0.'
+                    });
 
-    $("#hijos").css("border-color", "#EE092A");
-    return; // Sale de la función si el número no es válido
-} else {
-    $("#hijos").css("border-color", "#15CD02");
-}
+                    $("#hijos").css("border-color", "#EE092A");
+                    return; // Sale de la función si el número no es válido
+                } else {
+                    $("#hijos").css("border-color", "#15CD02");
+                }
 
                 /*    var telefono = $("#telefono").val(); */
-                var regexTelefono = /^[0-9]{4}[0-9]{7}$/; 
+                var regexTelefono = /^[0-9]{4}[0-9]{7}$/;
                 if (!regexTelefono.test(telefono)) {
                     e.preventDefault(); // Evita que se envíe el formulario si el teléfono no cumple con el patrón
 
@@ -744,10 +752,10 @@ if (!regHijos.test(hijos) || hijos === "") {
                                 console.log(data)
                                 Swal.fire({
                                     icon: 'success',
-                                    title: data.trim()??'Se registro exitosamente...',
+                                    title: data.trim() ?? 'Se registro exitosamente...',
                                     footer: '<a href="__verBeneficiario.php?cedula=' + cedula + '">Ir a cargar copia de cédula</a>'
                                 }).then(function() {
-                                      /* window.location = "01-atencionCiu.php"; */
+                                    /* window.location = "01-atencionCiu.php"; */
                                 })
 
                                 if (!data) {
