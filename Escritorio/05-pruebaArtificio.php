@@ -13,40 +13,7 @@ include_once("partearriba.php");
         </div>
     </div>
 
-    <div class="boxes">
 
-        <?php
-        include_once("../php/01-discapacitados.php");
-        $dis = new Discapacitados(1);
-
-        $consulta = $dis->consultarTodosDiscapacitados();
-        $sincarnet = $dis->consultageneralsincarnet();
-
-        include_once("../php/01-atenciones.php");
-        $aten = new Atenciones(1);
-
-        $atenciones =  $aten->contarTodasAtencionesa();
-
-        ?>
-        <div class="box box1">
-            <i class='bx bx-first-aid'></i>
-            <span class="link-name">Atenciones</span>
-            <span class="number"><?php echo count($atenciones) ?></span>
-        </div>
-
-        <div class="box box2">
-            <i class='bx bxs-user-badge'></i>
-            <span class="link-name"><a href="sincarnet.php">Sin carnet </a></span>
-            <span class="number"><?php echo count($sincarnet) ?></span>
-        </div>
-
-        <div class="box box3">
-            <i class='bx bx-group'></i>
-            <span class="link-name"><a href="Beneficiarios.php">Beneficiarios </a></span>
-            <span class="number"><?php echo count($consulta); ?></span>
-
-        </div>
-    </div>
 
     <div class="reportes-totales">
 
@@ -76,14 +43,13 @@ include_once("partearriba.php");
         <table id="atencion">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Cedula</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>id de la Prueba</th>
-            
                     <th>Artificio de prueba</th>
-                    <th>Fecha de prueba</th>
-                    <th>Status</th>
+                    <th>Fecha de la prueba</th>
+                    <th>Medidas</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -91,29 +57,27 @@ include_once("partearriba.php");
             <tbody>
 
                 <?php
-                include_once("../php/01-04-pruebaArtificio.php");
-                $aten = new prueba_artificio(1);
-                $consulta = $aten->consultarTodasPruebasSindar();
+                include_once("../php/01-02-cita_protesis.php");
+                $aten = new citas_protesis(1);
+                $consulta = $aten->consultarTodasCitasSindar_prueba();
                 $cantidadRegistros = count($consulta);
                 if ($consulta) {
                     foreach ($consulta as $registros) {
                 ?>
                         <tr>
 
-                            <td><?php echo $registros["cedula"] ?></td>
+                            <td><?php echo $registros["id"] ?></td>
+                            <td> <a class="cedula" name="enlace" id="verBeneficiario" href="__verBeneficiario.php?cedula=<?php echo $registros['cedula']; ?>"><?php echo $registros['cedula']; ?> </a></td>
+
                             <td><?php echo $registros["nombre"] ?></td>
                             <td><?php echo $registros["apellido"] ?></td>
-                            <td><?php echo $registros["id"] ?></td>
-                    
-                            <td><?php echo $registros["nombre_artificio"] ?></td>
-                            <td><?php echo $registros["fecha_pruebas"] ?></td>
-                            <?php if ($registros["statu"]) {
-                                echo '<td>'.$registros["statu"].'</td>';
-                            }else{?>
-                            <td style="color: red;">Personas sin probar artificio</td>
-                            <?php }?>
-                            <td><a href="05-asignarPrueba.php?id=<?php echo $registros["id"] ?>">Probar artificio</a></td>
-                            <td><a href="" class="eliminar">Eliminar Reg</a></td>
+                            <td><?php echo $registros["artificio"] ?></td>
+                            <td><?php echo $registros["fecha_prueba"] ?></td>
+                            <td><a onclick="verDescripcion('<?php echo $registros['descripcion'] ?>','<?php echo $registros['medidas'] ?>')" class="remitir">Ver medidas</a></td>
+
+                            <td><a onclick="finalizarPrueba('<?php echo $registros['id'] ?>')">Probar artificio</a></td>
+                            <td><a href="eliminar/eliminar_orte.php?id=<?php echo $registros["id"] ?>" class="eliminar">Eliminar Reg</a></td>
+
                         </tr>
                 <?php
                     }
@@ -123,6 +87,77 @@ include_once("partearriba.php");
             </tbody>
         </table>
     </div>
+
+
+    <script src="../package/dist/sweetalert2.all.js"></script>
+    <script src="../package/dist/sweetalert2.all.min.js"></script>
+    <script>
+        function verDescripcion(p1, p2) {
+            Swal.fire({
+                title: 'Descripción del requerimiento:',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#1AA83E',
+                html: `<details>
+                        <summary>Requerimiento principal</summary>
+                        <p>${p1}</p>
+                    </details>
+                    
+                    <details>
+                        <summary>Medidas</summary>
+                        <p>${p2}</p>
+                    </details>
+                    `,
+            })
+        }
+
+        function finalizarPrueba(p1) {
+            var id = p1
+            Swal.fire({
+                title: '¿Desea finalizar proceso?:',
+                confirmButtonText: 'Si, ya se ha probó el artificio',
+                showCancelButton: true,
+                cancelButtonColor: "#d33",
+                confirmButtonColor: '#1AA83E',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                   
+                    // Enviar los datos por AJAX
+                    $.ajax({
+                        type: "POST",
+                        url: "../php/procesamientoFinalizarPrueba.php",
+                        data: {
+                            id: id,
+                          
+                        },
+                        success: function(data) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Proceso finalizado'
+                            }).then(function() {
+                                location.reload();
+                            });
+
+                            if (!data) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: "No se pudo registrar la solicitud, verifique datos"
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            }
+                        },
+                        error: function(data) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 
     <?php
     include_once("parteabajo.php");

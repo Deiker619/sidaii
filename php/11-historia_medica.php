@@ -249,6 +249,7 @@ class historia_medica extends ManejadorBD
         } 
     }
 
+
     public function autenticarMedidas()
     {
         try {
@@ -460,6 +461,8 @@ class historia_medica extends ManejadorBD
             exit();
         }
     }
+
+    
 
 
     /* ============Consultar todas Ortesis para asignar toma de medidas=========================  */

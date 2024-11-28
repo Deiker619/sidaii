@@ -78,7 +78,7 @@ include_once("partearriba.php");
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>Artificio</th>
-                    <th>Historia medica</th>
+                    <th>Descripcion</th>
                     <th>Fecha establicida para la toma</th>
                     <th>Status</th>
                     <th></th>
@@ -88,25 +88,29 @@ include_once("partearriba.php");
             <tbody>
 
                 <?php
-                include_once("../php/01-03-toma_medidas.php");
+                /*  include_once("../php/01-03-toma_medidas.php");
                 $aten = new toma_medidas(1);
-                $consulta = $aten->consultarTodasMedidasSindar();
+                $consulta = $aten->consultarTodasMedidasSindar(); */
+                include_once("../php/01-02-cita_protesis.php");
+                $aten = new citas_protesis(1);
+                $consulta = $aten->consultarTodasCitasSindar_toma_medidas();
                 $cantidadRegistros = count($consulta);
                 if ($consulta) {
                     foreach ($consulta as $registros) {
                 ?>
                         <tr>
 
-                            <td><?php echo $registros["codigo_cita"] ?></td>
-                            <td><?php echo $registros["cedula"] ?></td>
+                            <td><?php echo $registros["id"] ?></td>
+                            <td> <a class="cedula" name="enlace" id="verBeneficiario" href="__verBeneficiario.php?cedula=<?php echo $registros['cedula']; ?>"><?php echo $registros['cedula']; ?> </a></td>
                             <td><?php echo $registros["nombre"] ?></td>
                             <td><?php echo $registros["apellido"] ?></td>
                             <td><?php echo $registros["artificio"] ?></td>
-                            <td><a class="cargar" href="15-verHistoriaMedica.php?codigo_cita=<?php echo  $registros["codigo_cita"] ?>">Ver historia M.</a></td>
-                            <td><?php echo $registros["fecha_medidas"] ?></td>
+                            <!-- <td><a class="cargar" href="15-verHistoriaMedica.php?codigo_cita=<?php echo  $registros["codigo_cita"] ?>">Ver historia M.</a></td> -->
+                            <td><a onclick="verDescripcion('<?php echo $registros['descripcion'] ?>')">Ver descripcion</a></td>
+                            <td><?php echo $registros["fecha_toma"] ?? '10/09/1999' ?></td>
                             <td style="color: red;">Sin tomar medidas</td>
-                            <td><a  class="remitir" onclick='cargar(<?php echo $registros["codigo_cita"]?> )'>Tomar medidas</a></td>
-                            <td><a href="" class="eliminar">Eliminar Reg</a></td>
+                            <td><a class="remitir" onclick='cargar(<?php echo $registros["id"] ?>)'>Tomar medidas</a></td>
+                            <td><a href="eliminar/eliminar_orte.php?id=<?php echo $registros["id"] ?>" class="eliminar">Eliminar Reg</a></td>
                         </tr>
                 <?php
                     }
@@ -120,10 +124,10 @@ include_once("partearriba.php");
     <?php
     include_once("parteabajo.php");
     ?>
-  <script src="../package/dist/sweetalert2.all.js"></script>
+    <script src="../package/dist/sweetalert2.all.js"></script>
     <script src="../package/dist/sweetalert2.all.min.js"></script>
     <script>
-         function cargar(p1) {
+        function cargar(p1) {
             var id = p1;
             Swal.fire({
                 title: '¿Ya este beneficiario se le hicieron las toma de medidas? ',
@@ -131,13 +135,11 @@ include_once("partearriba.php");
                 showCancelButton: true,
                 confirmButtonText: 'Cargar',
                 confirmButtonColor: '#1AA83E',
-                html: 
-                    '<select name="recibido" id="recibido" require style="width:100%">' +
+                html: '<select name="recibido" id="recibido" require style="width:100%">' +
                     '<option value="Si">Si</option>' +
                     '<option value="No">No</option>' +
 
-                    '</select>'
-                    ,
+                    '</select>',
                 denyButtonText: `No cargar`,
             }).then((result) => {
                 /* Read more about isConfirmed, isDenied below */
@@ -146,101 +148,126 @@ include_once("partearriba.php");
                     console.log(recibido)
                     if (recibido == "Si") {
 
-                        var inputValue = "";
-
-                        const {
-                            value: atencion
-                        } = Swal.fire({
-                            title: 'Cargue el codigo de la toma de medidas',
-                            input: 'number',
-                            inputLabel: 'Introduce el codigo de la toma',
-                            inputValue: inputValue,
+                        Swal.fire({
+                            title: 'Seleccione la fecha para la prueba de artificio',
+                            html: `
+                                    <input type="date" id="fecha_toma" class="swal2-input" placeholder="Selecciona una fecha">
+                                    <input type="text" id="medidas" class="swal2-input" placeholder="Ingrese medidas tomadas">
+                                `,
                             showCancelButton: true,
-                            inputValidator: (value) => {
-                                if (!value) {
-                                    return 'Debes escribir algo'
+                            preConfirm: () => {
+                                const fechaToma = document.getElementById('fecha_toma').value;
+                                const medidas = document.getElementById('medidas').value;
+
+                                // Validar que ambos campos tengan valor
+                                if (!fechaToma) {
+                                    Swal.showValidationMessage('Debes seleccionar una fecha');
+                                    return false; // Impide cerrar el modal
                                 }
 
-                                if (value) {
-                                    codigo_toma = value;
-                                    console.log(recibido, id, codigo_toma)
+                                if (!medidas) {
+                                    Swal.showValidationMessage('Debes ingresar una breve descripción de las medidas');
+                                    return false; // Impide cerrar el modal
+                                }
 
-                                    /* $.ajax({
-                                        type: "POST",
-                                        url: "../php/procesamientodecarga_solicitud.php",
-                                        data: {
-                                            id: id,
-                                            recibido: recibido,
-                                            codigo_toma
+                                // Devuelve un objeto con ambos valores
+                                return {
+                                    fechaToma,
+                                    medidas
+                                };
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const {
+                                    fechaToma,
+                                    medidas
+                                } = result.value; // Extrae valores del objeto result.value
 
-                                        },
-                                        success: function(data) {
+                                console.log('Fecha seleccionada:', fechaToma);
+                                console.log('Medidas ingresadas:', medidas);
+
+                                // Enviar los datos por AJAX
+                                $.ajax({
+                                    type: "POST",
+                                    url: "../php/procesamientoPruebaArtificio.php",
+                                    data: {
+                                        id: id,
+                                        fecha_prueba: fechaToma,
+                                        descripcion: medidas
+                                    },
+                                    success: function(data) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Cita otorgada en la fecha '+ fechaToma 
+                                        }).then(function() {
+                                            location.reload();
+                                        });
+
+                                        if (!data) {
                                             Swal.fire({
-
-                                                title: data
+                                                icon: 'error',
+                                                title: "No se pudo registrar la solicitud, verifique datos"
                                             }).then(function() {
-                                                window.location = "01,2-atenciones.php";
-                                            })
-
-                                            if (!data) {
-                                                Swal.fire({
-                                                    icon: 'error',
-                                                    title: "No se pudo registrar la solicitud, verifique datos"
-                                                }).then(function() {
-                                                    window.location = "01,2-atenciones.php";
-                                                })
-                                            }
-                                        },
-                                        error: function(data) {
-                                            Swal.fire({
-                                                'icon': 'error',
-                                                'title': 'Oops...',
-                                                'text': data
-                                            })
+                                                location.reload();
+                                            });
                                         }
-                                    }) */
-
-                                }
+                                    },
+                                    error: function(data) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: data
+                                        });
+                                    }
+                                });
                             }
+                        });
 
-                        })
+                        // Inicializar el datepicker de Flatpickr
+                        flatpickr("#fecha_toma", {
+                            dateFormat: "Y-m-d", // Formato: Año-Mes-Día
+                            defaultDate: new Date(), // Fecha por defecto
+                            locale: "es" // Opcional, para español
+                        });
 
 
-                    } /* else {
-                        $.ajax({
-                            type: "POST",
-                            url: "../php/procesamientodecarga_solicitud.php",
-                            data: {
-                                id: id,
-                                atencion_recibida: atencion_recibida
 
-                            },
-                            success: function(data) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: data
-                                }).then(function() {
-                                    window.location = "01,2-atenciones.php";
-                                })
+                    }
+                    /* else {
+                                           $.ajax({
+                                               type: "POST",
+                                               url: "../php/procesamientodecarga_solicitud.php",
+                                               data: {
+                                                   id: id,
+                                                   atencion_recibida: atencion_recibida
 
-                                if (!data) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: "No se pudo registrar la solicitud, verifique datos"
-                                    }).then(function() {
-                                        window.location = "01,2-atenciones.php";
-                                    })
-                                }
-                            },
-                            error: function(data) {
-                                Swal.fire({
-                                    'icon': 'error',
-                                    'title': 'Oops...',
-                                    'text': data
-                                })
-                            }
-                        })
-                    } */
+                                               },
+                                               success: function(data) {
+                                                   Swal.fire({
+                                                       icon: 'success',
+                                                       title: data
+                                                   }).then(function() {
+                                                       window.location = "01,2-atenciones.php";
+                                                   })
+
+                                                   if (!data) {
+                                                       Swal.fire({
+                                                           icon: 'error',
+                                                           title: "No se pudo registrar la solicitud, verifique datos"
+                                                       }).then(function() {
+                                                           window.location = "01,2-atenciones.php";
+                                                       })
+                                                   }
+                                               },
+                                               error: function(data) {
+                                                   Swal.fire({
+                                                       'icon': 'error',
+                                                       'title': 'Oops...',
+                                                       'text': data
+                                                   })
+                                               }
+                                           })
+                                       } */
 
 
 
@@ -252,5 +279,14 @@ include_once("partearriba.php");
 
 
 
+        }
+
+        function verDescripcion(p1) {
+            Swal.fire({
+                title: 'Descripción del requerimiento:',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#1AA83E',
+                html: p1,
+            })
         }
     </script>

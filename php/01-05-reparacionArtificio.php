@@ -9,6 +9,7 @@ class raparacion_artificio extends ManejadorBD{
         private $id;
         private $fecha_reparacion;
         private $artificio;
+		private $descripcion;
 		/* private $cedula;
         private $fecha_aten;
         private $atencion_recibida ; */
@@ -48,6 +49,14 @@ class raparacion_artificio extends ManejadorBD{
 		public function setartificio($artificio)
 		{
 		    $this->artificio = $artificio;		    
+		}
+		public function getDescripcion()
+        {
+            return $this->descripcion ;
+        }
+		public function setdescripcion($descripcion)
+		{
+		    $this->descripcion = $descripcion;		    
 		}
 
 		
@@ -90,7 +99,7 @@ class raparacion_artificio extends ManejadorBD{
 				$exito = $stmt->execute();
 
 				// Numero de Filas Afectadas
-				echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>";
+				/* echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
 
 				// Devuelve los resultados obtenidos
 				return $exito; // si es verdadero se insertó correctamente el registro	
@@ -130,6 +139,31 @@ class raparacion_artificio extends ManejadorBD{
 
 				$stmt = $this->cnn->prepare("SELECT beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.discapacidad, beneficiario.atencion_solicitada,
 				 reparacion_artificios.id, reparacion_artificios.artificio FROM `reparacion_artificios`, beneficiario WHERE beneficiario.cedula = reparacion_artificios.cedula 
+				AND reparacion_artificios.id = :id;");
+				// Especificamos el fetch mode antes de llamar a fetch()
+				$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+				// Asiganmos valores a los parametros
+				$stmt->bindParam(':id', $this->id);
+				// Ejecutamos
+				$stmt->execute();
+
+				// Numero de Filas Afectadas
+				/* echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+				// Devuelve los resultados obtenidos
+				return $stmt->fetch();	
+
+	        }catch(PDOException $error) {
+			    // Mostramos un mensaje genérico de error.
+				echo "Error: ejecutando consulta SQL.".$error->getMessage();
+				exit();
+	        } 
+		}
+		public function consultarReparacionModificar(){
+			try{	
+
+				$stmt = $this->cnn->prepare("SELECT beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.discapacidad, beneficiario.atencion_solicitada,
+				 reparacion_artificios.id, reparacion_artificios.artificio, reparacion_artificios.fecha_reparacion,  reparacion_artificios.descripcion FROM `reparacion_artificios`, beneficiario WHERE beneficiario.cedula = reparacion_artificios.cedula 
 				AND reparacion_artificios.id = :id;");
 				// Especificamos el fetch mode antes de llamar a fetch()
 				$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
@@ -205,7 +239,7 @@ class raparacion_artificio extends ManejadorBD{
 			try{	
 
 				$stmt = $this->cnn->prepare("SELECT beneficiario.nombre, beneficiario.apellido, beneficiario.cedula, beneficiario.discapacidad,
-				 beneficiario.atencion_solicitada, reparacion_artificios.id, reparacion_artificios.artificio FROM 
+				 beneficiario.atencion_solicitada, reparacion_artificios.id, reparacion_artificios.artificio, reparacion_artificios.status, reparacion_artificios.fecha_reparacion, reparacion_artificios.descripcion FROM 
 				 beneficiario, reparacion_artificios WHERE beneficiario.cedula = reparacion_artificios.cedula AND 
 				 /* beneficiario.atencion_solicitada = '6-repaart' */  reparacion_artificios.artificio IS NOT NULL;");
 				// Especificamos el fetch mode antes de llamar a fetch()
@@ -265,7 +299,65 @@ class raparacion_artificio extends ManejadorBD{
 				$stmt->execute();
 
 				// Numero de Filas Afectadas
-				echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>";
+				/* echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
+
+				// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+				return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	
+
+	        }catch(PDOException $error) {
+			    // Mostramos un mensaje genérico de error.
+				echo "Error: ejecutando consulta SQL.".$error->getMessage();
+				exit();
+	        } 
+
+		}
+		public function InsertarCitaReparacion(){
+
+			try{	
+
+				$stmt = $this->cnn->prepare("UPDATE reparacion_artificios SET artificio = :artificio, 
+				descripcion = :descripcion, fecha_reparacion = :fecha_reparacion, status = 'Cita dada' 
+                                             WHERE id = :id");
+				// Asignamos valores a los parametros
+				$stmt->bindParam(':id', $this->id);
+				$stmt->bindParam(':artificio', $this->artificio);
+				$stmt->bindParam(':descripcion', $this->descripcion);
+				$stmt->bindParam(':fecha_reparacion', $this->fecha_reparacion);
+
+              
+				// Ejecutamos
+				$stmt->execute();
+
+				// Numero de Filas Afectadas
+				/* echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
+
+				// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+				return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	
+
+	        }catch(PDOException $error) {
+			    // Mostramos un mensaje genérico de error.
+				echo "Error: ejecutando consulta SQL.".$error->getMessage();
+				exit();
+	        } 
+
+		}
+		public function reparcionAtendida(){
+
+			try{	
+
+				$stmt = $this->cnn->prepare("UPDATE reparacion_artificios SET status = 'Reparacion completada' 
+                                             WHERE id = :id");
+				// Asignamos valores a los parametros
+				$stmt->bindParam(':id', $this->id);
+				
+				
+
+              
+				// Ejecutamos
+				$stmt->execute();
+
+				// Numero de Filas Afectadas
+				/* echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
 
 				// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
 				return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	
@@ -280,12 +372,13 @@ class raparacion_artificio extends ManejadorBD{
 
 		
 
-		public function eliminarDiscapacitados(){
+		public function eliminarReparacion(){
 
 			try{	
 
-				$stmt = $this->cnn->prepare("DELETE FROM discapacitados WHERE numero_aten = :numero_aten");
+				$stmt = $this->cnn->prepare("DELETE  FROM reparacion_artificios WHERE id = :id");
 				
+				$stmt->bindParam(':id', $this->id);
 				// Asiganmos valores a los parametros
 				/* $stmt->bindParam(':numero_aten', $this->numero_aten); */
 				// Ejecutamos

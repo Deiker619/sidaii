@@ -8,6 +8,8 @@ class audiometria extends ManejadorBD{
         private $cedula;
         private $id;
         private $fecha_cita;
+		private $descripcion;
+		private $status;
 		/* private $cedula;
         private $fecha_aten;
         private $atencion_recibida ; */
@@ -71,6 +73,22 @@ class audiometria extends ManejadorBD{
 		{
 		    $this->fecha_cita = $fecha_cita;		    
 		}
+		public function getdescripcion()
+		{
+		    return $this->descripcion;
+		}
+		public function setdescripcion($descripcion)
+		{
+		    $this->descripcion = $descripcion;		    
+		}
+		public function getstatus()
+		{
+		    return $this->status;
+		}
+		public function setstatus($status)
+		{
+		    $this->status = $status;		    
+		}
 
 
 
@@ -130,7 +148,7 @@ class audiometria extends ManejadorBD{
 			try{	
 
 				$stmt = $this->cnn->prepare("SELECT beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.discapacidad,
-                 beneficiario.atencion_solicitada, audiometria.id FROM `audiometria`, beneficiario WHERE 
+                 beneficiario.atencion_solicitada, audiometria.id, audiometria.fecha_cita, audiometria.descripcion FROM `audiometria`, beneficiario WHERE 
                  beneficiario.cedula = audiometria.cedula 
 				AND audiometria.id = :id;");
 				// Especificamos el fetch mode antes de llamar a fetch()
@@ -183,8 +201,8 @@ class audiometria extends ManejadorBD{
 
 			try{	
 
-				$stmt = $this->cnn->prepare("SELECT beneficiario.nombre, beneficiario.apellido, beneficiario.cedula, 
-                beneficiario.discapacidad, beneficiario.atencion_solicitada, audiometria.id, audiometria.fecha_cita
+				$stmt = $this->cnn->prepare("SELECT audiometria.id,beneficiario.nombre, beneficiario.apellido, beneficiario.cedula, 
+                beneficiario.discapacidad, beneficiario.atencion_solicitada, audiometria.id, audiometria.fecha_cita, audiometria.status, audiometria.descripcion
                  FROM beneficiario, audiometria WHERE beneficiario.cedula = audiometria.cedula  /* beneficiario.atencion_solicitada = '7-audiom' */ and audiometria.fecha_cita IS NOT NULL;");
 				// Especificamos el fetch mode antes de llamar a fetch()
 				$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
@@ -233,17 +251,71 @@ class audiometria extends ManejadorBD{
 
 			try{	
 
-				$stmt = $this->cnn->prepare("UPDATE audiometria SET fecha_cita = :fecha_cita
+				$stmt = $this->cnn->prepare("UPDATE audiometria SET fecha_cita = :fecha_cita, descripcion = :descripcion, status = 'cita dada'
                                              WHERE id = :id");
 				
 				// Asignamos valores a los parametros
 				$stmt->bindParam(':fecha_cita', $this->fecha_cita);
                 $stmt->bindParam(':id', $this->id);
+                $stmt->bindParam(':descripcion', $this->descripcion);
 				// Ejecutamos
 				$stmt->execute();
 
 				// Numero de Filas Afectadas
-				echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>";
+			/* 	echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
+
+				// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+				return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	
+
+	        }catch(PDOException $error) {
+			    // Mostramos un mensaje genérico de error.
+				echo "Error: ejecutando consulta SQL.".$error->getMessage();
+				exit();
+	        } 
+
+		}
+		public function modificarCitaDada(){
+
+			try{	
+
+				$stmt = $this->cnn->prepare("UPDATE audiometria SET fecha_cita = :fecha_cita, descripcion = :descripcion
+                                             WHERE id = :id");
+				
+				// Asignamos valores a los parametros
+				$stmt->bindParam(':fecha_cita', $this->fecha_cita);
+                $stmt->bindParam(':id', $this->id);
+                $stmt->bindParam(':descripcion', $this->descripcion);
+				// Ejecutamos
+				$stmt->execute();
+
+				// Numero de Filas Afectadas
+			/* 	echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
+
+				// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+				return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	
+
+	        }catch(PDOException $error) {
+			    // Mostramos un mensaje genérico de error.
+				echo "Error: ejecutando consulta SQL.".$error->getMessage();
+				exit();
+	        } 
+
+		}
+		public function cargar_nuevo_estado(){
+
+			try{	
+
+				$stmt = $this->cnn->prepare("UPDATE audiometria SET status = 'Audiometria completada'
+                                             WHERE id = :id");
+				
+				// Asignamos valores a los parametros
+                $stmt->bindParam(':id', $this->id);
+             
+				// Ejecutamos
+				$stmt->execute();
+
+				// Numero de Filas Afectadas
+			/* 	echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
 
 				// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
 				return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	
