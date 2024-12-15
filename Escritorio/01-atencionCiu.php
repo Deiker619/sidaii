@@ -265,6 +265,7 @@ include_once("partearriba.php");
                                             <option value="5-pruebar">Prueba artifcio</option> -->
                                             <option value="6-repaart">Reparación Artificio</option>
                                             <option value="7-audiom">Audiometria</option>
+                                            <option value="8-rehabilitacion">Rehabilitacion</option>
                                         <?php } ?>
 
                                         <!--   <option value="8-calibr">Calibracion de Protesis Auditivas</option>

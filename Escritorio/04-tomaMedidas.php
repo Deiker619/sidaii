@@ -149,7 +149,7 @@ include_once("partearriba.php");
                     if (recibido == "Si") {
 
                         Swal.fire({
-                            title: 'Seleccione la fecha de la toma de medidas',
+                            title: 'Seleccione la fecha para la prueba de artificio',
                             html: `
                                     <input type="date" id="fecha_toma" class="swal2-input" placeholder="Selecciona una fecha">
                                     <input type="text" id="medidas" class="swal2-input" placeholder="Ingrese medidas tomadas">
@@ -198,7 +198,7 @@ include_once("partearriba.php");
                                     success: function(data) {
                                         Swal.fire({
                                             icon: 'success',
-                                            title: data
+                                            title: 'Operacion exitosa'
                                         }).then(function() {
                                             location.reload();
                                         });

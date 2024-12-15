@@ -355,12 +355,12 @@ include_once("partearriba.php");
                                             html: '<button onclick="redireccionar(<?php echo $registro["id"] ?>)" class="buttonDownload">Download</button>'
                                         });
                                     } else {
-                                        Toast.fire({
+                                        /* Toast.fire({
                                             icon: 'success',
                                             title: '¿Desea descargar PDF?',
 
                                             html: '<button onclick="redireccionarP(<?php echo $registro["id"] ?>)" class="buttonDownload">Download</button>'
-                                        });
+                                        }); */
                                     }
 
 

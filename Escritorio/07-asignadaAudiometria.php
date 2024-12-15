@@ -12,7 +12,7 @@ if ($_POST['statusModified']) {
     if ($cita_cerrada) {
 
         $data = [
-            'message' => 'Reparacion completada',
+            'message' => 'Operación completada',
             'others' => ''
         ];
         header('Content-Type: application/json');

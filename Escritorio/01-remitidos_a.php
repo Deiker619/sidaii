@@ -75,7 +75,7 @@ include_once("partearriba.php");
                 include_once("../php/6-remitir.php");
                 $aten = new remitido(1);
                 $aten->setdepartamento($gerencia);
-                if($rol =="Superusuario" || $rol =="Administrador" || $rol =="coorA" || $gerencia =="2Atc"){
+                if($rol =="Superusuario" || $rol =="Administrador" || $rol =="coorA" || $gerencia =="2Atc" || $gerencia =="5Logi"){
                     $consulta = $aten->consultarTodosRemitidoss();
                 }else{
                     $aten->setcoordinacion($coordi);
