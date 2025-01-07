@@ -48,7 +48,7 @@ include_once("partearriba.php");
             </div>
             <div class="opciones_form">
                 <div class="ya_registrado"><a href="registrado.php">Ya registrado en SIDDAI!</a></div>
-                <div class="ya_registrado"><a onclick='conapdis()'>Ya registrado en Conapdis</a></div>
+               <!--  <div class="ya_registrado"><a onclick='conapdis()'>Ya registrado en Conapdis</a></div> -->
             </div>
 
 

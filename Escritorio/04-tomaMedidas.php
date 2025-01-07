@@ -198,7 +198,7 @@ include_once("partearriba.php");
                                     success: function(data) {
                                         Swal.fire({
                                             icon: 'success',
-                                            title: 'Operacion exitosa'
+                                            title: 'Cita otorgada en la fecha '+ fechaToma 
                                         }).then(function() {
                                             location.reload();
                                         });
