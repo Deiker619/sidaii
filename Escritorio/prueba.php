@@ -19,13 +19,20 @@ if ($consulta) {
             '<td>' . $registros["nombre_estado"] . '</td>' .
             '<td>' . $registros["nombre_e"] . '</td>' .
             '<td>' . $registros["atencion_brindada"] . '</td>' .
-            '<td>' . $registros["nombre_ayuda"] . '</td>' .
-            '<td>' . $registros["por"] . '</td>' .
-            '<td style="color: green;">Atendido</td>';
-        if ($registros["atencion_brindada"] == "-ayudatec") { ?>
+            '<td>' . $registros["nombre_ayuda"] . '</td>'; ?>
+        <td style="padding: 12px;">
+            <div style="display: inline-flex; position: relative;">
+                <?php if ($registros['institucion']) { ?>
+                    <b><small class="tag <?php echo $registros['institucion'] ?>">#<?php echo $registros['institucion']; ?></small></b>
+                <?php  } ?>
+                <?php echo $registros["por"] ?>
+            </div>
+        </td>
+        <td>Atendido</td>
+        <?php if ($registros["atencion_brindada"] == "-ayudatec") { ?>
             <td style="padding: 0;"><a href="reportes/reporteAtencion.php?numero_aten=<?php echo $registros["numero_aten"] ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i></a></td>
             <td style="padding: 0;"> <a class="cargar" style="margin: 5px" href="reportes/reporteCargarSolicitudes.php?numero_aten=<?php echo $registros["numero_aten"]; ?>"><i class='bx bx-download'></i></a></td>
-            <td style="padding: 0;"> <a id="verBeneficiario" href="documentos/informes/<?php echo $registros['informe']??'404'; ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i> </a></td>
+            <td style="padding: 0;"> <a id="verBeneficiario" href="documentos/informes/<?php echo $registros['informe'] ?? '404'; ?>" class="cargar" style="margin: 5px"> <i class='bx bx-download'></i> </a></td>
         <?php
         } else {
             echo '<td></td>
@@ -45,7 +52,7 @@ if ($consulta) {
                 <?php } ?>
             </div>
         </td>
-        
+
 <?php
 
 

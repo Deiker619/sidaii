@@ -18,6 +18,7 @@
                 $gerencia = $_POST["gerencia"];
                 $rol = $_POST["rol"];
                 $coordinacion = $_POST["coordinacion"];
+                $institucion = $_POST["institucion"];   
             $user->setcedula($cedula);
 
             $Consulta = $user->consultarUsuarios();
@@ -32,6 +33,7 @@
              $user->settelefono($telefono);
              $user->setsexo ($sexo);
              $user->setgerencia($gerencia);
+             $user->setinstitucion($institucion);
              $user->setrol($rol);
 
              if ($coordinacion) {

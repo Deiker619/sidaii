@@ -2445,3 +2445,20 @@ table.dataTable.no-footer{
 .avance:hover .card__arrow svg {
   transform: translateX(3px);
 }
+
+.tag {
+  position: absolute;
+  left: 24px;
+  top: -11px;
+  right: 0;
+  bottom: 0;
+  color: rgb(7, 113, 212);
+}
+
+.tag.conpadis{
+  color: #FE4E00;
+}
+
+.tag.fmjgh{
+  color: rgb(233, 158, 19);
+}

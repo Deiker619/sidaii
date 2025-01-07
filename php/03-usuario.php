@@ -15,6 +15,7 @@ class Usuario extends ManejadorBD
 	private $gerencia;
 	private $rol;
 	private $coordinacion;
+	private $institucion;
 
 
 
@@ -57,6 +58,15 @@ class Usuario extends ManejadorBD
 	public function setnombre($nombre)
 	{
 		$this->nombre = $nombre;
+	}
+
+	public function getinstitucion()
+	{
+		return $this->institucion;
+	}
+	public function setinstitucion($institucion)
+	{
+		$this->institucion = $institucion;
 	}
 
 
@@ -128,8 +138,8 @@ class Usuario extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO usuario (cedula, passwordd, nombre, email, telefono, sexo, gerencia, rol) 
-											 VALUES (:cedula, :passwordd, :nombre, :email, :telefono, :sexo, :gerencia, :rol)");
+			$stmt = $this->cnn->prepare("INSERT INTO usuario (cedula, passwordd, nombre, email, telefono, sexo, gerencia, rol, institucion) 
+											 VALUES (:cedula, :passwordd, :nombre, :email, :telefono, :sexo, :gerencia, :rol, :institucion)");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':cedula', $this->cedula);
@@ -140,6 +150,7 @@ class Usuario extends ManejadorBD
 			$stmt->bindParam(':sexo', $this->sexo);
 			$stmt->bindParam(':gerencia', $this->gerencia);
 			$stmt->bindParam(':rol', $this->rol);
+			$stmt->bindParam(':institucion', $this->institucion);
 
 
 			$exito = $stmt->execute();
@@ -163,8 +174,8 @@ class Usuario extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO usuario (cedula, passwordd, nombre, email, telefono, sexo, gerencia, rol, coordinacion) 
-											 VALUES (:cedula, :passwordd, :nombre, :email, :telefono, :sexo, :gerencia, :rol, :coordinacion)");
+			$stmt = $this->cnn->prepare("INSERT INTO usuario (cedula, passwordd, nombre, email, telefono, sexo, gerencia, rol, coordinacion, institucion) 
+											 VALUES (:cedula, :passwordd, :nombre, :email, :telefono, :sexo, :gerencia, :rol, :coordinacion, :institucion)");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':cedula', $this->cedula);
@@ -176,6 +187,7 @@ class Usuario extends ManejadorBD
 			$stmt->bindParam(':gerencia', $this->gerencia);
 			$stmt->bindParam(':rol', $this->rol);
 			$stmt->bindParam(':coordinacion', $this->coordinacion);
+			$stmt->bindParam(':institucion', $this->institucion); 
 
 			$exito = $stmt->execute();
 

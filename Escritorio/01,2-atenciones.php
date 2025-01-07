@@ -532,13 +532,22 @@ include_once("partearriba.php");
                 ?>
                         <tr>
 
-                            <td class="sorting_1 <?php echo $registros['urgencia'] ?>"><a class="cedula" id="verBeneficiario" <?php if ($rol == "Administrador" || $rol == "Superusuario" || $rol =="Coordinador") { ?> href="modificarAtencionOAC.php?numero_aten=<?php echo $registros['numero_aten']; ?>" <?php } ?>><?php echo $registros["numero_aten"] ?></a></td>
+                            <td class="sorting_1 <?php echo $registros['urgencia'] ?>"><a class="cedula" id="verBeneficiario" <?php if ($rol == "Administrador" || $rol == "Superusuario" || $rol == "Coordinador") { ?> href="modificarAtencionOAC.php?numero_aten=<?php echo $registros['numero_aten']; ?>" <?php } ?>><?php echo $registros["numero_aten"] ?></a></td>
                             <td> <a class="cedula" name="enlace" id="verBeneficiario" href="__verBeneficiario.php?cedula=<?php echo $registros['cedula']; ?>"><?php echo $registros['cedula']; ?> </a></td>
                             <td><?php echo $registros["nombre"] ?></td>
                             <td><?php echo $registros["apellido"] ?></td>
                             <td><?php echo $registros["nombre_estado"] ?></td>
                             <td><?php echo $registros["nombre_e"] ?></td>
-                            <td><?php echo $registros["promotor"] ?></td>
+                            <td>
+                                <div style="display: inline-flex; position: relative;">
+                                    <?php if ($registros['institucion']) { ?>
+                                        <b><small class="tag <?php echo $registros['institucion'] ?>">#<?php echo $registros['institucion']; ?></small></b>
+                                    <?php  } ?>
+                                    <?php echo $registros["promotor"] ?>
+                                </div>
+                            </td>
+
+
 
                             <?php if ($registros["atencion_solicitada"]) { ?>
 

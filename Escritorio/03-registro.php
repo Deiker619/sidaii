@@ -37,7 +37,7 @@ include_once("partearriba.php");
 
                             <div class="input-field">
                                 <label>Telefono</label>
-                                <input type="number" placeholder="Ingresa tu numero de Telefono"  name="telefono" id="telefone">
+                                <input type="number" placeholder="Ingresa tu numero de Telefono" name="telefono" id="telefone">
                             </div>
 
                             <div class="input-field">
@@ -57,6 +57,13 @@ include_once("partearriba.php");
                                 <select name="sexo" require id="sexos">
                                     <option value="m">Masculino</option>
                                     <option value="f">Femenino</option>
+                                </select>
+                            </div>
+                            <div class="input-field">
+                                <label>Institución a la que pertenece</label>
+                                <select name="sexo" require id="institucion">
+                                    <option value="fmjgh">Fundación Jose Gregorio Hernandez</option>
+                                    <option value="conapdis">Conapdis</option>
                                 </select>
                             </div>
 
@@ -196,6 +203,7 @@ include_once("partearriba.php");
                 var sexos = $("#sexos").val();
                 var gerencia = $("#gerencia").val();
                 var rol = $("#rol").val();
+                var institucion = $("#institucion").val();
 
                 var coordinacion = $("#coordinacion").val();
 
@@ -204,7 +212,7 @@ include_once("partearriba.php");
                     console.log(coordinacion)
                 }
 
-                console.log(nombrez, cedule, emaile, telefone, coordinacion, rol)
+                console.log(nombrez, cedule, emaile, telefone, coordinacion, rol, institucion)
 
 
 
@@ -269,7 +277,7 @@ include_once("partearriba.php");
 
 
 
-                asignarAtencion();
+                 asignarAtencion();
                 $.ajax({
                     type: "POST",
                     url: "../php/procesamientoregistro.php",
@@ -283,7 +291,8 @@ include_once("partearriba.php");
                         sexos: sexos,
                         gerencia: gerencia,
                         coordinacion: coordinacion,
-                        rol: rol
+                        rol: rol,
+                        institucion: institucion
                     },
 
                     success: function(data) {
@@ -296,16 +305,10 @@ include_once("partearriba.php");
 
                             }).then(function() {
                                 window.location = "03-registro.php";
-                                /*  $("#cedula").attr("readonly","readonly");
-                                 $("#nombre").attr("readonly","readonly");
-                                 $("#apellido").attr("readonly","readonly");
-                                 $("#numero_jornada").attr("readonly","readonly");
-                                 $("#discapacidad").attr("readonly","readonly");
-                                 $("#tipo_ayuda_tec").attr("readonly","readonly");
-                                 */
+                                
 
                             })
-                        } else if(data.trim() == "error"){
+                        } else if (data.trim() == "error") {
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Operación fallida',
@@ -313,16 +316,10 @@ include_once("partearriba.php");
 
                             }).then(function() {
                                 window.location = "03-registro.php";
-                                /*  $("#cedula").attr("readonly","readonly");
-                                 $("#nombre").attr("readonly","readonly");
-                                 $("#apellido").attr("readonly","readonly");
-                                 $("#numero_jornada").attr("readonly","readonly");
-                                 $("#discapacidad").attr("readonly","readonly");
-                                 $("#tipo_ayuda_tec").attr("readonly","readonly");
-                                 */
+                                
 
                             })
-                        }else if(data.trim() =="existe"){
+                        } else if (data.trim() == "existe") {
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Operación fallida',
@@ -330,13 +327,7 @@ include_once("partearriba.php");
 
                             }).then(function() {
                                 window.location = "03-registro.php";
-                                /*  $("#cedula").attr("readonly","readonly");
-                                 $("#nombre").attr("readonly","readonly");
-                                 $("#apellido").attr("readonly","readonly");
-                                 $("#numero_jornada").attr("readonly","readonly");
-                                 $("#discapacidad").attr("readonly","readonly");
-                                 $("#tipo_ayuda_tec").attr("readonly","readonly");
-                                 */
+                                
 
                             })
                         }
