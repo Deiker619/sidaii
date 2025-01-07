@@ -53,9 +53,9 @@ include_once("partearriba.php");
 
                                 <td><a onclick="cargar('<?php echo addslashes($registros['descripcion']); ?>', '<?php echo $registros['id']; ?>', '<?php echo $registros['nombre']; ?>')">Cita atendida</a></td>
                             <?php   } else { ?>
-                                <td><a class="remitir">Enviar notificacion</a></td>
+                                <td><a onclick="enviarEmail('<?php echo $registros['email'] ?>')" class="remitir">Enviar notificacion</a></td>
                             <?php } ?>
-                            <td><a onclick="eliminar('<?php echo ($registros['id']); ?>')" class="eliminar">Eliminar Reg</a></td>
+                            <td><a  onclick="eliminar('<?php echo ($registros['id']); ?>')" class="eliminar">Eliminar Reg</a></td>
 
 
                         </tr>
@@ -193,6 +193,149 @@ include_once("partearriba.php");
             })
 
 
+
+        }
+        function enviarEmail( b) {
+            let correo = b
+            let email = true;
+          
+
+            /* No tiene correo */
+            if (correo) {
+                Swal.fire({
+                    title: "¿Desea enviar una notificación al correo registrado?",
+                    html: "<b>Correo: </b>" + b + "",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, enviar!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        asignarAtencion();
+                        $.ajax({
+                            type: "POST",
+                            url: "reportes/enviarNotificacionAudiometria.php",
+                            data: {
+                   
+                                correo: correo,
+
+                            },
+                            success: function(data) {
+                                console.log(data)
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+
+
+
+                                    },
+                                    willClose: () => {
+
+                                        window.location.href = "07-audiometriaRecibida.php"
+                                    }
+                                });
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Enviado exitosamente',
+                                });
+
+
+                            },
+                            error: function(data) {
+                                console.log(data)
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Oops...',
+                                    'text': data
+                                })
+                            }
+                        })
+                    }
+                });
+            } else {
+                const {
+                    value: atencion
+                } = Swal.fire({
+                    title: 'Agrega el correo personalizado',
+                    input: 'email',
+                    inputLabel: 'Introduce el correo para enviar comprobante',
+                    inputValue: correo,
+                    footer: "Esta persona no tiene correo registrado",
+                    showCancelButton: true,
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'Debes escribir algo'
+                        }
+
+                        if (value) {
+                            correo = value;
+
+                            asignarAtencion();
+                            $.ajax({
+                                type: "POST",
+                                url: "reportes/enviarEmail.php",
+                                data: {
+                                    numero_aten: numero_aten,
+                                    correo: correo,
+
+                                },
+                                success: function(data) {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+
+
+
+                                        },
+                                        willClose: () => {
+
+                                            window.location.href = "07-audiometriaRecibida.php"
+                                        }
+                                    });
+
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Enviado exitosamente',
+                                    });
+
+                                    if (!data) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: "No se pudo registrar la solicitud, verifique datos"
+                                        }).then(function() {
+                                            window.location = "01,2-atenciones.php";
+                                        })
+                                    }
+                                },
+                                error: function(data) {
+                                    Swal.fire({
+                                        'icon': 'error',
+                                        'title': 'Oops...',
+                                        'text': data
+                                    })
+                                }
+                            })
+
+                        }
+                    }
+
+                })
+            }
+            /* Si tiene correo */
 
         }
     </script>

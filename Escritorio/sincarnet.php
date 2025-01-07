@@ -16,16 +16,10 @@ include_once("partearriba.php");
 
     <div class="tabla-atencion">
         <!-- <div class="personas-conatencion"><a href="01,5-atencionRecibida.php">Personas con atenciones recibidas</a></div> -->
-            <h2>Beneficiarios sin carnet</h2>
+            <h2>Beneficiarios sin certificado de discapacidad</h2>
 
 <br>
-            <h2>Total: <?php 
-             include_once("../php/01-discapacitados.php");
-             $aten = new Discapacitados (1);
-             $consulta = $aten->consultageneral();
-             $cantidadRegistros = count($consulta);
-             
-             echo $cantidadRegistros;?></h2>
+            
             <table>
                 <thead>
                     <tr>

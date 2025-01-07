@@ -71,7 +71,7 @@ include_once("partearriba.php");
                 <?php
                 include_once("../php/6-remitir.php");
                 $aten = new remitido(1);
-                $consulta = $aten->consultarTodosRemitidosInfraestructura();
+                $consulta = $aten->consultarTodosRemitidosOAC();
                 $cantidadRegistros = count($consulta);
                 if ($consulta) {
                     foreach ($consulta as $registros) {

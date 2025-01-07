@@ -57,11 +57,12 @@ include_once("partearriba.php");
 
                                    
                                     <?php if ($gerencia == "5Logi" || $rol == "Superusuario") { ?>
-                                        <option value="3-orypro">Apertura de historia medica</option>
+                                        <option value="3-orypro">Ortesis y protesis</option>
                                         <!-- <option value="4-tomedi">Toma Medidas</option>
                                         <option value="5-pruebar">Prueba artifcio</option> -->
-                                        <option value="6-repaart">Reparacion Artificio</option>
+                                        <option value="6-repaart">Reparación Artificio</option>
                                         <option value="7-audiom">Audiometria</option>
+                                        <option value="8-rehabilitacion">Rehabilitación</option>
                                     <?php } ?>
 
                                     <!--   <option value="8-calibr">Calibracion de Protesis Auditivas</option>

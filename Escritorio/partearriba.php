@@ -215,6 +215,7 @@
                         <li><a href="04-ortesisyProtesis.php">Órtesis y Prótesis</a></li>
                         <li><a href="06-reparacionArtificio.php">Reparaciones artificio</a></li>
                         <li><a href="07-audiometria.php">Audiometría</a></li>
+                        <li><a href="17-rehabilitacion.php">Rehabilitaciones</a></li>
                         <li><a href="01-remitidos_a.php">Remitidos</a></li>
 
                     </ul>

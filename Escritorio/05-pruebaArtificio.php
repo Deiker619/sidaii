@@ -132,7 +132,7 @@ include_once("partearriba.php");
                         success: function(data) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Proceso finalizado'
+                                title: 'Operación exitosa'
                             }).then(function() {
                                 location.reload();
                             });

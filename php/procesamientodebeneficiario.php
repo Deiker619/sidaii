@@ -18,22 +18,22 @@ if (isset($_POST['registrado'])) {
 	if ($Consulta) {
 
 		switch ($atencion_solicitada) {
-			
+
 			case "1-oac":
 				require_once("../php/01-atenciones.php");
 				$atencion = new Atenciones(1);
 				$atencion->setasignado($cedulauser);
 				$atencion->setcedula($cedula);
 				$consultaayuda = $atencion->autenticarAtencion();
-				
+
 				$data = [
 					'message' => 'Se registro exitosamente',
-					'others' => $consultaayuda??null
+					'others' => $consultaayuda ?? null
 				];
 				header('Content-Type: application/json');
 				echo json_encode($data);
 				$atencion->insertarAtencion();
-				
+
 				break;
 
 			case "2-ayudte":
@@ -70,15 +70,15 @@ if (isset($_POST['registrado'])) {
 				$medidas = new toma_medidas(1);
 				$medidas->setcedula($cedula);
 				$consultamedidas = $medidas->autenticarMedidas();
-				
-					$medidas->insertarMedidas();
-					$data = [
-						'message' => 'Se registro exitosamente',
-						'others' => $consultaayuda??null
-					];
-					header('Content-Type: application/json');
-					echo json_encode($data);
-				
+
+				$medidas->insertarMedidas();
+				$data = [
+					'message' => 'Se registro exitosamente',
+					'others' => $consultaayuda ?? null
+				];
+				header('Content-Type: application/json');
+				echo json_encode($data);
+
 				break;
 
 			case "5-pruebar":
@@ -104,16 +104,16 @@ if (isset($_POST['registrado'])) {
 				$medidas = new raparacion_artificio(1);
 				$medidas->setcedula($cedula);
 				$ConsultaPruebas = $medidas->autenticarReparacion();
-				
-				
-					$medidas->insertarReparacion();
-					$data = [
-						'message' => 'Se registro exitosamente en reparaciones',
-					
-					];
-					header('Content-Type: application/json');
-					echo json_encode($data);
-				
+
+
+				$medidas->insertarReparacion();
+				$data = [
+					'message' => 'Se registro exitosamente en reparaciones',
+
+				];
+				header('Content-Type: application/json');
+				echo json_encode($data);
+
 				break;
 
 			case "7-audiom":
@@ -121,12 +121,9 @@ if (isset($_POST['registrado'])) {
 				$medidas = new audiometria(1);
 				$medidas->setcedula($cedula);
 				$ConsultaPruebas = $medidas->autenticarAudiometria();
-				if (!$ConsultaPruebas) {
-					echo "Se registro exitosamente";
-					$medidas->insertarCita();
-				} else {
-					echo "Ya este Beneficiario se registro en esta area";
-				}
+				
+				$medidas->insertarCita();
+				
 				break;
 
 			case "10-partic":
@@ -154,12 +151,28 @@ if (isset($_POST['registrado'])) {
 				$consultaayuda = $atencion->autenticarAtencion();
 				$data = [
 					'message' => 'Se registro exitosamente',
-					'others' => $consultaayuda??null
+					'others' => $consultaayuda ?? null
 				];
 				header('Content-Type: application/json');
 				echo json_encode($data);
 				$atencion->insertarAtencion();
-				
+
+
+				break;
+			case "8-rehabilitacion":
+				require_once("../php2/__rehabilitacion.php");
+				$atencion = new rehabilitacion(1);
+				$atencion->setcedula($cedula);
+				$atencion->setpor($cedulauser);
+				$consultaayuda = null;
+				$data = [
+					'message' => 'Se registro exitosamente',
+					'others' => $consultaayuda ?? null
+				];
+				header('Content-Type: application/json');
+				echo json_encode($data);
+				$atencion->insertarCita();
+
 
 				break;
 		}
@@ -296,7 +309,7 @@ if (isset($_POST['registrado'])) {
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
 				$consultaayuda = $atencion->autenticarAtencion();
-			
+
 				$atencion->insertarAtencion();
 				echo "Se registró " . $nombre . " exitosamente";
 				break;
@@ -386,13 +399,24 @@ if (isset($_POST['registrado'])) {
 				$atencion->insertarsolicitud();
 				echo "Se registró " . $nombre . " exitosamente";
 				break;
+			case "8-rehabilitacion":
+				require_once("../php2/__rehabilitacion.php");
+				$atencion = new rehabilitacion(1);
+				$atencion->setcedula($cedula);
+				$atencion->setpor($cedulauser);
+				$consultaayuda = null;
+				$atencion->insertarCita();
+				echo "Se registró " . $nombre . " exitosamente";
+
+
+				break;
 
 			default:
 				// Acción por defecto si ninguna de las condiciones coincide
 				break;
 		}
 	} else {
-		
+
 
 		switch ($atencion_solicitada) {
 			case "1-oac":
@@ -403,7 +427,7 @@ if (isset($_POST['registrado'])) {
 				$consultaayuda = $atencion->autenticarAtencion();
 				echo "Ya " . $nombre . " se encuentra registrado, se le cargara otra solicitud ";
 				$atencion->insertarAtencion();
-				
+
 				break;
 
 			case "0-aten-coo":
@@ -413,6 +437,17 @@ if (isset($_POST['registrado'])) {
 				$atencion->setasignado($cedulauser);
 				$atencion->insertarAtencion();
 				echo "Ya " . $nombre . " se encuentra registrado, se le cargara otra solicitud";
+				break;
+
+			case "8-rehabilitacion":
+				require_once("../php2/__rehabilitacion.php");
+				$atencion = new rehabilitacion(1);
+				$atencion->setcedula($cedula);
+				$atencion->setpor($cedulauser);
+				echo "Ya " . $nombre . " se encuentra registrado, se le cargara otra solicitud";
+				$atencion->insertarCita();
+
+
 				break;
 
 			case "2-ayudte":

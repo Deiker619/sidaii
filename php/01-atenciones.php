@@ -341,7 +341,7 @@ class Atenciones extends ManejadorBD
 
 			/* ACTU */
 			$stmt = $this->cnn->prepare("SELECT atenciones.atencion_solicitada,atenciones.numero_aten, atenciones.urgencia, beneficiario.cedula, beneficiario.email, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones.statu, usuario.nombre as promotor ,
-			atenciones.informe FROM atenciones, beneficiario, estados, discapacid_e, tipoatencion, usuario WHERE
+			atenciones.informe, usuario.institucion FROM atenciones, beneficiario, estados, discapacid_e, tipoatencion, usuario WHERE
             								usuario.cedula = atenciones.asignado and
 											beneficiario.cedula = atenciones.cedula and 
 											beneficiario.estado = estados.id_estados and 
@@ -402,6 +402,7 @@ class Atenciones extends ManejadorBD
 			beneficiario.email,
 			beneficiario.apellido,
             usuario.nombre as por,
+			usuario.institucion,
 			estados.nombre_estado,
 			discapacid_e.nombre_e,
 			 CASE WHEN atenciones.atencion_recibida IS NOT NULL THEN

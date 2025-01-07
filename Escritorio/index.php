@@ -81,7 +81,7 @@ include_once("partearriba.php")
                     </div>
                 </div>
                 <div class="boxes2">
-                    <span class="link-name"><a href="sincarnet.php">Sin carnet </a></span>
+                    <span class="link-name"><a href="sincarnet.php">Sin certificado </a></span>
                     <span class="number"><?php echo count($sincarnet) ?></span>
                     <div class="progress">
                         <div class="progress-bar" style="width:75%;">
