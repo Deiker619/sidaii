@@ -241,8 +241,6 @@
                     <!-- Submenus de un boton -->
                     <ul class="sub-menu">
                         <li><a href="01-atencionCiu.php">Registro beneficiario</a></li>
-                        <li><a href="08-desarrolloSocial-solicitudes.php">Solicitudes taller</a></li>
-                        <li><a href="09-desarrolloS-encuentros.php">Solicitudes encuentros</a></li>
                         <li><a href="12-D-escuela-comunitaria.php">Talleres</a></li>
                         <li><a href="10-encuentros.php">Encuentros</a></li>
                         <li><a href="12-D-escuela-comunitaria.php">Escuela Comunitaria</a></li>
