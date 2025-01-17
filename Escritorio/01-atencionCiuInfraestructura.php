@@ -242,47 +242,7 @@ include_once("partearriba.php");
                                 </div>
 
                                 
-                                <div class="input-field">
-                                    <label>Tipo de atención solicitada</label>
-                                    <select name="atencion" id="atencion" require>
-                                        <?php if ($gerencia == "4Gtno" || $rol == "Superusuario") { ?>
-                                            <option value="0-aten-coo">Atención a traves de coordinacion estadal</option>
-
-
-
-                                        <?php } ?>
-                                        <?php if ($gerencia == "2Atc" || $rol == "Superusuario") { ?>
-                                            <option value="1-oac">Atención a través de OAC</option>
-
-
-
-                                        <?php } ?>
-
-
-
-                                        <?php if ($gerencia == "5Logi" || $rol == "Superusuario") { ?>
-                                            <option value="3-orypro">Cita laboratorio ortesis y protesis</option>
-                                            <!-- <option value="4-tomedi">Toma Medidas</option>
-                                            <option value="5-pruebar">Prueba artifcio</option> -->
-                                            <option value="6-repaart">Reparación Artificio</option>
-                                            <option value="7-audiom">Audiometria</option>
-                                            <option value="8-rehabilitacion">Rehabilitacion</option>
-                                        <?php } ?>
-
-                                        <!--   <option value="8-calibr">Calibracion de Protesis Auditivas</option>
-                                          estamos esperando tipos de protesis auditivas para agregar a la base
-                                            <option value="9-soliproa">Solicitud de protesis auditivas</option> -->
-                                        <?php if ($gerencia == "3Gtnd" || $rol == "Superusuario") { ?>
-                                            <option value="10-partic">Participante de taller</option>
-                                            <option value="11-partic">Participante de encuentro</option>
-                                        <?php } ?>
-
-
-
-
-
-                                    </select>
-                                </div>
+                               
                        
 
                             </div>
@@ -557,7 +517,7 @@ include_once("partearriba.php");
                 /* Detalles medicos */
                 var discapacidad = $("#D-especifica").val();
                 var carnet = $("#carnet").val();
-                var atencion = $("#atencion").val();
+              
 
                 /* Cuidador */
                 var cuidador = $("#cuidador").val();
@@ -719,7 +679,7 @@ include_once("partearriba.php");
                             type: "POST",
                             url: "../php/procesamientodebeneficiario.php",
                             data: {
-                                
+                                accion: '',
                                 cedula: cedula,
                                 nombre: nombre,
                                 apellido: apellido,
@@ -736,7 +696,7 @@ include_once("partearriba.php");
                                 carnet: carnet,
                                 registrador: registrador,
                                 fecha_registro: fecha_registro,
-                                atencion: atencion,
+                  
                                 cuidador: cuidador,
                                 cedula_cui: cedula_cui,
                                 nombre_empre: nombre_empre,
