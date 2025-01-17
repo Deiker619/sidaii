@@ -537,4 +537,172 @@ class citas_protesis extends ManejadorBD
 			exit();
 		}
 	}
+
+	public function obtenerLaboratorios(){
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT laboratorios.id, laboratorios.nombre_lab, estados.nombre_estado, laboratorios.correo, laboratorios.telefono 
+			FROM `laboratorios`, estados
+			WHERE laboratorios.estado = estados.id_estados ");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			/* $stmt->bindParam(':id', $this->id); */
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* 	echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function verLaboratorio(){
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT laboratorios.id, laboratorios.nombre_lab, estados.nombre_estado, laboratorios.correo, laboratorios.telefono 
+			FROM `laboratorios`, estados
+			WHERE laboratorios.estado = estados.id_estados and laboratorios.id = :id");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->bindParam(':id', $this->id);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* 	echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetch();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function verAtencionLaboratorio($id){
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT a.id, a.cedula,a.fecha_registro, a.fecha_asistencia, b.sexo, b.edad, b.fecha_naci, b.telefono, b.nacionalidad, b.telefono,
+			 a.expediente ,b.nombre, b.apellido, s.nombre as nombre_servicio 
+			FROM `atenciones_laboratorios`as a, beneficiario as b, servicios_infraestructura as s 
+			WHERE b.cedula = a.cedula and s.id = a.tipo and a.id = :id
+			ORDER BY `a`.`id` ASC");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->bindParam(':id', $id);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* 	echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetch();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function insertarAtencionLaboratorio($cedula, $laboratorio,$tipo, $fecha_registro, $fecha_asistencia, $expediente){
+		try {
+
+			$stmt = $this->cnn->prepare("INSERT INTO `atenciones_laboratorios`(`cedula`, `laboratorio`, `tipo`, fecha_registro, fecha_asistencia, expediente) 
+			VALUES (:cedula, :laboratorio, :tipo, :fecha_registro, :fecha_asistencia, :expediente)");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->bindParam(':cedula', $cedula);
+			$stmt->bindParam(':laboratorio', $laboratorio);
+			$stmt->bindParam(':tipo', $tipo);
+			$stmt->bindParam(':fecha_registro', $fecha_registro);
+			$stmt->bindParam(':fecha_asistencia', $fecha_asistencia);
+			$stmt->bindParam(':expediente', $expediente);
+		
+
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* 	echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetch();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function consultarAtencionesLaboratorio($laboratorio){
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT a.id, a.cedula,a.fecha_registro, a.fecha_asistencia, a.expediente ,b.nombre, b.apellido, s.nombre as nombre_servicio FROM `atenciones_laboratorios`as a, beneficiario as b, servicios_infraestructura as s 
+			WHERE b.cedula = a.cedula and s.id = a.tipo and laboratorio = :laboratorio
+			ORDER BY `a`.`id` ASC");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->bindParam(':laboratorio',$laboratorio);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Ejecutamos
+			$stmt->execute();
+
+			// Numero de Filas Afectadas
+			/* 	echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function eliminarAtencionLaboratorio($id){
+		try {
+
+			$stmt = $this->cnn->prepare("DELETE FROM atenciones_laboratorios WHERE id = :id");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->bindParam(':id',$id);
+			$stmt->execute();
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			return $stmt->rowCount();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+					
+	public function modificarRegistroLaboratorio($id, $cedula, $servicios, $fecha_registro, $fecha_asistencia, $expediente){
+		try {
+
+			$stmt = $this->cnn->prepare("UPDATE `atenciones_laboratorios` 
+			SET 
+			`cedula`= :cedula,
+			`tipo`= :tipo,
+			`fecha_asistencia`= :fecha_asistencia,`fecha_registro`= :fecha_registro,
+			`expediente`= :expediente WHERE id = :id");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->bindParam(':id',$id);
+			$stmt->bindParam(':cedula',$cedula);
+			$stmt->bindParam(':tipo', $servicios);
+			$stmt->bindParam(':fecha_registro',$fecha_registro);
+			$stmt->bindParam(':fecha_asistencia',$fecha_asistencia);
+			$stmt->bindParam(':expediente',$expediente);
+			$stmt->execute();
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			return $stmt->rowCount();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
 }

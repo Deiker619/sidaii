@@ -9,7 +9,7 @@ include_once("partearriba.php");
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Remitidos: </span>
+            <span class="link-name">Orientados: </span>
         </div>
     </div>
 

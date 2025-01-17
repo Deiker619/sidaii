@@ -1282,6 +1282,11 @@ backdrop-filter: blur(10px);
   border-color: #1AA83E;
   background-color: #1AA83E;
  }
+ .cl-checkbox.dos > input:checked + span::before,
+ .cl-checkbox > input:indeterminate + span::before {
+  border-color: #ee4b1a;
+  background-color: #ee4b1a;
+ }
  
  .cl-checkbox > input:checked + span::after,
  .cl-checkbox > input:indeterminate + span::after {

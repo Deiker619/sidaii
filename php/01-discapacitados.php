@@ -425,6 +425,8 @@ class Discapacitados extends ManejadorBD
 
 			$stmt = $this->cnn->prepare("SELECT 
 			beneficiario.nombre, 
+			
+			beneficiario.nacionalidad,
 			beneficiario.cedula, 
 			beneficiario.apellido, 
 			beneficiario.fecha_naci, 
