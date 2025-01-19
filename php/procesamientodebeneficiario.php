@@ -6,6 +6,7 @@ include_once("detalles_institucionales.php");
 include_once("detalles_emprendimiento.php");
 include_once("detalles_cuidador.php");
 
+if (isset($_POST['accion'])  && $_POST['accion'] == 'si-atencion'){
 if (isset($_POST['registrado'])) {
 	$beneficiario = new Discapacitados(1);
 	$cedula = $_POST["cedula"];
@@ -566,4 +567,9 @@ if (isset($_POST['registrado'])) {
 
 	$nombre_emprendimiento = $_POST["nombre-emprendimiento"];
 	$area_comercial = $_POST["nombre-emprendimiento"]; */
+}
+}
+
+if (isset($_POST['accion'])  && $_POST['accion'] == 'no-atencion') {
+	
 }

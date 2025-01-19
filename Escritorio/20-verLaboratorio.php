@@ -923,7 +923,7 @@ $nombre_lab = $registro["nombre_lab"];
                             icon: 'error',
                             title: 'Oops...',
                             text: 'No se encontro ningun beneficiario con esa cedula',
-                            footer: '<a href="01-atencionCiu.php">Ir a registrar</a>'
+                            footer: '<a href="01-atencionCiuInfraestructura.php">Ir a registrar</a>'
                         })
                     }
 

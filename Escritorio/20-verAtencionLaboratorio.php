@@ -360,7 +360,7 @@ include_once("parteabajo.php");
                         icon: 'error',
                         title: 'Oops...',
                         text: 'No se encontro ningun beneficiario con esa cedula',
-                        footer: '<a href="01-atencionCiu.php">Ir a registrar</a>'
+                        footer: '<a href="01-atencionCiuInfraestructura.php">Ir a registrar</a>'
                     })
                 }
 

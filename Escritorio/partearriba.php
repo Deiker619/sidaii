@@ -211,7 +211,7 @@
                     </div>
                     <!-- Submenus de un boton -->
                     <ul class="sub-menu">
-                        <li><a href="01-atencionCiu.php">Registro beneficiario</a></li>
+                        <li><a href="01-atencionCiuInfraestructura.php">Registro beneficiario</a></li>
                         <li><a href="04-ortesisyProtesis.php">Órtesis y Prótesis</a></li>
                         <li><a href="06-reparacionArtificio.php">Reparaciones artificio</a></li>
                         <li><a href="07-audiometria.php">Audiometría</a></li>
