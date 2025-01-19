@@ -719,7 +719,7 @@ include_once("partearriba.php");
                             type: "POST",
                             url: "../php/procesamientodebeneficiario.php",
                             data: {
-                                
+                                accion: 'si-atencion',
                                 cedula: cedula,
                                 nombre: nombre,
                                 apellido: apellido,

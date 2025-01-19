@@ -47,7 +47,7 @@ include_once("partearriba.php");
 
             </div>
             <div class="opciones_form">
-                <div class="ya_registrado"><a href="registrado.php">Ya registrado en SIDDAI!</a></div>
+                <!-- <div class="ya_registrado"><a href="registrado.php">Ya registrado en SIDDAI!</a></div> -->
                <!--  <div class="ya_registrado"><a onclick='conapdis()'>Ya registrado en Conapdis</a></div> -->
             </div>
 
@@ -679,7 +679,7 @@ include_once("partearriba.php");
                             type: "POST",
                             url: "../php/procesamientodebeneficiario.php",
                             data: {
-                                accion: '',
+                                accion: 'no-atencion',
                                 cedula: cedula,
                                 nombre: nombre,
                                 apellido: apellido,
