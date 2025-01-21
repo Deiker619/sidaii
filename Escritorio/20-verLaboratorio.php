@@ -213,6 +213,61 @@ $nombre_lab = $registro["nombre_lab"];
 
 
                         </div>
+                        <div class="details personal" id="type_artificio">
+                            <span class="title">Artificio</span>
+                            <div class="fields">
+
+                                <div class="input-field">
+                                    <label>Tipo de artificio</label>
+                                    <select name="" id="select_artificio">
+                                        <option value=null>Seleccione</option>
+                                        <option value="protesis">Protesis</option>
+                                        <option value="ortesis">Ortesis</option>
+
+                                    </select>
+                                </div>
+
+                                <div class="input-field dos">
+                                    <label for=""> -</label>
+                                    <select name="" id="select_protesis">
+                                        <?php
+                                        include_once("../php/01-02-cita_protesis.php");
+                                        $aten = new citas_protesis(1);
+                                        $consulta = $aten->obtenerProtesis();
+                                        foreach ($consulta as $registro) { ?>
+                                            <option value="<?php echo $registro['id'] ?>"><?php echo $registro['nombre'] ?></option>
+
+                                        <?php } ?>
+
+
+                                    </select>
+
+                                </div>
+
+                                <div class="input-field">
+                                    <label for="">-</label>
+                                    <select name="" id="select_ortesis">
+                                    <?php
+                                        include_once("../php/01-02-cita_protesis.php");
+                                        $aten = new citas_protesis(1);
+                                        $consulta = $aten->obtenerOrtesis();
+                                        foreach ($consulta as $registro) { ?>
+                                            <option value="<?php echo $registro['id'] ?>"><?php echo $registro['nombre'] ?></option>
+
+                                        <?php } ?>
+    
+                                    </select>
+                                </div>
+
+
+
+
+                            </div>
+
+
+
+
+                        </div>
                         <div class="details personal">
                             <span class="title">Otros detalles</span>
                             <div class="fields">
@@ -380,7 +435,7 @@ $nombre_lab = $registro["nombre_lab"];
             </div>
         </div> -->
     </div>
-    
+
 
 
     <div id="ver_atenciones">
@@ -401,7 +456,7 @@ $nombre_lab = $registro["nombre_lab"];
                         <th>Fecha de asistencia</th>
                         <th>N° expediente</th>
                         <th></th>
-    
+
 
 
 
@@ -430,7 +485,7 @@ $nombre_lab = $registro["nombre_lab"];
                                 <td><?php echo $registros["fecha_registro"] ?></td>
                                 <td><?php echo $registros["expediente"] ?></td>
                                 <td><a onclick='eliminar(<?php echo $registros["id"]; ?>)' class="eliminar">Eliminar Reg</a></td>
-                              
+
 
 
 
@@ -454,43 +509,6 @@ $nombre_lab = $registro["nombre_lab"];
 
 
 
-    <!-- <canvas id="otra" class="chart2"></canvas> -->
-
-
-    <!-- <div class="graficas">
-        
-
-
-
-
-        <div class="tarjetas-graficas">
-            <h2 class="titulo-grafica">Atenciones por Atencion brindada</h2>
-            <canvas id="graficaxbrindada"></canvas>
-        </div>
-
-        <div class="tarjetas-graficas">
-            <h2 class="titulo-grafica">Atenciones totales por Mes</h2>
-            <canvas id="graficaxmes"></canvas>
-        </div>
-
-        <div class="tarjetas-graficas">
-            <h2 class="titulo-grafica">Atenciones por Año </h2>
-            <canvas id="graficaxaño"></canvas>
-        </div>
-        <div class="tarjetas-graficas">
-            <h2 class="titulo-grafica">Atenciones por sexo</h2>
-            <canvas id="graficaxsexo"></canvas>
-        </div>
-    </div> -->
-
-
-    <!-- <canvas id="graficaxatencion" class="chart2"></canvas>
- -->
-
-
-
-
-
 
 
 
@@ -500,252 +518,7 @@ $nombre_lab = $registro["nombre_lab"];
     <script src="../package/dist/sweetalert2.all.min.js"></script>
 
 
-    <!-- Subir Archivos -->
-    <script>
-        function eliminar(p1) {
 
-
-            var id = p1;
-            console.log(id);
-
-
-            Swal.fire({
-                icon: "question",
-                title: '¿Desea eliminar esta atencion?',
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Eliminar',
-                denyButtonText: `No eliminar`,
-            }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-
-                    asignarAtencion();
-                    $.ajax({
-                        type: "GET",
-                        url: "eliminar/eliminar_atencion_estadal.php",
-                        data: {
-                            id: id
-
-
-                        },
-                        success: function(data) {
-                            Swal.fire({
-                                'icon': 'success',
-                                'title': 'Eliminacion de atencion',
-                                'text': 'Se elimino correctamente esta atencion',
-                                'confirmButton': 'btn btn-success'
-                            }).then(function() {
-                                location.reload();
-                            })
-                        },
-                        error: function(data) {
-                            Swal.fire({
-                                'icon': 'error',
-                                'title': 'Oops...',
-                                'text': data
-                            })
-                        }
-                    })
-                } else if (result.isDenied) {
-                    Swal.fire('Changes are not eliminated', '', 'info')
-                }
-            })
-        }
-
-        function enviarEmail(a, b) {
-            let correo = b
-            let email = true;
-            let numero_aten = a;
-
-            /* No tiene correo */
-            if (correo) {
-                Swal.fire({
-                    title: "¿Desea enviar el comprobante al correo registrado?",
-                    html: "<b>Correo: </b>" + b + "",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Si, enviar!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        asignarAtencion();
-                        $.ajax({
-                            type: "POST",
-                            url: "reportes/enviarEmailOP.php",
-                            data: {
-                                numero_aten: numero_aten,
-                                correo: correo,
-
-                            },
-                            success: function(data) {
-                                console.log(data)
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer);
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer);
-
-
-
-                                    },
-                                    willClose: () => {
-
-                                        location.reload();
-                                    }
-                                });
-
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Enviado exitosamente',
-                                });
-
-
-                            },
-                            error: function(data) {
-                                console.log(data)
-                                Swal.fire({
-                                    'icon': 'error',
-                                    'title': 'Oops...',
-                                    'text': data
-                                })
-                            }
-                        })
-                    }
-                });
-            } else {
-                const {
-                    value: atencion
-                } = Swal.fire({
-                    title: 'Agrega el correo personalizado',
-                    input: 'email',
-                    inputLabel: 'Introduce el correo para enviar comprobante',
-                    inputValue: correo,
-                    footer: "Esta persona no tiene correo registrado",
-                    showCancelButton: true,
-                    inputValidator: (value) => {
-                        if (!value) {
-                            return 'Debes escribir algo'
-                        }
-
-                        if (value) {
-                            correo = value;
-
-                            asignarAtencion();
-                            $.ajax({
-                                type: "POST",
-                                url: "reportes/enviarEmailOP.php",
-                                data: {
-                                    numero_aten: numero_aten,
-                                    correo: correo,
-
-                                },
-                                success: function(data) {
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: 'top-end',
-                                        showConfirmButton: false,
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-
-
-
-                                        },
-                                        willClose: () => {
-
-                                            location.reload();
-                                        }
-                                    });
-
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Enviado exitosamente',
-                                    });
-
-                                    if (!data) {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: "No se pudo registrar la solicitud, verifique datos"
-                                        }).then(function() {
-                                            location.reload();
-                                        })
-                                    }
-                                },
-                                error: function(data) {
-                                    Swal.fire({
-                                        'icon': 'error',
-                                        'title': 'Oops...',
-                                        'text': data
-                                    })
-                                }
-                            })
-
-                        }
-                    }
-
-                })
-            }
-            /* Si tiene correo */
-
-        }
-
-        function subirArchivo(a) {
-            var numero_aten = a;
-            Swal.fire({
-                title: 'Cargar informe medico',
-                input: 'file',
-                inputAttributes: {
-                    accept: ['application/pdf'], // Limita a archivos PDF, puedes ajustar según tus necesidades
-                },
-                showCancelButton: true,
-                confirmButtonText: 'Subir',
-                cancelButtonText: 'Cancelar',
-            }).then((file) => {
-                if (file.isConfirmed && file.value) {
-                    // Crear un objeto FormData y agregar el archivo y el número
-                    const formData = new FormData();
-                    formData.append('archivo', file.value);
-                    formData.append('numero_aten', numero_aten);
-
-                    // Hacer la solicitud AJAX utilizando jQuery
-                    asignarAtencion();
-                    $.ajax({
-                        url: 'documentos/informes/cargardocumento.php',
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(data) {
-                            console.log(data);
-                            try {
-                                const dataJ = JSON.parse(data);
-                                Swal.fire(dataJ.mensaje, '', 'success').then(function() {
-                                    window.location = "14,1-verCoodinacion.php?coordinacion=" + coordinacion;
-                                });
-
-
-                            } catch (error) {
-                                console.error('Error al analizar la respuesta del servidor como JSON:', error);
-                                Swal.fire('Error en el formato de la respuesta del servidor', '', 'error');
-                            }
-                        },
-                        error: function(error) {
-                            console.error('Error al subir el archivo:', error);
-                            Swal.fire('Error al cargar el archivo', '', 'error');
-                        }
-                    });
-                }
-            });
-        }
-    </script>
     <script type="text/javascript">
         $(function() {
             $("#registro").click(function(e) {
@@ -759,6 +532,18 @@ $nombre_lab = $registro["nombre_lab"];
                     var nombre = $("#nombre").val();
                     var apellido = $("#apellido").val();
                     var discapacidad = $("#discapacidad").val();
+                    var select_artificio = $("#select_artificio").val();
+                    var tipo_artificio = null
+                    if (select_artificio) {
+                        if (select_artificio == 'protesis') {
+                            tipo_artificio = $("#select_protesis").val();
+                        }
+                        if (select_artificio == 'ortesis') {
+                            tipo_artificio = $("#select_ortesis").val();
+                        }
+
+                        console.log('El artificio es: ', tipo_artificio)
+                    }
 
                     var servicios = {
                         "apertura": $("#apertura").is(":checked") ? $("#apertura").val() : null,
@@ -769,7 +554,7 @@ $nombre_lab = $registro["nombre_lab"];
                         "entrega": $("#entrega").is(":checked") ? $("#entrega").val() : null
                     };
 
-                    console.log(servicios);
+                    console.log(select_artificio);
 
                     e.preventDefault();
                     asignarAtencion();
@@ -780,6 +565,8 @@ $nombre_lab = $registro["nombre_lab"];
                         data: {
                             accion: 'r',
                             laboratorio: laboratorio,
+                            tipo_artificio: tipo_artificio,
+                            seleccionado: select_artificio,
                             cedula: cedula,
                             servicios: JSON.stringify(servicios),
                             fecha_registro: fecha_registro,
@@ -979,5 +766,58 @@ $nombre_lab = $registro["nombre_lab"];
 
             });
         }
+
+        function protesisOrOrtesis() {
+            $("#select_artificio").change(function() {
+                console.log(this.value)
+                if (this.value == "protesis") {
+
+                    $("#select_protesis").show()
+                    $("#select_protesis").prop('required', true);
+                    $("#select_ortesis").hide()
+
+                }
+                if (this.value == "ortesis") {
+                    $("#select_ortesis").show().prop('required', true);
+                    $("#select_protesis").hide().prop('required', false);
+
+                }
+                if (this.value == "null") {
+                    $("#select_ortesis").hide()
+                    $("#select_protesis").hide()
+
+                }
+            });
+        }
+
+        function checkEntrega() {
+            $("#entrega").change(function() {
+                if (this.checked) {
+
+                    $("#type_artificio").show();
+                    $('#select_artificio').val()
+                    $('#select_artificio').prop('required', true)
+
+
+                }
+
+                if (!this.checked) {
+                    $("#type_artificio").hide();
+                    $('#select_artificio').prop('required', false)
+                    $('#select_artificio').val(null)
+
+                }
+
+
+
+
+            });
+        }
+        $("#type_artificio").hide();
+        $("#select_ortesis").hide();
+        $("#select_protesis").hide();
+        $('#select_artificio').val(null)
+        checkEntrega()
         opciones_menu_protesis();
+        protesisOrOrtesis()
     </script>
