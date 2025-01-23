@@ -1111,6 +1111,7 @@ $registro = $aten->consultarCoordinacion();
                         '<option value="18-Brpl50">Baston de rastreo plegable numero 50</option>' +
                         '<option value="19-Brpl52">Baston de rastreo plegable numero 52</option>' +
                         '<option value="5-ap.audio">Aparato de audiometria</option>' +
+                        '<option value="-nebu">Nebulizador</option>' +
                         '<option value="otros">otros</option>' +
 
                     '</select><br>
