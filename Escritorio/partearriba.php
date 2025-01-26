@@ -212,6 +212,7 @@
                     <!-- Submenus de un boton -->
                     <ul class="sub-menu">
                         <li><a href="01-atencionCiuInfraestructura.php">Registro beneficiario</a></li>
+                        <li><a href="21-evaluacionesMedicas.php">Evaluaciones medicas</a></li>
                         <li><a href="20-atenciones_infraestructura_estados.php">Atenciones por estado</a></li>
                         <li><a href="04-ortesisyProtesis.php">Prótesis por proyecto</a></li>
                         <li><a href="06-reparacionArtificio.php">Reparaciones artificio</a></li>
