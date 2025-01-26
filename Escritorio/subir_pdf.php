@@ -1,5 +1,5 @@
 <?php
-include_once("../php/informes_medicos.php");
+include_once("../php/12-informes_medicos.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['pdf'])) {
     $id = $_POST['id'];
