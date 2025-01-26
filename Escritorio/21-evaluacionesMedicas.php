@@ -88,13 +88,12 @@ include_once("../php/12-informes_medicos.php") // Incluye la clase informes_medi
                 showCancelButton: true,
                 confirmButtonText: 'Eliminar',
                 confirmButtonColor: '#1AA83E',
-                html: `Codigo de cita: ${p1}`,
                 denyButtonText: `No eliminar`,
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "POST",
-                        url: "",
+                        url: "../php2/__eliminar_informe.php",
                         data: {
                             eliminar: eliminar,
                             id: id
