@@ -58,22 +58,22 @@ if ($consulta) {
             ];
             echo json_encode($datos);
 
+            case 'informe_medico':
+                require_once("../php/12-informes_medicos.php");
+                $informe = new informes_medicos(1);
+                $informe->setcedula($cedula);
+                $informe->setnombre($consulta['nombre']); // Asumiendo que $consulta tiene el nombre del beneficiario
+                $informe->insertarInforme();
+                header('Content-Type: application/json');
+                $datos = [
+                    'code' => 200,
+                    'message' => 'Se registró en servicio de informes médicos'
+                ];
+                echo json_encode($datos);
+                break;
 
-            break;
-        case 'reparacion_artificio':
-            require_once("../php/01-05-reparacionArtificio.php");
-            $medidas = new raparacion_artificio(1);
-            $medidas->setcedula($cedula);
-
-            $medidas->insertarReparacion();
-            header('Content-Type: application/json');
-            $datos = [
-                'code' => 200,
-                'message' => 'Se registró en servicio de reparacon de artificio'
-            ];
-            echo json_encode($datos);
-            break;
-
+            
+    
 
         default:
             # code...
