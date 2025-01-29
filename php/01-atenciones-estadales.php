@@ -289,8 +289,8 @@ public function consultarTodosAtenciones()
 		try {
 
 			/* ACTU */
-			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten,atenciones_coordinaciones.urgencia,atenciones_coordinaciones.atencion_solicitada,usuario.nombre, atenciones_coordinaciones.numero_aten, beneficiario.cedula, beneficiario.nombre,beneficiario.email, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion, atenciones_coordinaciones.informe
-			FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, tipoatencion, usuario, coordinaciones_estadales WHERE
+			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten,atenciones_coordinaciones.urgencia,atenciones_coordinaciones.atencion_solicitada,usuario.nombre, atenciones_coordinaciones.numero_aten, beneficiario.cedula, beneficiario.nombre,beneficiario.email, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion, atenciones_coordinaciones.informe
+			FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, usuario, coordinaciones_estadales WHERE
 			
 			usuario.cedula = atenciones_coordinaciones.asignado and
 			usuario.coordinacion =  :coordinacion and 
@@ -298,7 +298,7 @@ public function consultarTodosAtenciones()
 			beneficiario.cedula = atenciones_coordinaciones.cedula and 
 			beneficiario.estado = estados.id_estados and 
 			beneficiario.discapacidad = discapacid_e.id_e and
-			beneficiario.atencion_solicitada = tipoatencion.id and
+		
 			atenciones_coordinaciones.fecha_aten IS NULL;');
 			$stmt->bindParam(':coordinacion', $this->coordinacion);
 			// Especificamos el fetch mode antes de llamar a fetch()
@@ -326,14 +326,14 @@ public function consultarTodosAtenciones()
 		try {
 
 			/* ACTU */
-			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten, atenciones_coordinaciones.urgencia ,atenciones_coordinaciones.atencion_solicitada, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.email, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion
-			,atenciones_coordinaciones.informe FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, tipoatencion, usuario, coordinaciones_estadales WHERE
+			$stmt = $this->cnn->prepare('SELECT atenciones_coordinaciones.numero_aten, atenciones_coordinaciones.urgencia ,atenciones_coordinaciones.atencion_solicitada, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.email, estados.nombre_estado, discapacid_e.nombre_e,  atenciones_coordinaciones.statu, coordinaciones_estadales.nombre_coordinacion
+			,atenciones_coordinaciones.informe FROM atenciones_coordinaciones, beneficiario, estados, discapacid_e, usuario, coordinaciones_estadales WHERE
 			atenciones_coordinaciones.asignado = usuario.cedula and 
             usuario.coordinacion = coordinaciones_estadales.id and
 			beneficiario.cedula = atenciones_coordinaciones.cedula and 
 			beneficiario.estado = estados.id_estados and 
 			beneficiario.discapacidad = discapacid_e.id_e and
-			beneficiario.atencion_solicitada = tipoatencion.id and
+			
 
 			atenciones_coordinaciones.fecha_aten IS NULL;');
 			
