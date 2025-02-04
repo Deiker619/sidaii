@@ -109,7 +109,7 @@ class audiometria extends ManejadorBD{
 				$exito = $stmt->execute();
 
 				// Numero de Filas Afectadas
-				echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>";
+				/* echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>"; */
 
 				// Devuelve los resultados obtenidos
 				return $exito; // si es verdadero se insertó correctamente el registro	

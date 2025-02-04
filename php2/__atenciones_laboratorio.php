@@ -2,6 +2,11 @@
 
 if(isset($_REQUEST['accion']) && $_REQUEST['accion'] == 'r'){
     include_once("../php/01-02-cita_protesis.php");
+
+    $tipo_artificio = $_REQUEST['tipo_artificio'];
+    $seleccionado = $_REQUEST['seleccionado'];
+
+
     $accion  = $_REQUEST['accion'];
     $cedula = $_REQUEST['cedula'];
     $servicios_json = $_REQUEST['servicios'];
@@ -11,6 +16,10 @@ if(isset($_REQUEST['accion']) && $_REQUEST['accion'] == 'r'){
     $expediente = $_REQUEST['expediente'];
     $servicios = json_decode($servicios_json, true);
     $pruebas = [];
+
+    
+
+
     header('Content-Type: application/json');
     
     $protesis = new citas_protesis(1);
@@ -19,8 +28,18 @@ if(isset($_REQUEST['accion']) && $_REQUEST['accion'] == 'r'){
         
         foreach ($servicios as $servicio ) {
             if($servicio){
-                
-                $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente); 
+                if($seleccionado == 'ortesis'){
+
+                    $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, $seleccionado, $tipo_artificio, null); 
+                }
+                if($seleccionado == 'protesis'){
+                    $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, $seleccionado,  null, $tipo_artificio); 
+                }
+                if($seleccionado == 'null' or $seleccionado == null){
+                    $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, null,  null, null); 
+                }
+
+               /*  $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, null,  null, null);  */
             }
         }
         
@@ -29,6 +48,7 @@ if(isset($_REQUEST['accion']) && $_REQUEST['accion'] == 'r'){
             'servicios' => $servicios,
             'laboratorio' => $laboratorio,
             'message' => 200,
+            'prueba' => $seleccionado,
             'accion' => $accion
         ];
         echo json_encode($datos);

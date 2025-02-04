@@ -8,7 +8,7 @@ include_once('partearriba.php');
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Rehabilitacion: <?php echo $rol ?></span>
+            <span class="link-name">Rehabilitaciones cerradas: <?php echo $rol ?></span>
         </div>
     </div>
 

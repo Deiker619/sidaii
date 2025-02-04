@@ -570,6 +570,133 @@ if (isset($_POST['registrado'])) {
 }
 }
 
+
+
+//Solo para usuarios de infraestructura
 if (isset($_POST['accion'])  && $_POST['accion'] == 'no-atencion') {
-	
+	/* Detalles personales */
+
+	$beneficiario = new Discapacitados(1);
+	$cedula = $_POST["cedula"];
+	$cedulauser = $_POST["cedulauser"];
+	$atencion_solicitada = $_POST["atencion"]??null;
+
+	$nombre = $_POST["nombre"];
+	$apellido = $_POST["apellido"];
+
+	$email = $_POST["email"];
+	$telefono = $_POST["telefono"];
+	$fecha_naci = $_POST["fecha_naci"];
+	$edad = $_POST["edad"];
+	$hijos = $_POST["hijos"];
+	$civil = $_POST["civil"];
+	$estado = $_POST["estado"];
+	$municipio = $_POST["municipio"];
+	$parroquia = $_POST["parroquia"];
+	$discapacidad = $_POST["discapacidad"];
+
+	$sexo = $_POST["sexo"];
+
+
+
+
+
+	$cod_carnet = $_POST["carnet"];
+	$registrado_por = $_POST["registrador"];
+	$fecha_registro = $_POST["fecha_registro"];
+
+	/* DIRECCION  */
+	$direccion = $_POST["direccion"];
+	$nacionalidad = $_POST["nacionalidad"];
+
+
+
+
+
+	/* cuidador */
+	$cuidador = $_POST["cuidador"];
+	$cedula_cui = $_POST["cedula_cui"];
+
+	/* Emprendimiento */
+	$nombre_empre = $_POST["nombre_empre"];
+	$rif_emp = $_POST["rif_emp"];
+	$area_comerc = $_POST["area_comerc"];
+	$banco = $_POST["banco"];
+
+	/* institucionales */
+	$bono = $_POST["bono"];
+
+
+
+	$beneficiario = new Discapacitados(1);
+	$cedula = $_POST["cedula"];
+	$cedulauser = $_POST["cedulauser"];
+
+	$beneficiario->setcedula($cedula);
+
+	$Consulta = $beneficiario->consultarDiscapacitados();
+
+	if (!$Consulta) {
+
+		$beneficiario->setcedula($cedula);
+		$beneficiario->setnombre($nombre);
+		$beneficiario->setapellido($apellido);
+		$beneficiario->setemail($email);
+
+		$beneficiario->settelefono($telefono);
+		$beneficiario->setfecha_naci($fecha_naci);
+		$beneficiario->setsexo($sexo);
+		$beneficiario->setedad($edad);
+		$beneficiario->sethijos($hijos);
+		$beneficiario->setcivil($civil);
+		$beneficiario->setestado($estado);
+		$beneficiario->setmunicipio($municipio);
+		$beneficiario->setparroquia($parroquia);
+		$beneficiario->setdiscapacidad($discapacidad);
+		$beneficiario->setatencion_solicitada($atencion_solicitada);
+		$beneficiario->setcod_carnet($cod_carnet);
+		$beneficiario->setregistrado_por($registrado_por);
+		$beneficiario->setfecha_registro($fecha_registro);
+		$beneficiario->setnacionalidad($nacionalidad);
+
+		$beneficiario->insertarDiscapacitados();
+
+		$detalles = new detalles_institucionales(1);
+
+		$detalles->setcedula($cedula);
+		$detalles->setproteccion_social($bono);
+		$detalles->setdireccion($direccion);
+		$detalles->insertardetalles();
+		$detalles->insertardireccion(); //10/01/2024
+
+
+		if ($nombre_empre and $rif_emp) {
+			$emprendimiento = new detalles_emprendimiento(1);
+			$emprendimiento->setcedula($cedula);
+			$emprendimiento->setnombre_emprendimiento($nombre_empre);
+			$emprendimiento->setrif_emprendimiento($rif_emp);
+			$emprendimiento->setarea_comercial($area_comerc);
+			$emprendimiento->setbanco($banco);
+			$emprendimiento->insertardetalles();
+		}
+
+
+
+		if ($cedula_cui) {
+			$cuid = new detalles_cuidador(1);
+			$cuid->setcedula($cedula);
+			$cuid->setnombre($cuidador);
+			$cuid->setcedula_r($cedula_cui);
+			$cuid->insertardetalles();
+		}
+		echo "Se registró " . $nombre . " exitosamente";
+
+
+
+
+
+		
+	}else{
+		echo "Ya este Beneficiario se encuentra registrado";
+	}
 }

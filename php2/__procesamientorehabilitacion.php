@@ -55,6 +55,7 @@ if(isset($_REQUEST['cerrar_caso'])){
 
     $rehabilitacionModel = new rehabilitacion(1);
     $rehabilitacionModel->setid($id);
+    $rehabilitacionModel->eliminarUltimoCasoProceso();
     $rehabilitacionModel->cerrarCaso();
 
     echo 'hola' , $id;

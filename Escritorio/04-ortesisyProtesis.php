@@ -1,110 +1,37 @@
 <?php
 include_once("partearriba.php");
 ?>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
 <div class="dash-contenido">
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Personas para apertura de historia medica: <?php echo $rol ?></span>
+            <span class="link-name">Ortesis y protesis: <?php echo $rol ?></span>
         </div>
     </div>
-
-    <?php if ($rol == "Administrador" || $rol == "Superusuario" || $rol == "coorA") { ?>
-        <div class="acordeon">
-            <br>
-
-            <div class="tab">
-                <input type="checkbox" name="acc" id="acc1">
-                <label for="acc1">
-                    <h2>C-E</h2>
-                    <h3> Lista de laboratorios por estado</h3>
-                </label>
-                <div class="tab-background"></div>
-                <div class="content">
-
-                    <div class="resumen">
-
-                        <?php
-                        include_once("../php/01-02-cita_protesis.php");
-                        $aten = new citas_protesis(1);
-                        $consulta = $aten->obtenerLaboratorios();
-
-                        foreach ($consulta as $registros) {
-                        ?>
-
-                            <div class="cardd">
-                                <div class="title">
-                                    <span></span>
-                                    <p class="title-text">atenciones</p>
-                                    <p class="percent"><?php echo 0 ?></p>
-                                </div>
-                                <div class="data">
-                                    <p>
-                                        <span style="display: block; font-size: 10px; margin:0"><?php echo $registros["nombre_lab"] ?></span>
-                                        <a href="20-verLaboratorio.php?laboratorio=<?php echo $registros["id"] ?>" class="enlace_especial"><?php echo $registros["nombre_estado"] ?></a>
-                                    </p>
-                                    <div class="range">
-                                        <div class="fill"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        <?php
-                        }
-
-                        $aten->__destruct();
-                        ?>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    <?php } ?>
-
-    <div class="reportes-totales">
-        <div class="reporte">
-            <a href="04-tomaMedidas.php">Toma de medidas</a>
-        </div>
-        <div class="reporte">
-            <a href="05-pruebaArtificio.php">Prueba de artificio</a>
-        </div>
-    </div>
-
     <div class="tabla-atencion">
-        <div class="personas-conatencion">
-            <div class="botones__especiales">
-                <button class="Btn export">
-                    <div class="sign">
-                        <i class='bx bx-export'></i>
-                    </div>
-                    <div class="text_boton">Remitidos de gerencia</div>
-                </button>
-                <button class="Btn import">
-                    <div class="sign">
-                        <i class='bx bx-import'></i>
-                    </div>
-                    <a href="04-ort-remitidos.php" class="enlace_especial">
-                        <div class="text_boton"> Remitidos a gerencia</div>
-                    </a>
-                </button>
-            </div>
-            <a class="enlace" href="04-ort-citaDada.php">Citas dadas</a>
+        <h2>Citas dadas para ortesis y protesis</h2>
+        <div class="Informe medico">
+            <button class="pdf" id="selectPdfButton" style="background:white;box-shadow: none; border:none;">
+                <div class="sign">
+                    <h3 style="color:rgb(77, 77, 77)">Inserte el informe medico</h3>
+                    <i class='bx bx-file' style="color: #fa1030;"></i>
+                </div>
+                <input type="file" accept="application/pdf" style="display: none;" id="pdfInput">
+            </button>
         </div>
-        <h2>Personas para apertura medica</h2>
-        
-        <table id="atencion">
+        <table>
             <thead>
                 <tr>
                     <th>Cedula</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>id de la apertura</th>
+                    <th>Codigo de cita</th>
                     <th>Status</th>
+                    <th>Fecha de cita</th>
                     <th></th>
                     <th></th>
+                    <th>Informe medico</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,29 +39,126 @@ include_once("partearriba.php");
                 <?php
                 include_once("../php/01-02-cita_protesis.php");
                 $aten = new citas_protesis(1);
-                $consulta = $aten->consultarTodasCitasSindar();
+                $consulta = $aten->consultarTodasCitasDadas();
                 $cantidadRegistros = count($consulta);
                 if ($consulta) {
                     foreach ($consulta as $registros) {
                 ?>
                         <tr>
-                            <td><a class="cedula" name="enlace" id="verBeneficiario" href="__verBeneficiario.php?cedula=<?php echo $registros['cedula']; ?>"><?php echo $registros['cedula']; ?></a></td>
+                            <td><?php echo $registros["cedula"] ?></td>
                             <td><?php echo $registros["nombre"] ?></td>
                             <td><?php echo $registros["apellido"] ?></td>
                             <td><?php echo $registros["id"] ?></td>
-                            <td style="color: red;">Apertura sin abrir</td>
-                            <td><a href="04-ort-darCita.php?id=<?php echo $registros["id"] ?>">Aperturar historia</a></td>
-                            <td><a href="eliminar/eliminar_orte.php?id=<?php echo $registros["id"] ?>" class="eliminar">Eliminar Reg</a></td>
+                            <td style="color: green;">Cita dada</td>
+                            <td><?php echo $registros["fecha_cita"] ?></td>
+                            <td><a class="cargar" href="15-verHistoriaMedica.php?codigo_cita=<?php echo  $registros["id"] ?>">Ver historia M.</a></td>
+                            <td><a href="" class="eliminar">Eliminar Reg</a></td>
+                            <td>
+                                <?php
+                                $pdfPath = 'informesMedicos/informe_' . $registros["cedula"] . '.pdf';
+                                $pdfPathWithNumber = 'informesMedicos/informe_' . $registros["cedula"] . '_*.pdf'; // Esto debería coincidir con el patrón que estás viendo
+
+                                // Verificamos si el archivo existe con el nombre normal
+                                if (file_exists($pdfPath)) {
+                                    echo '<a href="' . $pdfPath . '" target="_blank"><i class="bx bx-file" style="color: #fa1030;"></i></a>';
+                                }
+                                // Verificamos si el archivo existe con el número extra
+                                elseif (glob($pdfPathWithNumber)) {
+                                    echo '<a href="' . glob($pdfPathWithNumber)[0] . '" target="_blank"><i class="bx bx-file" style="color: #fa1030;"></i></a>';
+                                } else {
+                                    echo 'No disponible';
+                                }
+                                ?>
+
+                            </td>
                         </tr>
                 <?php
                     }
                 }
                 ?>
-
             </tbody>
         </table>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.getElementById('selectPdfButton').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Ingrese la cedula',
+                input: 'text',
+                inputLabel: 'Cedula',
+                inputPlaceholder: 'Introduzca la cedula',
+                showCancelButton: true,
+                confirmButtonText: 'Buscar',
+                cancelButtonText: 'Cancelar',
+                preConfirm: (cedula) => {
+                    if (cedula) {
+                        return cedula;
+                    } else {
+                        Swal.showValidationMessage('Por favor ingrese la cedula')
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var cedula = result.value;
+                    verificarCedulaYSubirPdf(cedula);
+                }
+            });
+        });
+
+        function verificarCedulaYSubirPdf(cedula) {
+            // Verificar si la cédula está en la base de datos
+            fetch('../php/pdfInforme.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'cedula=' + cedula
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Si la cédula está verificada, proceder a cargar el PDF
+                        cargarPdf(cedula);
+                    } else {
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    Swal.fire('Error', 'Hubo un problema con la conexión', 'error');
+                });
+        }
+
+        function cargarPdf(cedula) {
+            var inputFile = document.getElementById('pdfInput');
+            inputFile.click();
+            inputFile.onchange = function(event) {
+                var file = event.target.files[0];
+                if (file) {
+                    var formData = new FormData();
+                    formData.append('pdf', file);
+                    formData.append('cedula', cedula);
+
+                    fetch('../php/pdfInforme.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Éxito', 'PDF cargado exitosamente', 'success');
+                            } else {
+                                Swal.fire('Error', 'Hubo un problema al cargar el PDF', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire('Error', 'Hubo un problema con la conexión', 'error');
+                        });
+                }
+            };
+        }
+    </script>
 
     <?php
     include_once("parteabajo.php");
