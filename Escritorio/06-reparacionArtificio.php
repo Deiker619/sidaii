@@ -22,7 +22,7 @@ include_once("partearriba.php");
                     <div class="messageBox">
 
                         <input required="" placeholder="Ingrese la cedula para agregar" type="text" id="messageInput" />
-                        <button id="sendButton" type="submit">
+                        <button id="sendButton" type="submit" >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
                                 <path
                                     fill="none"
