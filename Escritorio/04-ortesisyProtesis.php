@@ -1,4 +1,4 @@
-    <?php
+<?php
     include_once("partearriba.php");
     ?>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
