@@ -120,12 +120,12 @@ class Jornadas extends ManejadorBD
 
 
 
-	public function insertarJornada()
+	public function insertarJornada($coordinacion)
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO jornada (estado, municipio, parroquia, numero_personas, gerencia) 
-											VALUES (:estado, :municipio,:parroquia, :numero_personas, :gerencia)");
+			$stmt = $this->cnn->prepare("INSERT INTO jornada (estado, municipio, parroquia, numero_personas, gerencia, coordinacion) 
+											VALUES (:estado, :municipio,:parroquia, :numero_personas, :gerencia, :coordinacion)");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':estado', $this->estado);
@@ -133,6 +133,7 @@ class Jornadas extends ManejadorBD
 			$stmt->bindParam(':parroquia', $this->parroquia);
 			$stmt->bindParam(':numero_personas', $this->numero_personas);
 			$stmt->bindParam(':gerencia', $this->gerencia);
+			$stmt->bindParam(':coordinacion', $coordinacion);
 
 			/* $stmt->bindParam(':direccion', $this->direccion);
 				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
@@ -207,7 +208,7 @@ class Jornadas extends ManejadorBD
 
 		try {
 
-			$stmt = $this->cnn->prepare("SELECT jornada.id, estados.nombre_estado, municipios.nombre, parroquia.nombre_parroquia, jornada.numero_personas, jornada.gerencia FROM `jornada`, municipios, estados, parroquia WHERE
+			$stmt = $this->cnn->prepare("SELECT jornada.id, estados.nombre_estado, municipios.nombre, parroquia.nombre_parroquia, jornada.coordinacion, jornada.numero_personas, jornada.gerencia FROM `jornada`, municipios, estados, parroquia WHERE
 				 estados.id_estados = jornada.estado and municipios.id_municipios = jornada.municipio and parroquia.id = jornada.parroquia");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo

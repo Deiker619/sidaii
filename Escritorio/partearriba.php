@@ -76,6 +76,9 @@
         case "3supe":
             $rol = "Superusuario";
             break;
+        case "4nali":
+            $rol = "Analista";
+            break;
         default:
             // Caso por defecto si ninguna de las condiciones anteriores se cumple
             break;
@@ -116,7 +119,7 @@
             </li>
             <!-- Boton 2: categorias -->
             <?php
-            if ($gerencia == "4Gtno" || $rol == "Superusuario") {
+            if ($gerencia == "4Gtno" || $rol == "Superusuario" ) {
             ?>
                 <li>
                     <div class="ioncn-link">
@@ -132,7 +135,7 @@
                         <?php if ($rol != "coorA") { ?>
                             <li><a href="01-atencionCiu.php">Registro beneficiario</a></li>
                         <?php } ?>
-                        <?php if ($rol == "Coordinador") { ?>
+                        <?php if ($rol == "Coordinador" || $rol=="Analista") { ?>
                             <li><a href="14,1-verCoodinacion.php?coordinacion=<?php echo $coordi?>">Ver mi Coordinacion</a></li>
                         <?php }?>
 
@@ -184,7 +187,7 @@
             <!-- Copias -->
             <!-- Boton 1: Dashboard -->
             <?php
-            if ($rol == "Administrador" || $rol == "Superusuario") {
+            if ($rol == "Administrador" || $rol == "Superusuario" || $rol=="Coordinador") {
             ?>
                 <li>
                     <a href="03-registro.php">

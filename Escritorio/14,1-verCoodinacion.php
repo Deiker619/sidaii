@@ -199,7 +199,7 @@ $registro = $aten->consultarCoordinacion();
         </div>
     </div>
 
-    <?php if ($rol == "Coordinador") { ?>
+    <?php if ($rol == "Coordinador" || $rol =="Analista") { ?>
         <div class="tabla-atencion" id="atenciones">
             <div class="personas-conatencion">
                 <div class="botones__especiales">
