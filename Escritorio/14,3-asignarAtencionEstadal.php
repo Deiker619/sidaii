@@ -100,10 +100,7 @@ include_once("partearriba.php");
                                     <label>Fecha</label>
                                     <input type="text" placeholder="Ingresa el codigo de carnet" required readonly name="fecha_aten" id="fecha_aten" value="<?php echo date("Y-m-d") ?>">
                                 </div>
-                                <div class="input-field">
-                                    <label>Fecha</label>
-                                    <input type="text" placeholder="Ingresa el codigo de carnet" required readonly name="fecha_aten" id="fecha_aten" value="<?php echo date("Y-m-d") ?>">
-                                </div>
+
 
 
 
@@ -458,7 +455,13 @@ include_once("partearriba.php");
                                         'title': 'Asignacion de atencion: Remitido',
                                         'text': "Remitido exitosamente",
                                     }).then(function() {
-                                        window.location = "01,2-atenciones.php";
+                                        window.history.back();
+                                        setTimeout(() => {
+                                            window.location.reload();
+                                        }, 100); // Se asegura de recargar después de regresar.
+
+
+
                                     })
                                 }
 
@@ -468,7 +471,13 @@ include_once("partearriba.php");
                                         'title': 'Asignacion de atencion: Orientado',
                                         'text': "Orientado exitosamente",
                                     }).then(function() {
-                                        window.location = "01,2-atenciones.php";
+                                        window.history.back();
+                                        setTimeout(() => {
+                                            window.location.reload();
+                                        }, 100); // Se asegura de recargar después de regresar.
+
+
+
                                     })
                                 }
                                 if (data.oac.mensaje == "primera" && data.op.mensaje == "primera") {
@@ -492,7 +501,12 @@ include_once("partearriba.php");
                                             },
                                             willClose: () => {
 
-                                                window.location.href = "14-coordinacionesEstadales.php"
+                                                window.history.back();
+                                                setTimeout(() => {
+                                                    window.location.reload();
+                                                }, 100); // Se asegura de recargar después de regresar.
+
+
                                             }
                                         });
 
@@ -521,7 +535,11 @@ include_once("partearriba.php");
                                                 '<b>Dias de diferencia: </b>' + data.op.difer +
                                                 '<b>Entregado en: </b>' + data.op.coordinacion
                                         }).then(function() {
-                                            window.location.href = "14-coordinacionesEstadales.php"
+                                            window.history.back();
+                                            setTimeout(() => {
+                                                window.location.reload();
+                                            }, 100); // Se asegura de recargar después de regresar.
+
                                         })
                                     }
                                     if (data.op.mensaje == "Noentregado") {
@@ -558,7 +576,11 @@ include_once("partearriba.php");
                                                 '<b>Dias de diferencia: </b>' + data.oac.difer,
                                             'footer': "Ya pasaron los 6 meses de la ultima entrega de este tipo"
                                         }).then(function() {
-                                            window.location.href = "14-coordinacionesEstadales.php"
+                                            window.history.back();
+                                            setTimeout(() => {
+                                                window.location.reload();
+                                            }, 100); // Se asegura de recargar después de regresar.
+
                                         })
                                     }
                                     if (data.oac.mensaje == "Noentregado") {
@@ -593,7 +615,11 @@ include_once("partearriba.php");
                                                 '<b>Dias de diferencia: </b>' + data.oac.difer,
                                             'footer': "Ya pasaron los 6 meses de la ultima entrega de este tipo"
                                         }).then(function() {
-                                            window.location.href = "14-coordinacionesEstadales.php"
+                                            window.history.back();
+                                            setTimeout(() => {
+                                                window.location.reload();
+                                            }, 100); // Se asegura de recargar después de regresar.
+
                                         })
                                     }
                                     if (data.oac.mensaje == "Noentregado") {
@@ -621,7 +647,7 @@ include_once("partearriba.php");
 
 
                                 /* OTRAS OPCIONES */
-                               
+
                             },
                             error: function(data) {
                                 console.log(data)

@@ -115,6 +115,7 @@ include_once("partearriba.php");
                             }
                         },
                         error: function(data) {
+                            console.log(data)
                             Swal.fire({
                                 'icon': 'error',
                                 'title': 'Oops...',

@@ -71,7 +71,8 @@
                     toggleZoomScreen()
                 </script>
 
-
+                <script src="../package/dist/sweetalert2.all.js"></script>
+                <script src="../package/dist/sweetalert2.all.min.js"></script>
                 <script>
                     // Función para almacenar la posición actual antes de recargar la página
                     window.addEventListener('beforeunload', function() {

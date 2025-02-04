@@ -9,8 +9,13 @@ include_once("02-jornadas.php");
 	$parroquia = $_POST["parroquia"];
 	$numero_personas = $_POST["personas_atender"];
 	$gerencia = $_POST["gerencia"];
+	$coordinacion = !empty($_POST['coordinacion']) ? $_POST['coordinacion'] : null;
+	/* if($coordinacion == null || $coordinacion == ""){
+		$coordinacion = null;
+	}else{
+		$coordinacion = ;
+	} */
 	
-
 
 
 	
@@ -22,7 +27,7 @@ include_once("02-jornadas.php");
 	$jornadas->setparroquia($parroquia);
 	$jornadas->setnumero_personas($numero_personas);
 	$jornadas->setgerencia($gerencia);
-	$jornadas->insertarJornada();
+	$jornadas->insertarJornada($coordinacion);
 
 	function redireccionar($url){ 
 		ob_start();   // Se utiliza para solucionar el error de  headers already sent 

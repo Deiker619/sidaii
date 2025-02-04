@@ -3,7 +3,7 @@ require_once("../php/01-05-reparacionArtificio.php");
 
 
     
-    echo 'eliminar';
+    
     $id = $_POST["id"];
     $reparacion = new raparacion_artificio(1);
     $reparacion ->setid($id);

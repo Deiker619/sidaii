@@ -235,9 +235,8 @@ class citas_protesis extends ManejadorBD
 		try {
 
 			$stmt = $this->cnn->prepare("SELECT cita_ortesis_protesis.id, beneficiario.nombre, beneficiario.apellido, beneficiario.cedula,  cita_ortesis_protesis.laboratorio, cita_ortesis_protesis.fecha_cita
-				FROM beneficiario, cita_ortesis_protesis, tipoatencion 
-				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula and beneficiario.atencion_solicitada 
-				= tipoatencion.id and cita_ortesis_protesis.fecha_toma IS NULL");
+				FROM beneficiario, cita_ortesis_protesis 
+				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula and cita_ortesis_protesis.fecha_toma IS NULL");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Ejecutamos
@@ -260,9 +259,8 @@ class citas_protesis extends ManejadorBD
 		try {
 
 			$stmt = $this->cnn->prepare("SELECT cita_ortesis_protesis.id, cita_ortesis_protesis.descripcion, cita_ortesis_protesis.artificio,beneficiario.nombre, beneficiario.apellido, beneficiario.cedula,  cita_ortesis_protesis.laboratorio, cita_ortesis_protesis.fecha_toma
-				FROM beneficiario, cita_ortesis_protesis, tipoatencion 
-				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula and beneficiario.atencion_solicitada 
-				= tipoatencion.id and cita_ortesis_protesis.fecha_prueba IS NULL");
+				FROM beneficiario, cita_ortesis_protesis 
+				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula  and cita_ortesis_protesis.fecha_prueba IS NULL");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Ejecutamos
@@ -286,9 +284,8 @@ class citas_protesis extends ManejadorBD
 
 			$stmt = $this->cnn->prepare("SELECT cita_ortesis_protesis.id, cita_ortesis_protesis.descripcion, cita_ortesis_protesis.artificio,beneficiario.nombre, beneficiario.apellido, beneficiario.cedula,  cita_ortesis_protesis.laboratorio, cita_ortesis_protesis.fecha_prueba, 
 			cita_ortesis_protesis.medidas, cita_ortesis_protesis.descripcion
-				FROM beneficiario, cita_ortesis_protesis, tipoatencion 
-				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula and beneficiario.atencion_solicitada 
-				= tipoatencion.id and cita_ortesis_protesis.fecha_prueba IS NOT NULL and cita_ortesis_protesis.status IS NULL");
+				FROM beneficiario, cita_ortesis_protesis 
+				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula  and cita_ortesis_protesis.fecha_prueba IS NOT NULL and cita_ortesis_protesis.status IS NULL");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Ejecutamos
@@ -312,9 +309,8 @@ class citas_protesis extends ManejadorBD
 
 			$stmt = $this->cnn->prepare("SELECT cita_ortesis_protesis.id, cita_ortesis_protesis.descripcion, cita_ortesis_protesis.status, cita_ortesis_protesis.artificio,beneficiario.nombre, beneficiario.apellido, beneficiario.cedula,  cita_ortesis_protesis.laboratorio, cita_ortesis_protesis.fecha_prueba, 
 			cita_ortesis_protesis.medidas, cita_ortesis_protesis.descripcion
-				FROM beneficiario, cita_ortesis_protesis, tipoatencion 
-				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula and beneficiario.atencion_solicitada 
-				= tipoatencion.id and cita_ortesis_protesis.fecha_prueba IS NOT NULL and cita_ortesis_protesis.status IS NOT NULL");
+				FROM beneficiario, cita_ortesis_protesis 
+				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula  and cita_ortesis_protesis.fecha_prueba IS NOT NULL and cita_ortesis_protesis.status IS NOT NULL");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Ejecutamos
@@ -364,9 +360,8 @@ class citas_protesis extends ManejadorBD
 		try {
 
 			$stmt = $this->cnn->prepare("SELECT cita_ortesis_protesis.id, beneficiario.nombre, beneficiario.apellido, beneficiario.cedula,  cita_ortesis_protesis.laboratorio, cita_ortesis_protesis.fecha_cita
-				FROM beneficiario, cita_ortesis_protesis, tipoatencion 
-				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula and beneficiario.atencion_solicitada 
-				= tipoatencion.id and cita_ortesis_protesis.fecha_toma IS NOT NULL");
+				FROM beneficiario, cita_ortesis_protesis 
+				WHERE beneficiario.cedula = cita_ortesis_protesis.cedula and cita_ortesis_protesis.fecha_toma IS NOT NULL");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Ejecutamos
@@ -609,11 +604,11 @@ class citas_protesis extends ManejadorBD
 			exit();
 		}
 	}
-	public function insertarAtencionLaboratorio($cedula, $laboratorio,$tipo, $fecha_registro, $fecha_asistencia, $expediente){
+	public function insertarAtencionLaboratorio($cedula, $laboratorio,$tipo, $fecha_registro, $fecha_asistencia, $expediente, $tipo_artificio, $ortesis, $protesis){
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO `atenciones_laboratorios`(`cedula`, `laboratorio`, `tipo`, fecha_registro, fecha_asistencia, expediente) 
-			VALUES (:cedula, :laboratorio, :tipo, :fecha_registro, :fecha_asistencia, :expediente)");
+			$stmt = $this->cnn->prepare("INSERT INTO `atenciones_laboratorios`(`cedula`, `laboratorio`, `tipo`, fecha_registro, fecha_asistencia, expediente, tipo_artificio, artificio_ortesis, artificio_protesis) 
+			VALUES (:cedula, :laboratorio, :tipo, :fecha_registro, :fecha_asistencia, :expediente, :tipo_artificio, :ortesis, :protesis)");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->bindParam(':cedula', $cedula);
 			$stmt->bindParam(':laboratorio', $laboratorio);
@@ -621,6 +616,10 @@ class citas_protesis extends ManejadorBD
 			$stmt->bindParam(':fecha_registro', $fecha_registro);
 			$stmt->bindParam(':fecha_asistencia', $fecha_asistencia);
 			$stmt->bindParam(':expediente', $expediente);
+
+			$stmt->bindParam(':tipo_artificio', $tipo_artificio);
+			$stmt->bindParam(':ortesis', $ortesis);
+			$stmt->bindParam(':protesis', $protesis);
 		
 
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
@@ -698,6 +697,38 @@ class citas_protesis extends ManejadorBD
 
 			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
 			return $stmt->rowCount();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function obtenerProtesis(){
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT `id`, `nombre` FROM `protesis` WHERE 1");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			
+			$stmt->execute();
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+	public function obtenerOrtesis(){
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT `id`, `nombre` FROM `ortesis` WHERE 1");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			
+			$stmt->execute();
+
+			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
+			return $stmt->fetchAll();
 		} catch (PDOException $error) {
 			// Mostramos un mensaje genérico de error.
 			echo "Error: ejecutando consulta SQL." . $error->getMessage();

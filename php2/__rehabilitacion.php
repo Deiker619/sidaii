@@ -208,6 +208,33 @@ class rehabilitacion extends ManejadorBD{
 				exit();
 	        } 
 		}
+		public function eliminarUltimoCasoProceso(){
+			try{	
+
+				$stmt = $this->cnn->prepare("DELETE FROM `avances` WHERE rehabilitacion = :id and status='en proceso'");
+				
+				// Asignamos valores a los parametros
+				$stmt->bindParam(':id', $this->id);
+		
+				/* $stmt->bindParam(':direccion', $this->direccion);
+				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
+				$stmt->bindParam(':estado', $this->estado); */
+               
+				// Ejecutamos
+				$exito = $stmt->execute();
+
+				// Numero de Filas Afectadas
+				echo "<br>Se Afecto: ".$stmt->rowCount()." Registro<br>";
+
+				// Devuelve los resultados obtenidos
+				return $exito; // si es verdadero se insertó correctamente el registro	
+
+	        }catch(PDOException $error) {
+			    // Mostramos un mensaje genérico de error.
+				echo "Error: ejecutando consulta SQL.".$error->getMessage();
+				exit();
+	        } 
+		}
 		public function insertarAvance(){
 			try{	
 
@@ -443,28 +470,7 @@ class rehabilitacion extends ManejadorBD{
 		}
 
 		
-		public function consultarTodasAyudas_tecRecibidas(){
-
-			try{	
-
-				$stmt = $this->cnn->prepare("SELECT beneficiario.nombre, beneficiario.apellido, beneficiario.cedula, atenciones.numero_aten, ayudas_tec.id, ayudas_tec.tipo_ayuda_tec FROM `ayudas_tec`, beneficiario, atenciones WHERE ayudas_tec.numero_aten = atenciones.numero_aten and beneficiario.cedula = atenciones.cedula AND atenciones.atencion_recibida = '-ayudatec' AND ayudas_tec.tipo_ayuda_tec IS NOT NULL;");
-				// Especificamos el fetch mode antes de llamar a fetch()
-				$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
-				// Ejecutamos
-				$stmt->execute();
-
-				// Numero de Filas Afectadas
-			/* 	echo "<br>Se devolvieron: ".$stmt->rowCount()." Registros<br>"; */
-
-				// Devuelve los resultados obtenidos
-				return $stmt->fetchAll();	
-
-	        }catch(PDOException $error) {
-			    // Mostramos un mensaje genérico de error.
-				echo "Error: ejecutando consulta SQL.".$error->getMessage();
-				exit();
-	        } 
-		}
+		
 
 
 		public function modificarCita(){

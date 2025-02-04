@@ -1,6 +1,7 @@
 <?php
 include_once("partearriba.php");
 $gerencia_json = json_encode($gerencia);
+$coordinacion_json = json_encode($coordi);
 ?>
 
 
@@ -12,7 +13,7 @@ $gerencia_json = json_encode($gerencia);
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Operacion estadal: <?php echo $rol ?></span>
+            <span class="link-name">Jornadas: </span>
         </div>
     </div>
     <!-- Boton de reporte -->
@@ -153,7 +154,7 @@ $gerencia_json = json_encode($gerencia);
                 if ($consulta) {
 
                     foreach ($consulta as $registros) {
-                        if ($registros["gerencia"] == $gerencia || $rol=="Superusuario") {
+                        if ($registros["gerencia"] == $gerencia and $_SESSION['coordinacion'] == $registros["coordinacion"] || $rol == "Administrador") {
                 ?>
                             <tr>
 
@@ -164,13 +165,29 @@ $gerencia_json = json_encode($gerencia);
                                 <td><a href="02-AsignarJornada.php?id=<?php echo $registros["id"] ?>">Ver jornada</a></td>
                                 <?php if ($rol == "Superusuario") { ?>
                                     <td><a onClick="eliminar(<?php echo $registros["id"] ?>)" class="eliminar">Eliminar Reg</a></td>
-                                <?php }else{
+                                <?php } else {
                                     echo "<td></td>";
                                 } ?>
                             </tr>
-                <?php
-                        }
-                    }
+                        <?php
+                        } ?>
+
+                        <?php if ($rol == "Superusuario") { ?>
+                            <tr>
+
+                                <td><?php echo $registros["nombre_estado"] ?></td>
+                                <td><?php echo $registros["nombre"] ?></td>
+                                <td><?php echo $registros["nombre_parroquia"] ?></td>
+                                <td><?php echo $registros["numero_personas"] ?></td>
+                                <td><a href="02-AsignarJornada.php?id=<?php echo $registros["id"] ?>">Ver jornada</a></td>
+                                <?php if ($rol == "Superusuario") { ?>
+                                    <td><a onClick="eliminar(<?php echo $registros["id"] ?>)" class="eliminar">Eliminar Reg</a></td>
+                                <?php } else {
+                                    echo "<td></td>";
+                                } ?>
+                            </tr>
+                        <?php }  ?>
+                <?php  }
                 }
                 ?>
 
@@ -271,11 +288,12 @@ $gerencia_json = json_encode($gerencia);
 
                         var estado = $("#estado").val()
                         var gerencia = <?php echo $gerencia_json; ?>;
+                        var coordinacion = <?php echo $coordinacion_json; ?>;
                         var municipio = $("#municipio").val()
                         var parroquia = $("#parroquia").val()
                         var personas_atender = $("#personas_atender").val()
 
-                        console.log(estado, municipio, parroquia, personas_atender, gerencia);
+                        console.log(estado, municipio, parroquia, personas_atender, gerencia, coordinacion);
                         asignarAtencion();
                         $.ajax({
                             type: "POST",
@@ -285,12 +303,14 @@ $gerencia_json = json_encode($gerencia);
                                 municipio: municipio,
                                 parroquia: parroquia,
                                 personas_atender: personas_atender,
-                                gerencia: gerencia
+                                gerencia: gerencia,
+                                coordinacion: coordinacion
 
 
 
                             },
                             success: function(data) {
+                                console.log(data);
                                 Swal.fire({
                                     icon: 'success',
                                     title: "Jornanda creada"
@@ -303,7 +323,7 @@ $gerencia_json = json_encode($gerencia);
                                         icon: 'error',
                                         title: "No se pudo registrar la jornada, verifique datos"
                                     }).then(function() {
-                                        window.location = "01-atencionCiu.php";
+                                        /*  window.location = "01-atencionCiu.php"; */
                                     })
                                 }
                             },

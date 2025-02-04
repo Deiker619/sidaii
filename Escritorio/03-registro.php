@@ -114,17 +114,25 @@ include_once("partearriba.php");
                                     <label>Rol</label>
                                     <select name="rol" require id="rol">
 
-                                        <?php if ($gerencia == "4Gtno" || $rol == "Superusuario") { ?>
+                                        <?php if ($gerencia == "4Gtno" ) { ?>
                                             <option value="2coor">Coordinador estadal</option>
-                                            <option value="coorA">Coordinador area </option>
+                                            <option value="4nali">Analista</option>
                                         <?php } ?>
-                                        <?php if ($gerencia == "2Atc" || $rol == "Superusuario") { ?>
-                                            <option value="2coor">Analista</option>
-                                            <option value="1adm">Coordinador de Área</option>
+                                        <?php if ($gerencia == "2Atc") { ?>
+                                            <option value="2coor">Coordinador estadal</option>
+                                            <option value="4nali">Analista</option>
                                         <?php } ?>
+                                        <?php if ($rol == "Superusuario") { ?>
+                                            <option value="2coor">Coordinador estadal</option>
+                                            <option value="1adm">Administrador</option>
+                                            <option value="4nali">Analista</option>
+                                            <option value="3supe">Superadministrador</option>
+                                         <!--    <option value="coorA">Coordinador area </option> -->
+                                        <?php } ?>
+                                       
 
 
-                                        <option value="1adm">Administrador</option>
+                                        
 
 
                                     </select>
