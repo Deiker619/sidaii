@@ -1,108 +1,37 @@
 <?php
-    include_once("partearriba.php");
-    ?>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="stylesprotesis.css">
-    <div class="dash-contenido">
-        <div class="overview">
-            <div class="titulo">
-                <i class='bx bxs-dashboard'> </i>
-                <span class="link-name">Servicio de Protesis por proyecto: <?php echo $rol ?></span>
-            </div>
+include_once("partearriba.php");
+?>
+
+<div class="dash-contenido">
+    <div class="overview">
+        <div class="titulo">
+            <i class='bx bxs-dashboard'> </i>
+            <span class="link-name">Ortesis y protesis: <?php echo $rol ?></span>
         </div>
-
-
-
-
-        <div class="reportes-totales">
-
-            <!-- reportes 1 -->
-            <div class="reporte">
-                <a href="04-tomaMedidas.php">Toma de medidas</a>
-            </div>
-            <div class="reporte">
-                <a href="05-pruebaArtificio.php">Prueba de artificio</a>
-            </div>
-            <!-- <div class="reporte">
-            <a href=""></a>
-        </div>
-        <div class="reporte">
-            <a href=""></a>
-        </div> -->
-            <!-- reportes 1 -->
-
-            <!-- reportes 1 -->
-        </div>
-
-        <div class="tabla-atencion">
-            <div class="personas-conatencion">
-                <div class="botones__especiales">
-                    <button class="Btn export">
-
-                        <div class="sign">
-                            <i class='bx bx-export'></i>
-                        </div>
-
-                        <div class="text_boton">Remitidos de gerencia</div>
-                    </button>
-                    <button class="Btn import">
-
-                        <div class="sign">
-                            <i class='bx bx-import'></i>
-                        </div>
-
-                        <a href="04-ort-remitidos.php" class="enlace_especial">
-                            <div class="text_boton"> Remitidos a gerencia
-                        </a>
+    </div>
+    <div class="tabla-atencion">
+        <h2>Citas dadas para ortesis y protesis</h2>
+        <div class="Informe medico">
+            <button class="pdf" id="selectPdfButton" style="background:white;box-shadow: none; border:none;">
+                <div class="sign">
+                    <h3 style="color:rgb(77, 77, 77)">Inserte el informe medico</h3>
+                    <i class='bx bx-file' style="color: #fa1030;"></i>
                 </div>
-                </button>
-
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-
-                <!-- From Uiverse.io by vinodjangid07 -->
-
-                <form  id="form_agregar">
-                    <div class="messageBox">
-
-                        <input required="" placeholder="Ingrese la cedula para agregar" type="text" id="messageInput" />
-                        <button id="sendButton" type="submit">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
-                                <path
-                                    fill="none"
-                                    d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
-                                <path
-                                    stroke-linejoin="round"
-                                    stroke-linecap="round"
-                                    stroke-width="33.67"
-                                    stroke="#6c6c6c"
-                                    d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </form>
-                <div style="display: flex; justify-content: center; align-items: center;">
-
-                    <a class="enlace" style="margin: 0;" href="04-ort-citaDada.php">Citas dadas</a>
-                </div>
-
-
-            </div>
-
+                <input type="file" accept="application/pdf" style="display: none;" id="pdfInput">
+            </button>
         </div>
-        <h2>Servicio por proyecto de Protesis</h2>
-
-        <table id="atencion">
+        <table>
             <thead>
                 <tr>
                     <th>Cedula</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>id de la apertura</th>
+                    <th>Codigo de cita</th>
                     <th>Status</th>
+                    <th>Fecha de cita</th>
                     <th></th>
                     <th></th>
+                    <th>Informe medico</th>
                 </tr>
             </thead>
             <tbody>
@@ -110,97 +39,127 @@
                 <?php
                 include_once("../php/01-02-cita_protesis.php");
                 $aten = new citas_protesis(1);
-                $consulta = $aten->consultarTodasCitasSindar();
+                $consulta = $aten->consultarTodasCitasDadas();
                 $cantidadRegistros = count($consulta);
                 if ($consulta) {
                     foreach ($consulta as $registros) {
                 ?>
                         <tr>
-
-                            <td> <a class="cedula" name="enlace" id="verBeneficiario" href="__verBeneficiario.php?cedula=<?php echo $registros['cedula']; ?>"><?php echo $registros['cedula']; ?> </a></td>
+                            <td><?php echo $registros["cedula"] ?></td>
                             <td><?php echo $registros["nombre"] ?></td>
                             <td><?php echo $registros["apellido"] ?></td>
                             <td><?php echo $registros["id"] ?></td>
+                            <td style="color: green;">Cita dada</td>
+                            <td><?php echo $registros["fecha_cita"] ?></td>
+                            <td><a class="cargar" href="15-verHistoriaMedica.php?codigo_cita=<?php echo  $registros["id"] ?>">Ver historia M.</a></td>
+                            <td><a href="" class="eliminar">Eliminar Reg</a></td>
+                            <td>
+                                <?php
+                                $pdfPath = 'informesMedicos/informe_' . $registros["cedula"] . '.pdf';
+                                $pdfPathWithNumber = 'informesMedicos/informe_' . $registros["cedula"] . '_*.pdf'; // Esto debería coincidir con el patrón que estás viendo
 
-                            <td style="color: red;">Apertura sin abrir</td>
-                            <td><a href="04-ort-darCita.php?id=<?php echo $registros["id"] ?>">Aperturar historia</a></td>
-                            <td><a href="eliminar/eliminar_orte.php?id=<?php echo $registros["id"] ?>" class="eliminar">Eliminar Reg</a></td>
+                                // Verificamos si el archivo existe con el nombre normal
+                                if (file_exists($pdfPath)) {
+                                    echo '<a href="' . $pdfPath . '" target="_blank"><i class="bx bx-file" style="color: #fa1030;"></i></a>';
+                                }
+                                // Verificamos si el archivo existe con el número extra
+                                elseif (glob($pdfPathWithNumber)) {
+                                    echo '<a href="' . glob($pdfPathWithNumber)[0] . '" target="_blank"><i class="bx bx-file" style="color: #fa1030;"></i></a>';
+                                } else {
+                                    echo 'No disponible';
+                                }
+                                ?>
+
+                            </td>
                         </tr>
                 <?php
                     }
                 }
                 ?>
-
             </tbody>
         </table>
     </div>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        function add_servicio() {
-
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                },
-                willClose: () => {
-
-                    location.reload()
-                }
-
-            })
-            let cedula = $('#messageInput').val();
-            var cedulauser = <?php echo json_encode($cedulauser); ?>
-
-            console.log(cedula)
-
-            
-            $.ajax({
-                type: "POST",
-                url: "../php2/__agregar_servicio_infraestructura.php",
-                data: {
-                    servicio: 'protesis_proyecto',
-                    cedula: cedula,
-                    cedulauser: cedulauser
-                },
-                success: function(data) {
-                    console.log(data)
-                    if (data.code == 404) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'No se encontro ningun beneficiario con esa cedula',
-                            footer: '<a href="01-atencionCiuInfraestructura.php">Ir a registrar</a>'
-                        })
+        document.getElementById('selectPdfButton').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Ingrese la cedula',
+                input: 'text',
+                inputLabel: 'Cedula',
+                inputPlaceholder: 'Introduzca la cedula',
+                showCancelButton: true,
+                confirmButtonText: 'Buscar',
+                cancelButtonText: 'Cancelar',
+                preConfirm: (cedula) => {
+                    if (cedula) {
+                        return cedula;
+                    } else {
+                        Swal.showValidationMessage('Por favor ingrese la cedula')
                     }
-
-                    if (data.code == 200) {
-                        Toast.fire({
-                            icon: "success",
-                            title: data.message
-                        })
-
-                    }
-                },
-                error: function(data) {
-                    console.log(data)
                 }
-            })
-        };
-
-        $('#form_agregar').on('submit', function(event) {
-            // Detecta el envío del formulario
-            event.preventDefault();
-            add_servicio()
-
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var cedula = result.value;
+                    verificarCedulaYSubirPdf(cedula);
+                }
+            });
         });
+
+        function verificarCedulaYSubirPdf(cedula) {
+            // Verificar si la cédula está en la base de datos
+            fetch('../php/pdfInforme.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'cedula=' + cedula
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Si la cédula está verificada, proceder a cargar el PDF
+                        cargarPdf(cedula);
+                    } else {
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    Swal.fire('Error', 'Hubo un problema con la conexión', 'error');
+                });
+        }
+
+        function cargarPdf(cedula) {
+            var inputFile = document.getElementById('pdfInput');
+            inputFile.click();
+            inputFile.onchange = function(event) {
+                var file = event.target.files[0];
+                if (file) {
+                    var formData = new FormData();
+                    formData.append('pdf', file);
+                    formData.append('cedula', cedula);
+
+                    fetch('../php/pdfInforme.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Éxito', 'PDF cargado exitosamente', 'success');
+                            } else {
+                                Swal.fire('Error', 'Hubo un problema al cargar el PDF', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire('Error', 'Hubo un problema con la conexión', 'error');
+                        });
+                }
+            };
+        }
     </script>
+
     <?php
     include_once("parteabajo.php");
     ?>
