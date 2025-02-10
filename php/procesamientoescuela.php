@@ -8,7 +8,7 @@ include_once("7-escuela-comunitaria.php");
 
 
 
-
+	$coordinacion = $_POST["coordinacion"]??null;
     $estado = $_POST["estado"];
 	$municipio = $_POST["municipio"];
 	$parroquia = $_POST["parroquia"];
@@ -39,7 +39,7 @@ include_once("7-escuela-comunitaria.php");
 	/* if($consulta){
 		echo "Ya esta persona fue remitida";
 	}else{ */
-		$escuela->insertarescuela();
+		$escuela->insertarescuela($coordinacion);
 		echo "Regitro el taller exitosamente";
 	
 	

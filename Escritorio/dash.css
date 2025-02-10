@@ -522,6 +522,20 @@ canvas#ayudas_tec{
   color: #fff;
   border: 1px solid #fff;
 }
+.dash-contenido .tabla-atencion table tbody td a.prueba{
+  cursor: pointer;
+  border: 1px solid #f07c2f;
+  color: #f07c2f;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.dash-contenido .tabla-atencion table tbody td a.prueba:hover{
+  background-color: #f07c2f;
+  color: #fff;
+  border: 1px solid #fff;
+}
 
 .dash-contenido .tabla-atencion table tbody td a.remitir{
   

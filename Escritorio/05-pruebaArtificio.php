@@ -75,7 +75,7 @@ include_once("partearriba.php");
                             <td><?php echo $registros["fecha_prueba"] ?></td>
                             <td><a onclick="verDescripcion('<?php echo $registros['descripcion'] ?>','<?php echo $registros['medidas'] ?>')" class="remitir">Ver medidas</a></td>
 
-                            <td><a onclick="finalizarPrueba('<?php echo $registros['id'] ?>')">Probar artificio</a></td>
+                            <td><a onclick="finalizarPrueba('<?php echo $registros['id'] ?>')">Finalizar proceso</a></td>
                             <td><a href="eliminar/eliminar_orte.php?id=<?php echo $registros["id"] ?>" class="eliminar">Eliminar Reg</a></td>
 
                         </tr>

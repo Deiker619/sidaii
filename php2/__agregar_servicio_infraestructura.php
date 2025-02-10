@@ -57,7 +57,9 @@ if ($consulta) {
                 'message' => 'Se registró en servicio de rehabilitacion'
             ];
             echo json_encode($datos);
+            break;
         case 'reparacion_artificio':
+            
 
             require_once("../php/01-05-reparacionArtificio.php");
             $medidas = new raparacion_artificio(1);

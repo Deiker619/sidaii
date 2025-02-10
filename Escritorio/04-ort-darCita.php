@@ -140,10 +140,7 @@ include_once("partearriba.php");
                                                 <span>Artificio: Protesis</span>
                                             </label>
 
-                                            <label class="cl-checkbox">
-                                                <input type="radio" name="artificio" value="-ortesis" id="ortesis">
-                                                <span>Artificio: Ortesis</span>
-                                            </label>
+                                        
 
                                         </div>
 
@@ -159,13 +156,13 @@ include_once("partearriba.php");
 
 
                                 <div class="details personal">
-                                    <span class="title">Fecha para toma de medidas</span>
+                                    <span class="title">Asigna fecha para evaluación</span>
                                     <div class="fields">
 
 
             
                                         <div class="input-field">
-                                            <label>Asigna fecha para toma de medidas</label>
+                                            <label>Asigna fecha para evaluación</label>
                                             <input type="date" required name="fecha_cita" id="fecha_cita">
                                         </div>
 

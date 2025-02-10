@@ -116,7 +116,7 @@ include_once("partearriba.php");
 
                                         <?php if ($gerencia == "4Gtno" ) { ?>
                                             <option value="2coor">Coordinador estadal</option>
-                                            <option value="4nali">Analista</option>
+                                            <option value="4nali">Promotor</option>
                                         <?php } ?>
                                         <?php if ($gerencia == "2Atc") { ?>
                                             <option value="2coor">Coordinador estadal</option>

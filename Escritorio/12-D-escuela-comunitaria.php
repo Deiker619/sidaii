@@ -1,6 +1,7 @@
 <?php
 include_once("partearriba.php");
 $gerencia_json = json_encode($gerencia);
+$coordinacion_json = json_encode($coordi);
 ?>
 
 
@@ -11,14 +12,14 @@ $gerencia_json = json_encode($gerencia);
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Desarrollo social: <?php echo $rol ?></span>
+            <span class="link-name">Talleres y escuelas: <?php echo $rol ?></span>
         </div>
     </div>
 
 
-     <!-- Boton de reporte -->
+    <!-- Boton de reporte -->
 
-   <!-- <a href=""> <button class="download-button">
+    <!-- <a href=""> <button class="download-button">
         <div class="docs"><svg class="css-i6dzq1" stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" height="20" width="20" viewBox="0 0 24 24">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                 <polyline points="14 2 14 8 20 8"></polyline>
@@ -34,7 +35,7 @@ $gerencia_json = json_encode($gerencia);
             </svg>
         </div> -->
     </button></a>
-    
+
     <div class="cont-registro">
 
         <div class="container">
@@ -43,7 +44,7 @@ $gerencia_json = json_encode($gerencia);
                 Crear nuevo taller
             </header>
 
-            <form action="" method="post" >
+            <form action="" method="post">
                 <div class="form">
 
                     <div class="details personal">
@@ -143,7 +144,6 @@ $gerencia_json = json_encode($gerencia);
             include_once("../php/7-escuela-comunitaria.php");
             $esc = new escuela(1);
             $contar = $esc->consultarTodasEscuelas();
-            echo count($contar);
 
             ?>
         </h2>
@@ -170,22 +170,39 @@ $gerencia_json = json_encode($gerencia);
                 $consulta = $aten->consultarTodasEscuelas();
                 $cantidadRegistros = count($consulta);
                 if ($consulta) {
-                    foreach ($consulta as $registros) {
-                ?>
-                        <tr>
+                    foreach ($consulta as $registros) { ?>
+                        <?php if ($rol == 'Superusuario' || $rol == "Administrador") { ?>
+                            <tr>
 
-                            <td><?php echo $registros["id_curso"] ?></td>
-                            <td><?php echo $registros["fecha_inicio"] ?></td>
-                            <td><?php echo $registros["fecha_final"] ?></td>
-                            <td><?php echo $registros["Tema"] ?></td>
-                            <td><?php echo $registros["comunidad"] ?></td>
-                            <td><?php echo $registros["nombre_estado"] ?></td>
-                            <td><?php echo $registros["nombre"] ?></td>
-                            <td><?php echo $registros["nombre_parroquia"] ?></td>
-                            <td><a href="12-D-VerEscuela.php?id=<?php echo $registros["id_curso"] ?>">Ver taller</a></td>
-<!--                             <td><a href="ModificarJornada/modificarBeneficiario.php?id=30165406" class="eliminar">Eliminar Reg</a></td>
- -->                        </tr>
-                <?php
+                                <td><?php echo $registros["id_curso"] ?></td>
+                                <td><?php echo $registros["fecha_inicio"] ?></td>
+                                <td><?php echo $registros["fecha_final"] ?></td>
+                                <td><?php echo $registros["Tema"] ?></td>
+                                <td><?php echo $registros["comunidad"] ?></td>
+                                <td><?php echo $registros["nombre_estado"] ?></td>
+                                <td><?php echo $registros["nombre"] ?></td>
+                                <td><?php echo $registros["nombre_parroquia"] ?></td>
+                                <td><a href="12-D-VerEscuela.php?id=<?php echo $registros["id_curso"] ?>">Ver taller</a></td>
+                            </tr>
+
+
+                        <?php } ?>
+                        <?php if ($registros["coordinacion"] == $coordi && $registros['gerencia'] == $gerencia and $rol != "Superusuario") { ?>
+
+                            <tr>
+
+                                <td><?php echo $registros["id_curso"] ?></td>
+                                <td><?php echo $registros["fecha_inicio"] ?></td>
+                                <td><?php echo $registros["fecha_final"] ?></td>
+                                <td><?php echo $registros["Tema"] ?></td>
+                                <td><?php echo $registros["comunidad"] ?></td>
+                                <td><?php echo $registros["nombre_estado"] ?></td>
+                                <td><?php echo $registros["nombre"] ?></td>
+                                <td><?php echo $registros["nombre_parroquia"] ?></td>
+                                <td><a href="12-D-VerEscuela.php?id=<?php echo $registros["id_curso"] ?>">Ver taller</a></td>
+                            </tr>
+
+                <?php }
                     }
                 }
                 ?>
@@ -203,6 +220,7 @@ $gerencia_json = json_encode($gerencia);
                 if (valid) {
                     var estado = $("#estado").val();
                     var gerencia = <?php echo $gerencia_json; ?>;
+                    var coordinacion = <?php echo $coordinacion_json; ?>;
                     var municipio = $("#municipio").val();
                     var parroquia = $("#parroquia").val();
                     var comunidad = $("#comunidad").val();
@@ -224,8 +242,9 @@ $gerencia_json = json_encode($gerencia);
                             comunidad: comunidad,
                             fecha_encuentro: fecha_encuentro,
                             fin_encuentro: fin_encuentro,
-                            curso: curso, 
-                            gerencia: gerencia
+                            curso: curso,
+                            gerencia: gerencia,
+                            coordinacion: coordinacion
                         },
 
                         success: function(data) {

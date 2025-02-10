@@ -117,11 +117,11 @@ class escuela extends ManejadorBD{
 
 
 
-		public function insertarescuela(){
+		public function insertarescuela($coordinacion){
 			try{	
 
-				$stmt = $this->cnn->prepare("INSERT INTO escuela_comunitaria (fecha_inicio, fecha_final, tema, comunidad, estado, municipio, parroquia, gerencia) 
-											VALUES (:fecha_inicio, :fecha_final, :tema, :comunidad, :estado, :municipio, :parroquia, :gerencia )");
+				$stmt = $this->cnn->prepare("INSERT INTO escuela_comunitaria (fecha_inicio, fecha_final, tema, comunidad, estado, municipio, parroquia, gerencia, coordinacion) 
+											VALUES (:fecha_inicio, :fecha_final, :tema, :comunidad, :estado, :municipio, :parroquia, :gerencia, :coordinacion )");
 				
 				// Asignamos valores a los parametros
                 $stmt->bindParam(':fecha_inicio', $this->fecha_inicio);
@@ -132,6 +132,7 @@ class escuela extends ManejadorBD{
                 $stmt->bindParam(':municipio', $this->municipio);
                 $stmt->bindParam(':parroquia', $this->parroquia);
                 $stmt->bindParam(':gerencia', $this->gerencia);
+                $stmt->bindParam(':coordinacion', $coordinacion);
 		
 				// Ejecutamos
 				$exito = $stmt->execute();
@@ -200,7 +201,7 @@ class escuela extends ManejadorBD{
 
 			try{	
 
-				$stmt = $this->cnn->prepare("SELECT escuela_comunitaria.id_curso, escuela_comunitaria.fecha_inicio,escuela_comunitaria.fecha_final,escuela_comunitaria.Tema,escuela_comunitaria.comunidad,estados.nombre_estado ,municipios.nombre ,parroquia.nombre_parroquia FROM `escuela_comunitaria`, estados, municipios, parroquia WHERE escuela_comunitaria.estado = estados.id_estados and municipios.id_municipios = escuela_comunitaria.estado and parroquia.id = escuela_comunitaria.parroquia");
+				$stmt = $this->cnn->prepare("SELECT escuela_comunitaria.id_curso, escuela_comunitaria.fecha_inicio,escuela_comunitaria.fecha_final,escuela_comunitaria.Tema, escuela_comunitaria.coordinacion, escuela_comunitaria.gerencia ,escuela_comunitaria.comunidad,estados.nombre_estado ,municipios.nombre ,parroquia.nombre_parroquia FROM `escuela_comunitaria`, estados, municipios, parroquia WHERE escuela_comunitaria.estado = estados.id_estados and municipios.id_municipios = escuela_comunitaria.estado and parroquia.id = escuela_comunitaria.parroquia");
 				// Especificamos el fetch mode antes de llamar a fetch()
 				$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 				// Ejecutamos
