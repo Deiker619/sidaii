@@ -517,7 +517,279 @@ $nombre_lab = $registro["nombre_lab"];
     <script src="../package/dist/sweetalert2.all.js"></script>
     <script src="../package/dist/sweetalert2.all.min.js"></script>
 
+                 <!-- graficas -->
+    <script>
+        const grafica = document.querySelector("#otra").getContext("2d");
+        const graficaxatencion = document.querySelector("#graficaxatencion").getContext("2d");
+        const graficaxbrindada = document.querySelector("#graficaxbrindada").getContext("2d");
+        const graficaxmes = document.querySelector("#graficaxmes").getContext("2d");
+        const graficaxaño = document.querySelector("#graficaxaño").getContext("2d");
+        const graficaxsexo = document.querySelector("#graficaxsexo").getContext("2d");
 
+
+        var coordinacion = <?php echo json_encode($coordinacion); ?>
+
+
+        // Realizar la solicitud Ajax usando jQuery
+
+        //Atenciones por discapacidad
+        $.ajax({
+            url: "graficas/graficas_coordinaciones.php",
+            method: "GET",
+            data: {
+                coordinacion: coordinacion
+            },
+            dataType: "json",
+            success: function(data) {
+                // Crear arreglos para almacenar los datos del gráfico
+                var nombres_discapacidad = [];
+                var discapacidades = [];
+
+                // Recorrer los datos y agregarlos a los arreglos
+                for (var i = 0; i < data.length; i++) {
+                    var nombre_discapacidad = data[i].nombre_discapacidad;
+                    var discapacidad = data[i].discapacidad;
+
+                    nombres_discapacidad.push(nombre_discapacidad);
+                    discapacidades.push(discapacidad);
+                }
+
+                // Crear el gráfico después de obtener todos los datos
+                new Chart(grafica, {
+                    type: "line",
+                    data: {
+                        labels: nombres_discapacidad,
+                        datasets: [{
+                            label: "Atenciones por: Discapacidad",
+                            data: discapacidades,
+                            borderColor: "#38b000",
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud Ajax:", status, error);
+            }
+        });
+        //Atenciones por ayuda
+        $.ajax({
+            url: "graficas/graficas_por_atenciones.php",
+            method: "GET",
+            data: {
+                coordinacion: coordinacion
+            },
+            dataType: "json",
+            success: function(data) {
+                console.log(data)
+                var nombres_deayuda = [];
+                var Ayudas_dadas = [];
+
+                // Recorrer los datos y agregarlos a los arreglos
+                for (var i = 0; i < data.length; i++) {
+                    var nombre = data[i].nombre_tipoayuda;
+                    var Ayuda = data[i].Ayudas_dadas;
+
+                    nombres_deayuda.push(nombre);
+                    Ayudas_dadas.push(Ayuda);
+                }
+
+                // Crear el gráfico después de obtener todos los datos
+                new Chart(graficaxatencion, {
+                    type: "line",
+                    data: {
+                        labels: nombres_deayuda,
+                        datasets: [{
+                            label: "Atenciones por: Tipo de ayuda tecnica",
+                            data: Ayudas_dadas,
+                            borderColor: "#38b000",
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud Ajax:", status, error);
+            }
+        });
+        //Atenciones brindadas
+        $.ajax({
+            url: "graficas/graficas_recibidas.php",
+            method: "GET",
+            data: {
+                coordinacion: coordinacion
+            },
+            dataType: "json",
+            success: function(data) {
+                console.log(data)
+                var nombre = [];
+                var Recibidas = [];
+
+                // Recorrer los datos y agregarlos a los arreglos
+                for (var i = 0; i < data.length; i++) {
+                    var nombres = data[i].nombre;
+                    var Recibidass = data[i].Recibidas;
+
+                    nombre.push(nombres);
+                    Recibidas.push(Recibidass);
+                }
+
+                // Crear el gráfico después de obtener todos los datos
+                new Chart(graficaxbrindada, {
+                    type: "line",
+                    data: {
+                        labels: nombre,
+                        datasets: [{
+                            label: "Atenciones por: Tipo de atencion",
+                            data: Recibidas,
+                            borderColor: "#38b000",
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud Ajax:", status, error);
+            }
+        });
+        //Atenciones por mes
+        $.ajax({
+            url: "graficas/graficas_por_mes.php",
+            method: "GET",
+            data: {
+                coordinacion: coordinacion
+            },
+            dataType: "json",
+            success: function(mes) {
+                var valore = eval(mes);
+                var ene = valore[0];
+                var feb = valore[1];
+                var mar = valore[2];
+                var abr = valore[3];
+                var may = valore[4];
+                var jun = valore[5];
+                var jul = valore[6];
+                var ago = valore[7];
+                var sep = valore[8];
+                var oct = valore[9];
+                var nov = valore[10];
+                var dic = valore[11];
+
+
+
+                // Crear el gráfico después de obtener todos los datos
+                new Chart(graficaxmes, {
+                    type: "line",
+                    data: {
+                        labels: ["Ene", "Feb", "Marz", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                        datasets: [{
+                            label: "Atenciones por: Mes",
+                            data: [ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic],
+                            borderColor: "#38b000",
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud Ajax:", status, error);
+            }
+        });
+        //Atenciones por año
+        $.ajax({
+            url: "graficas/graficas_por_año.php",
+            method: "GET",
+            data: {
+                coordinacion: coordinacion
+            },
+            dataType: "json",
+            success: function(year) {
+
+                var valors = eval(year);
+                var años = valors[0];
+                console.log(años)
+
+                let tiempo = new Date()
+                let año = tiempo.getFullYear().toString();
+                console.log(año)
+                // Crear el gráfico después de obtener todos los datos
+                new Chart(graficaxaño, {
+                    type: "bar",
+                    data: {
+                        labels: [año],
+                        datasets: [{
+                            label: "Asistencias por: año",
+                            data: años,
+                            borderColor: "#38b000",
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud Ajax:", status, error);
+            }
+        });
+        // Atenciones por sexo
+        $.ajax({
+            url: "graficas/graficas_por_sexo.php",
+            method: "GET",
+            data: {
+                coordinacion: coordinacion
+            },
+            dataType: "json",
+            success: function(data) {
+                console.log(data)
+                var sexoss = [];
+                var cantidadess = [];
+
+                // Recorrer los datos y agregarlos a los arreglos
+                for (var i = 0; i < data.length; i++) {
+                    var sexo = data[i].sexos;
+                    var cantidad = data[i].cantidades;
+
+                    sexoss.push(sexo);
+                    cantidadess.push(cantidad);
+                }
+                console.log(sexoss)
+
+                // Crear el gráfico después de obtener todos los datos
+                new Chart(graficaxsexo, {
+                    type: "line",
+                    data: {
+                        labels: sexoss,
+                        datasets: [{
+                            label: "Sexos",
+                            data: cantidadess,
+                            borderColor: "#38b000",
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud Ajax:", status, error);
+            }
+        });
+    </script>
 
     <script type="text/javascript">
         $(function() {

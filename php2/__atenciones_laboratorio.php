@@ -28,15 +28,19 @@ if(isset($_REQUEST['accion']) && $_REQUEST['accion'] == 'r'){
         
         foreach ($servicios as $servicio ) {
             if($servicio){
-                if($seleccionado == 'ortesis'){
+                if($servicio=='entrega'){
+                    if($seleccionado == 'ortesis'){
 
-                    $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, $seleccionado, $tipo_artificio, null); 
-                }
-                if($seleccionado == 'protesis'){
-                    $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, $seleccionado,  null, $tipo_artificio); 
-                }
-                if($seleccionado == 'null' or $seleccionado == null){
-                    $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, null,  null, null); 
+                        $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, $seleccionado, $tipo_artificio, null); 
+                    }
+                    if($seleccionado == 'protesis'){
+                        $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, $seleccionado,  null, $tipo_artificio); 
+                    }
+                  /*   if($seleccionado == 'null' or $seleccionado == null){
+                        $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, null,  null, null); 
+                    } */
+                }else{
+                    $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, null,  null, null);
                 }
 
                /*  $consulta = $protesis->insertarAtencionLaboratorio($cedula,  $laboratorio, $servicio, $fecha_registro, $fecha_asistencia, $expediente, null,  null, null);  */
