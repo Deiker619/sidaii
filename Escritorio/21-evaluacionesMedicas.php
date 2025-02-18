@@ -58,17 +58,13 @@ include_once("../php/12-informes_medicos.php") // Incluye la clase informes_medi
                 <td>{$registro['cedula']}</td>
                 <td>{$registro['nombre']}</td>
                 <td>";
-            if (!empty($registro['pdf_path'])) {
-                echo "<a href='{$registro['pdf_path']}' target='_blank'><i class='bx bxs-file-pdf' style='color: red; font-size: 24px;'></i></a>";
-            } else {
-                echo "<form action='subir_pdf.php' method='post' enctype='multipart/form-data' style='display: inline;'>
-                    <input type='hidden' name='id' value='{$registro['id']}'>
-                    <input type='file' name='pdf' id='pdf_{$registro['id']}' accept='application/pdf' style='display: none;' onchange='this.form.submit()'>
-                    <label for='pdf_{$registro['id']}' style='cursor: pointer;'>
-                        <i class='bx bx-upload' style='color: green; font-size: 24px;'></i>
-                    </label>
-                </form>";
-            }
+                if (!empty($registro['pdf_path'])) {
+                    echo "<a href='{$registro['pdf_path']}' target='_blank'><i class='bx bxs-file-pdf' style='color: red; font-size: 24px;'></i></a>";
+                } else {
+                    echo "<a href='subir_pdf.php?cedula={$registro['cedula']}' style='cursor: pointer;'>
+                            <i class='bx bx-folder' style='color: green; font-size: 24px;'></i>
+                          </a>";
+                }
             echo "</td>
                 <td><a onclick='eliminar({$registro['id']})' class='eliminar'>Eliminar Reg</a></td>
             </tr>";
