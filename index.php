@@ -17,7 +17,7 @@
 
 	<div class="cintillo">
 		<div class="img-cintillo">
-			<center><img src="a/img/cintillo2.jpg" alt=""></center>
+			<center><img src="a/img/cintillo3.jpg" alt=""></center>
 		</div>
 	</div>
 	<img class="wave" src="a/img/wave.png">
