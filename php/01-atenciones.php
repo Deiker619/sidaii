@@ -340,14 +340,13 @@ class Atenciones extends ManejadorBD
 		try {
 
 			/* ACTU */
-			$stmt = $this->cnn->prepare("SELECT atenciones.atencion_solicitada,atenciones.numero_aten, atenciones.urgencia, beneficiario.cedula, beneficiario.email, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e, tipoatencion.nombre_atencion, atenciones.statu, usuario.nombre as promotor ,
-			atenciones.informe, usuario.institucion FROM atenciones, beneficiario, estados, discapacid_e, tipoatencion, usuario WHERE
+			$stmt = $this->cnn->prepare("SELECT atenciones.atencion_solicitada,atenciones.numero_aten, atenciones.urgencia, beneficiario.cedula, beneficiario.email, beneficiario.nombre, beneficiario.apellido, estados.nombre_estado, discapacid_e.nombre_e,  atenciones.statu, usuario.nombre as promotor ,
+			atenciones.informe, usuario.institucion FROM atenciones, beneficiario, estados, discapacid_e, usuario WHERE
             								usuario.cedula = atenciones.asignado and
 											beneficiario.cedula = atenciones.cedula and 
 											beneficiario.estado = estados.id_estados and 
 											beneficiario.discapacidad = discapacid_e.id_e and
-											beneficiario.atencion_solicitada = tipoatencion.id and
-
+										
 											atenciones.fecha_aten IS NULL;");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo

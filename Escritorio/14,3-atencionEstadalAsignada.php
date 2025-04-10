@@ -144,7 +144,6 @@ if ($descrip_orientacion) {
 
     $consulta = $aten->modificarAtenciones();
     if ($consulta) {
-        echo "Orientado";
         include_once("../php/09-orientacion.php");
         $remicion = new orientacion(1);
         $remicion->setcedula($cedula);
@@ -155,7 +154,7 @@ if ($descrip_orientacion) {
         $remicion->setpor($por);  /* 22/8/2023     */
         $remicion->insertarOrientacionEstadal(); /* 22/8/2023    */
         $data = array();
-        $data["i"] = "Remitido";
+        $data["i"] = "Orientado";
         header('Content-Type: application/json');
         echo json_encode($data);
     }
