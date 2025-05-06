@@ -19,7 +19,7 @@
 
             <!-- reportes 1 -->
             <div class="reporte">
-                <a href="04-tomaMedidas.php">Toma de medidas</a>
+                <a href="04-tomaMedidas.php">Toma de medidas y evaluación</a>
             </div>
             <div class="reporte">
                 <a href="05-pruebaArtificio.php">Prueba de artificio</a>

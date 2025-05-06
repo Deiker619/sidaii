@@ -9,7 +9,7 @@ include_once("partearriba.php");
     <div class="overview">
         <div class="titulo">
             <i class='bx bxs-dashboard'> </i>
-            <span class="link-name">Ortesis y Protesis: <?php echo $rol ?></span>
+            <span class="link-name">Pruebas en marcha: <?php echo $rol ?></span>
         </div>
     </div>
 
@@ -19,10 +19,10 @@ include_once("partearriba.php");
 
         <!-- reportes 1 -->
         <div class="reporte">
-            <a href="04-tomaMedidas.php">Toma de medidas</a>
+            <a href="04-ortesisyProtesis.php">Sección principal</a>
         </div>
         <div class="reporte">
-            <a href="04-ortesisyProtesis.php">Citas</a>
+            <a href="04-tomaMedidas.php">Toma de medidas y evaluación</a>
         </div>
         <!-- <div class="reporte">
             <a href=""></a>
