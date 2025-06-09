@@ -4,6 +4,7 @@ include_once("../php/12-informes_medicos.php"); // Incluye la clase informes_med
 ?>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="stylesprotesis.css">
+<link rel="stylesheet" href="File.css">
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
 <div class="dash-contenido">
@@ -16,7 +17,7 @@ include_once("../php/12-informes_medicos.php"); // Incluye la clase informes_med
 
     <div class="tabla-atencion">
         <div class="personas-conatencion">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 5px;padding: 3px">
                
                 <div style="display: flex; justify-content: center; align-items: center;"></div>
             </div>
@@ -26,10 +27,11 @@ include_once("../php/12-informes_medicos.php"); // Incluye la clase informes_med
             <thead>
                 <tr>
                     <th>Nombre del archivo</th>
-                    <th>Acciones</th>
+                    <th style="text-align: center;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
+              
                 <?php
                 // Obtener la cédula del usuario desde la URL
                 $cedula = $_GET['cedula'];
@@ -60,9 +62,14 @@ include_once("../php/12-informes_medicos.php"); // Incluye la clase informes_med
                         $nombre_archivo = basename($archivo);
                         echo "<tr>
                             <td>{$nombre_archivo}</td>
-                            <td>
-                                <a href='{$archivo}' target='_blank'><i class='bx bxs-file-pdf' style='color: red; font-size: 24px;'></i></a>
-                                <a onclick='eliminarArchivo(\"{$archivo}\")' class='eliminar'>Eliminar</a>
+                            <td style='text-align: center;'>
+                            <a href ='{$archivo}' target='_blank' style='display: inline-block; 
+                            width: 100px;'>
+                            <i class ='bx bxs-file-pdf' style='color: red; font-size:20px;'></i>
+                            </a>
+                            <a onclick='eliminarArchivo(\"{$archivo}\")' class= 'eliminar' style = 'display: inline-block; width:80px; margin-left:10px;'>
+                            Eliminar
+                            </a>
                             </td>
                         </tr>";
                     }

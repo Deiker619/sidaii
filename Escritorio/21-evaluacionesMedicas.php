@@ -62,7 +62,7 @@ include_once("../php/12-informes_medicos.php") // Incluye la clase informes_medi
                     echo "<a href='{$registro['pdf_path']}' target='_blank'><i class='bx bxs-file-pdf' style='color: red; font-size: 24px;'></i></a>";
                 } else {
                     echo "<a href='subir_pdf.php?cedula={$registro['cedula']}' style='cursor: pointer;'>
-                            <i class='bx bx-folder' style='color: green; font-size: 24px;'></i>
+                            <i class='bx bx-folder' style='color: black; font-size: 25px;'></i>
                           </a>";
                 }
             echo "</td>
