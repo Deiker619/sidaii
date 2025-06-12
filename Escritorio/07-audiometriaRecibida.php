@@ -41,7 +41,7 @@ include_once("partearriba.php");
                 ?>
                         <tr>
 
-                        <td><a class="cedula" id="verBeneficiario" <?php if ($registros['status'] != 'Reparacion completada') { ?> href="07-audiometriaModificar.php?id=<?php echo $registros['id']; ?>" <?php } ?>><?php echo $registros["id"] ?></a></td>
+                            <td><a class="cedula" id="verBeneficiario" <?php if ($registros['status'] != 'Reparacion completada') { ?> href="07-audiometriaModificar.php?id=<?php echo $registros['id']; ?>" <?php } ?>><?php echo $registros["id"] ?></a></td>
                             <td><?php echo $registros["cedula"] ?></td>
                             <td><?php echo $registros["nombre"] ?></td>
                             <td><?php echo $registros["apellido"] ?></td>
@@ -52,10 +52,13 @@ include_once("partearriba.php");
                             <?php if ($registros['status'] != 'Audiometria completada') { ?>
 
                                 <td><a onclick="cargar('<?php echo addslashes($registros['descripcion']); ?>', '<?php echo $registros['id']; ?>', '<?php echo $registros['nombre']; ?>')">Cita atendida</a></td>
+                                <td><a class="reasignar-cita" onclick="reasignarFecha('<?php echo $registros['id']; ?>', '<?php echo $registros['nombre']; ?>', '<?php echo $registros['fecha_cita']; ?>')">
+                                        Reasignar la cita
+                                    </a></td>
                             <?php   } else { ?>
                                 <td><a onclick="enviarEmail('<?php echo $registros['email'] ?>')" class="remitir">Enviar notificacion</a></td>
                             <?php } ?>
-                            <td><a  onclick="eliminar('<?php echo ($registros['id']); ?>')" class="eliminar">Eliminar Reg</a></td>
+                            <td><a onclick="eliminar('<?php echo ($registros['id']); ?>')" class="eliminar">Eliminar Reg</a></td>
 
 
                         </tr>
@@ -133,6 +136,100 @@ include_once("partearriba.php");
 
 
         }
+function reasignarFecha(id, nombre, fechaActual) {
+    // Extraemos solo la parte de la fecha (sin hora)
+    const fechaActualSolo = fechaActual.split(' ')[0];
+    
+    Swal.fire({
+        title: `Seleccione en el calendario la fecha a cambiar para ${nombre}`,
+        html: `Fecha actual: <b>${fechaActualSolo}</b>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, reasignar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#009fec',
+        footer: `
+            <div style="margin-top: 1rem;">
+                <input type="date" 
+                       id="fecha-selector" 
+                       value="${fechaActualSolo}" 
+                       min="${new Date().toISOString().slice(0, 10)}"
+                       style="padding: 8px; border-radius: 4px; border: 1px solid #ddd; width: 100%">
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#009fec',
+        preConfirm: () => {
+            const selectorFecha = document.getElementById('fecha-selector').value;
+            
+            if (!selectorFecha) {
+                Swal.showValidationMessage('Debe seleccionar una fecha');
+                return false;
+            }
+            
+            return selectorFecha;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const nuevaFecha = result.value;
+            
+            Swal.fire({
+                title: 'Confirmar cambio',
+                html: `¿Está seguro de cambiar la fecha a <b>${formatDateForDisplay(nuevaFecha)}</b>?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#009fec',
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar'
+            }).then((confirmResult) => {
+                if (confirmResult.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "07-reasignarFechaAudiometria.php",
+                        data: {
+                            id: id,
+                            nueva_fecha: formatDateForServer(nuevaFecha)
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Fecha actualizada',
+                                    text: response.message || 'La fecha ha sido reasignada correctamente',
+                                    willClose: () => {
+                                        window.location.reload();
+                                    }
+                                });
+                            } else {
+                                Swal.fire('Error', response.message || 'Error al actualizar la fecha', 'error');
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire('Error', 'Ocurrió un error al comunicarse con el servidor', 'error');
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+// Funciones auxiliares para formatear fechas
+function formatDateForServer(dateString) {
+    return dateString + ' 00:00:00'; // Agrega hora mínima para compatibilidad con servidor
+}
+
+function formatDateForDisplay(dateString) {
+    const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+    };
+    return new Date(dateString).toLocaleDateString('es-ES', options);
+}
         function eliminar(p1) {
             var id = p1;
             Swal.fire({
@@ -195,10 +292,11 @@ include_once("partearriba.php");
 
 
         }
-        function enviarEmail( b) {
+
+        function enviarEmail(b) {
             let correo = b
             let email = true;
-          
+
 
             /* No tiene correo */
             if (correo) {
@@ -217,7 +315,7 @@ include_once("partearriba.php");
                             type: "POST",
                             url: "reportes/enviarNotificacionAudiometria.php",
                             data: {
-                   
+
                                 correo: correo,
 
                             },
