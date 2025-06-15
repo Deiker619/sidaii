@@ -1,26 +1,34 @@
 <?php
-header('Content-Type: application/json');
 
-if (!isset($_POST['id']) || !isset($_POST['nueva_fecha'])) {
-    echo json_encode(['success' => false, 'message' => 'Datos incompletos']);
-    exit;
+header('Content-Type: application/json');
+if (!isset($_POST['id']) || !isset($_POST['nueva_fecha'])){
+echo json_encode(['success' =>false, 'message' => 'Datos inclompletos']);
+exit;
 }
 
-require_once "conexion.php"; // Asegúrate de incluir tu archivo de conexión
-
+require_once("../php/01-06-audiometria.php");
+//Recibe los datos del formulario
 $id = $_POST['id'];
 $nueva_fecha = $_POST['nueva_fecha'];
 
-try {
-    $stmt = $pdo->prepare("UPDATE audiometrias SET fecha_cita = ? WHERE id = ?");
-    $success = $stmt->execute([$nueva_fecha, $id]);
+try{
+    //Llama a la clase audiometria
+    $audiometria = new audiometria(1);
+    $audiometria->setid($id);
+    $audiometria->setfecha_cita($nueva_fecha);
+    //Llama al metodo modificarCitaDada
+    //para actualizar la fecha de la cita
+    $resultado = $audiometria->modificarCitaDada();
 
-    if ($success && $stmt->rowCount() > 0) {
+    if($resultado > 0){
         echo json_encode(['success' => true, 'message' => 'Fecha actualizada correctamente']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'No se realizaron cambios']);
+        
+    }else {
+        echo json_encode(['success' => false, 'message' => 'Error al actualizar la fecha']);
     }
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Error en la base de datos: ' . $e->getMessage()]);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
 }
+
 ?>
+

@@ -136,45 +136,40 @@ include_once("partearriba.php");
 
 
         }
-function reasignarFecha(id, nombre, fechaActual) {
-    // Extraemos solo la parte de la fecha (sin hora)
+
+       function reasignarFecha(id, nombre, fechaActual) {
+    // Extraer solo la fecha (sin hora)
     const fechaActualSolo = fechaActual.split(' ')[0];
-    
+    const hoy = new Date().toISOString().slice(0, 10);
+
     Swal.fire({
-        title: `Seleccione en el calendario la fecha a cambiar para ${nombre}`,
-        html: `Fecha actual: <b>${fechaActualSolo}</b>`,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, reasignar',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#009fec',
-        footer: `
+        title: `Seleccione en el calendario la fecha de la cita a cambiar para ${nombre}`,
+        html: `
+            Fecha actual: <b>${fechaActualSolo}</b>
             <div style="margin-top: 1rem;">
                 <input type="date" 
-                       id="fecha-selector" 
-                       value="${fechaActualSolo}" 
-                       min="${new Date().toISOString().slice(0, 10)}"
-                       style="padding: 8px; border-radius: 4px; border: 1px solid #ddd; width: 100%">
+                    id="fecha-selector" 
+                    value="${fechaActualSolo}" 
+                    min="${hoy}"
+                    style="padding: 8px; border-radius: 4px; border: 1px solid #ddd; width: 100%">
             </div>
         `,
+        icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Confirmar',
         cancelButtonText: 'Cancelar',
         confirmButtonColor: '#009fec',
         preConfirm: () => {
             const selectorFecha = document.getElementById('fecha-selector').value;
-            
             if (!selectorFecha) {
                 Swal.showValidationMessage('Debe seleccionar una fecha');
                 return false;
             }
-            
             return selectorFecha;
         }
     }).then((result) => {
         if (result.isConfirmed) {
             const nuevaFecha = result.value;
-            
             Swal.fire({
                 title: 'Confirmar cambio',
                 html: `¿Está seguro de cambiar la fecha a <b>${formatDateForDisplay(nuevaFecha)}</b>?`,
@@ -192,15 +187,14 @@ function reasignarFecha(id, nombre, fechaActual) {
                             id: id,
                             nueva_fecha: formatDateForServer(nuevaFecha)
                         },
+                        dataType: "json",
                         success: function(response) {
                             if (response.success) {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Fecha actualizada',
                                     text: response.message || 'La fecha ha sido reasignada correctamente',
-                                    willClose: () => {
-                                        window.location.reload();
-                                    }
+                                    willClose: () => window.location.reload()
                                 });
                             } else {
                                 Swal.fire('Error', response.message || 'Error al actualizar la fecha', 'error');
@@ -217,19 +211,20 @@ function reasignarFecha(id, nombre, fechaActual) {
     });
 }
 
-// Funciones auxiliares para formatear fechas
-function formatDateForServer(dateString) {
-    return dateString + ' 00:00:00'; // Agrega hora mínima para compatibilidad con servidor
-}
+        // Funciones auxiliares para formatear fechas
+        function formatDateForServer(dateString) {
+            return dateString + ' 00:00:00'; // Agrega hora mínima para compatibilidad con servidor
+        }
 
-function formatDateForDisplay(dateString) {
-    const options = { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric'
-    };
-    return new Date(dateString).toLocaleDateString('es-ES', options);
-}
+        function formatDateForDisplay(dateString) {
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+
         function eliminar(p1) {
             var id = p1;
             Swal.fire({
