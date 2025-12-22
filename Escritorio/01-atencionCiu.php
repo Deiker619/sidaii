@@ -570,6 +570,7 @@ include_once("partearriba.php");
                 var telefono = $("#telefono").val();
                 var fecha_naci = $("#fecha_naci").val();
                 var edad = $("#edad").val();
+                var atencion_recibida = $("#atencion_recibida").val();
                 var hijos = $("#hijos").val();
                 var civil = $("#civil").val();
                 var carnet = $("#carnet").val();
@@ -778,6 +779,7 @@ include_once("partearriba.php");
                                 municipio: municipio,
                                 parroquia: parroquia,
                                 discapacidad: discapacidad,
+                                atencion_recibida: atencion_recibida,
                                 carnet: carnet,
                                 registrador: registrador,
                                 fecha_registro: fecha_registro,
