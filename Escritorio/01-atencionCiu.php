@@ -48,7 +48,7 @@ include_once("partearriba.php");
             </div>
             <div class="opciones_form">
                 <div class="ya_registrado"><a href="registrado.php">Ya registrado en SIDDAI!</a></div>
-               <!--  <div class="ya_registrado"><a onclick='conapdis()'>Ya registrado en Conapdis</a></div> -->
+                <!--  <div class="ya_registrado"><a onclick='conapdis()'>Ya registrado en Conapdis</a></div> -->
             </div>
 
 
@@ -137,6 +137,7 @@ include_once("partearriba.php");
                                     <option value="viudo/a">Viudo/a</option>
                                 </select>
                             </div>
+
 
                             <div class="input-field">
                                 <label>¿Pertenece a una etnia indígena?</label>
@@ -232,16 +233,60 @@ include_once("partearriba.php");
                                         ?>
                                     </select>
                                 </div>
+
                                 <div class="input-field" id="discapacidadE">
 
                                 </div>
+
+                                <?php if ($gerencia == "2Atc" || $rol == "Superusuario"){?>
+                                <div class="input-field">
+                                    <label>Tipo de ayuda técnica a otorgar:</label>
+                                    <select name="atencion_recibida" id="atencion_recibida" required>
+                                        <option value="">Seleccione una opción</option>
+
+                                        <option value="1-silla.r">Silla de ruedas estándar</option>
+                                        <option value="1.1-S.E16">Silla de rueda ergonómica N16</option>
+                                        <option value="1.2-S.E14">Silla de rueda ergonómica N14</option>
+                                        <option value="1.3-S.E18">Silla de rueda ergonómica N18</option>
+                                        <option value="1.4-S.R.A.">Silla de rueda reclinable adulto</option>
+                                        <option value="1.5-SRPE">Silla de rueda pediátrica ergonómica</option>
+                                        <option value="1.6-SRB">Silla de rueda bariátrica</option>
+                                        <option value="21-sllm">Silla a motor</option>
+                                        <option value="27-Sllc">Silla de rueda clínica</option>
+                                        <option value="30-sllsr">Silla sanitaria sin ruedas</option>
+                                        <option value="31-sllsr">Silla sanitaria con ruedas</option>
+
+                                        <option value="2-MuletasS">Muletas talla S</option>
+                                        <option value="2-MuletasM">Muletas talla M</option>
+                                        <option value="2-MuletasL">Muletas talla L</option>
+                                        <option value="-MuletasCa">Muletas canadienses adultos</option>
+                                        <option value="12-Mucp">Muletas canadienses pediátricas</option>
+
+                                        <option value="6-andadera">Andadera adulto fija</option>
+                                        <option value="22-Apm">Andadera pediátrica multifuncional</option>
+                                        <option value="23-Apr">Andadera pediátrica con ruedas</option>
+                                        <option value="25-Anpp">Andadera pediátrica posterior</option>
+                                        <option value="26-Anpf">Andadera pediátrica fija</option>
+
+                                        <option value="7-CamaCli">Cama clínica</option>
+                                        <option value="10-Cola">Colchón antiescaras</option>
+                                        <option value="1.7-COP">Coche ortopédico pediátrico</option>
+
+                                        <option value="3-baston">Bastón de apoyo</option>
+                                        <option value="4-baston.p">Bastón de 4 puntas</option>
+
+                                        <option value="12-Pro-aud">Prótesis auditivas</option>
+                                        <option value="11-panales">Pañales</option>
+                                    </select>
+                                </div>
+                             <?php } ?>
 
                                 <div class="input-field">
                                     <label>Numero de certificado</label>
                                     <input type="number" placeholder="Ingresa el numero de certificado" id="carnet" name="carnet">
                                 </div>
 
-                                
+
                                 <div class="input-field">
                                     <label>Tipo de atención solicitada</label>
                                     <select name="atencion" id="atencion" require>
@@ -283,7 +328,7 @@ include_once("partearriba.php");
 
                                     </select>
                                 </div>
-                       
+
 
                             </div>
 
@@ -295,8 +340,8 @@ include_once("partearriba.php");
                         </div>
 
                         <fieldset style="border-radius: 10px; border: 1px solid #ddd">
-                        <legend style="color: gray;">Datos opcionales</legend>
-                        <div class="details personal">
+                            <legend style="color: gray;">Datos opcionales</legend>
+                            <div class="details personal">
                                 <span class="title">¿Posee Cuidador o representante?</span>
                                 <div class="fields">
 
@@ -467,11 +512,11 @@ include_once("partearriba.php");
 
                             </div>
                         </fieldset>
-                        
 
 
-                            
-                        
+
+
+
 
                         <button class="nextBtn" name="registro" id="registro">
                             <span class="btnText">Registrar</span>
