@@ -1597,13 +1597,13 @@ public function consultarTodosAtenciones()
 			// Numero de Filas Afectadas
 			/* echo "<br>Se Afecto: " . $stmt->rowCount() . " Registro<br>"; */
 
-			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
-			/* return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	 */
+			// Devuelve true si se actualizó al menos un registro
+			return $stmt->rowCount() > 0;
 
 		} catch (PDOException $error) {
-			// Mostramos un mensaje genérico de error.
-			echo "Error: ejecutando consulta SQL." . $error->getMessage();
-			exit();
+			// Loguear error y devolver false
+			error_log("Error: ejecutando consulta SQL. " . $error->getMessage());
+			return false;
 		}
 	}
 

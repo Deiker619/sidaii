@@ -1915,7 +1915,10 @@ table {
         .save-buttoneye {
             display: none;
         }
-
+        
+#ayuda_tecnica_box{
+    display: none;
+}
 
        
 

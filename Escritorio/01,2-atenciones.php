@@ -177,48 +177,6 @@ include_once("partearriba.php");
             }
         }
         ?>
-        <div class="box box1">
-            <div class="contenedor-box">
-
-
-                <div class="boxes1">
-                    <div class="cont-box">
-                        <i class='bx bx-first-aid'></i>
-                    </div>
-                </div>
-                <div class="boxes2">
-                    <span class="link-name">Atenciones</span></a>
-                    <span class="number"><?php echo count($atenciones) ?></span>
-                    <div class="progress">
-                        <div class="progress-bar" style="width:<?php echo CalculoPorcentaje($atenciones, $consulta)  . "%" ?>;">
-                            <span class="progress-bar-text"></span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <div class="box box1">
-            <div class="contenedor-box">
-
-
-                <div class="boxes1">
-                    <div class="cont-box">
-                        <i class='bx bx-id-card'></i>
-                    </div>
-                </div>
-                <div class="boxes2">
-                    <span class="link-name"><a href="sincarnet.php">Sin carnet </a></span>
-                    <span class="number"><?php echo count($sincarnet) ?></span>
-                    <div class="progress">
-                        <div class="progress-bar" style="width:<?php echo CalculoPorcentaje($sincarnet, $consulta)  . "%" ?>;">
-                            <span class="progress-bar-text"></span>
-                        </div>
-                    </div>
-                    <span> <a href="sincarnet.php" class="ir"><i class='bx bxs-right-top-arrow-circle'></i></a></span>
-                </div>
-            </div>
-        </div>
 
         <div class="box box1">
             <div class="contenedor-box">
@@ -554,7 +512,16 @@ include_once("partearriba.php");
                                 <td>
 
 
-                                    <a class="cargar-solicitud" style="padding: 0;" href="reportes/reporteCargarSolicitudes.php?numero_aten=<?php echo $registros["numero_aten"]; ?>"> <?php echo $registros["atencion_solicitada"] ?></a>
+                                    <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+                                        <?php
+                                            $sol = $registros["atencion_solicitada"];
+                                            if (strpos($sol, '-') !== false) { ?>
+                                                <a class="cargar" style="padding:4px 8px;" onclick='cargar(<?php echo $registros["numero_aten"] ?>)'>Solicitud</a>
+                                            <?php } else { ?>
+                                                <a class="cargar-solicitud" href="reportes/reporteCargarSolicitudes.php?numero_aten=<?php echo $registros["numero_aten"]; ?>"><?php echo htmlspecialchars($sol); ?></a>
+                                            <?php }
+                                        ?>
+                                    </div>
 
 
 
@@ -935,12 +902,19 @@ include_once("partearriba.php");
 
                                         },
                                         success: function(data) {
-                                            Swal.fire({
+                                            // Actualizar la celda 'Solicitud' en la tabla sin recargar
+                                            try {
+                                                var idRow = id;
+                                                var texto = atencion_recibida;
+                                                var row = $('td.sorting_1 a.cedula').filter(function() { return $(this).text().trim() == idRow.toString(); }).closest('tr');
+                                                if (row.length) {
+                                                    row.find('td').eq(7).html('<a class="cargar-solicitud" href="reportes/reporteCargarSolicitudes.php?numero_aten='+idRow+'">'+texto+'</a>');
+                                                }
+                                            } catch (e) {
+                                                console.error(e);
+                                            }
 
-                                                title: data
-                                            }).then(function() {
-                                                /* window.location = "01,2-atenciones.php"; */
-                                            })
+                                            Swal.fire({ title: data });
 
                                             if (!data) {
                                                 Swal.fire({
@@ -978,24 +952,29 @@ include_once("partearriba.php");
 
                             },
                             success: function(data) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: data
-                                }).then(function() {
+                                    // Actualizar la celda 'Solicitud' en la tabla sin recargar
+                                    try {
+                                        var idRow = id;
+                                        var texto = atencion_recibida;
+                                        var row = $('td.sorting_1 a.cedula').filter(function() { return $(this).text().trim() == idRow.toString(); }).closest('tr');
+                                        if (row.length) {
+                                            row.find('td').eq(7).html('<a class="cargar-solicitud" href="reportes/reporteCargarSolicitudes.php?numero_aten='+idRow+'">'+texto+'</a>');
+                                        }
+                                    } catch (e) {
+                                        console.error(e);
+                                    }
 
+                                    Swal.fire({ icon: 'success', title: data });
 
-                                    window.location = "01,2-atenciones.php";
-                                })
-
-                                if (!data) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: "No se pudo registrar la solicitud, verifique datos"
-                                    }).then(function() {
-                                        window.location = "01,2-atenciones.php";
-                                    })
-                                }
-                            },
+                                    if (!data) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: "No se pudo registrar la solicitud, verifique datos"
+                                        }).then(function() {
+                                            window.location = "01,2-atenciones.php";
+                                        })
+                                    }
+                                },
                             error: function(data) {
                                 Swal.fire({
                                     'icon': 'error',

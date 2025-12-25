@@ -316,8 +316,24 @@ include_once("partearriba.php");
             }
                 ?>
 
+        </div>
                 </form>
 
+                <?php if (!empty($registro['atencion_recibida'])) { ?>
+                    <script>
+                        (function(){
+                            try{
+                                document.addEventListener('DOMContentLoaded', function(){
+                                    var val = '<?php echo addslashes($registro['atencion_recibida']); ?>';
+                                    if(val){
+                                        var sel = document.getElementById('atencion_recibida');
+                                        if(sel) sel.value = val;
+                                    }
+                                });
+                            }catch(e){console.log(e)}
+                        })();
+                    </script>
+                <?php } ?>
 
         </div>
         <script src="../package/dist/sweetalert2.all.js"></script>

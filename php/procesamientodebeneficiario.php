@@ -13,6 +13,11 @@ if (isset($_POST['registrado'])) {
 	$cedulauser = $_POST["cedulauser"];
 
 	$atencion_solicitada = $_POST["atencion"];
+	$atencion_recibida = $_POST["atencion_recibida"] ?? null;
+
+if ($atencion_recibida === '' || $atencion_recibida === 'null') {
+    $atencion_recibida = null;
+}
 	$beneficiario->setcedula($cedula);
 
 	$Consulta = $beneficiario->consultarDiscapacitados();
@@ -25,6 +30,8 @@ if (isset($_POST['registrado'])) {
 				$atencion = new Atenciones(1);
 				$atencion->setasignado($cedulauser);
 				$atencion->setcedula($cedula);
+				$atencion->setatencion_solicitada($atencion_solicitada);
+				$atencion->setatencion_recibida($atencion_recibida);
 				$consultaayuda = $atencion->autenticarAtencion();
 
 				$data = [
@@ -149,6 +156,8 @@ if (isset($_POST['registrado'])) {
 				$atencion = new AtencionesEstadales(1);
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
+				$atencion->setatencion_solicitada($atencion_solicitada);
+				$atencion->setatencion_recibida($atencion_recibida);
 				$consultaayuda = $atencion->autenticarAtencion();
 				$data = [
 					'message' => 'Se registro exitosamente',
@@ -189,6 +198,11 @@ if (isset($_POST['registrado'])) {
 	$cedula = $_POST["cedula"];
 	$cedulauser = $_POST["cedulauser"];
 	$atencion_solicitada = $_POST["atencion"];
+	$atencion_recibida = $_POST["atencion_recibida"] ?? null;
+
+if ($atencion_recibida === '' || $atencion_recibida === 'null') {
+    $atencion_recibida = null;
+}
 
 	$nombre = $_POST["nombre"];
 	$apellido = $_POST["apellido"];
@@ -307,8 +321,10 @@ if (isset($_POST['registrado'])) {
 			case "1-oac":
 				require_once("../php/01-atenciones.php");
 				$atencion = new Atenciones(1);
-				$atencion->setcedula($cedula);
-				$atencion->setasignado($cedulauser);
+					$atencion->setcedula($cedula);
+					$atencion->setasignado($cedulauser);
+					$atencion->setatencion_solicitada($atencion_solicitada);
+					$atencion->setatencion_recibida($atencion_recibida);
 				$consultaayuda = $atencion->autenticarAtencion();
 
 				$atencion->insertarAtencion();
@@ -318,8 +334,10 @@ if (isset($_POST['registrado'])) {
 			case "0-aten-coo":
 				require_once("../php/01-atenciones-estadales.php");
 				$atencion = new AtencionesEstadales(1);
-				$atencion->setcedula($cedula);
-				$atencion->setasignado($cedulauser);
+					$atencion->setcedula($cedula);
+					$atencion->setasignado($cedulauser);
+					$atencion->setatencion_solicitada($atencion_solicitada);
+					$atencion->setatencion_recibida($atencion_recibida);
 				$atencion->insertarAtencion();
 				echo "Se registró " . $nombre . " exitosamente";
 				break;
@@ -425,6 +443,8 @@ if (isset($_POST['registrado'])) {
 				$atencion = new Atenciones(1);
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
+				$atencion->setatencion_solicitada($atencion_solicitada);
+				$atencion->setatencion_recibida($atencion_recibida);
 				$consultaayuda = $atencion->autenticarAtencion();
 				echo "Ya " . $nombre . " se encuentra registrado, se le cargara otra solicitud ";
 				$atencion->insertarAtencion();
@@ -631,6 +651,11 @@ if (isset($_POST['accion'])  && $_POST['accion'] == 'no-atencion') {
 	$beneficiario = new Discapacitados(1);
 	$cedula = $_POST["cedula"];
 	$cedulauser = $_POST["cedulauser"];
+$atencion_recibida = $_POST["atencion_recibida"] ?? null;
+
+if ($atencion_recibida === '' || $atencion_recibida === 'null') {
+    $atencion_recibida = null;
+}
 
 	$beneficiario->setcedula($cedula);
 

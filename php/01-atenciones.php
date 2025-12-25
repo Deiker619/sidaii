@@ -163,12 +163,14 @@ class Atenciones extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO atenciones (cedula, asignado) 
-											VALUES (:cedula, :asignado)");
+			$stmt = $this->cnn->prepare("INSERT INTO atenciones (cedula, asignado, atencion_solicitada, atencion_recibida) 
+							VALUES (:cedula, :asignado, :atencion_solicitada, :atencion_recibida)");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':cedula', $this->cedula);
 			$stmt->bindParam(':asignado', $this->asignado);
+			$stmt->bindParam(':atencion_solicitada', $this->atencion_solicitada);
+			$stmt->bindParam(':atencion_recibida', $this->atencion_recibida);
 
 			/* $stmt->bindParam(':direccion', $this->direccion);
 				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
@@ -310,7 +312,7 @@ class Atenciones extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("SELECT  numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.estado,beneficiario.discapacidad, atenciones.atencion_solicitada, atenciones.informe FROM atenciones, beneficiario WHERE numero_aten = :numero_aten and beneficiario.cedula = atenciones.cedula and atenciones.fecha_aten IS NULL;");
+			$stmt = $this->cnn->prepare("SELECT  numero_aten, beneficiario.cedula, beneficiario.nombre, beneficiario.apellido, beneficiario.estado,beneficiario.discapacidad, atenciones.atencion_solicitada, atenciones.atencion_recibida, atenciones.informe FROM atenciones, beneficiario WHERE numero_aten = :numero_aten and beneficiario.cedula = atenciones.cedula and atenciones.fecha_aten IS NULL;");
 			// Especificamos el fetch mode antes de llamar a fetch()
 			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 			// Asiganmos valores a los parametros
@@ -826,32 +828,22 @@ class Atenciones extends ManejadorBD
 		}
 	}
 	public function subirInforme($archivo)
-	{
+{
+    try {
+        $stmt = $this->cnn->prepare("UPDATE atenciones SET informe = :informe WHERE numero_aten = :numero_aten");
+        $stmt->bindParam(':informe', $archivo);
+        $stmt->bindParam(':numero_aten', $this->numero_aten);
 
-		try {
+        $stmt->execute();
 
-			$stmt = $this->cnn->prepare("UPDATE atenciones SET informe = :informe
-                                             WHERE numero_aten = :numero_aten");
+        // Devuelve true si se actualizó al menos un registro
+        return $stmt->rowCount() > 0;
 
-			// Asignamos valores a los parametros
-			$stmt->bindParam(':informe', $archivo);
-			$stmt->bindParam(':numero_aten', $this->numero_aten);
-
-			// Ejecutamos
-			$stmt->execute();
-
-			// Numero de Filas Afectadas
-			/* echo "<br>Se Afecto: " . $stmt->rowCount() . " Registro<br>"; */
-
-			// Devuelve los resultados obtenidos 1:Exitoso, 0:Fallido
-			/* return $stmt->rowCount(); // si es verdadero se insertó correctamente el registro	 */
-		} catch (PDOException $error) {
-			// Mostramos un mensaje genérico de error.
-			echo "Error: ejecutando consulta SQL." . $error->getMessage();
-			exit();
-		}
-	}
-
+    } catch (PDOException $error) {
+        error_log("Error SQL: " . $error->getMessage());
+        return false;
+    }
+}
 
 	public function carga_solicitud()
 	{

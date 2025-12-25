@@ -238,49 +238,7 @@ include_once("partearriba.php");
 
                                 </div>
 
-                                <?php if ($gerencia == "2Atc" || $rol == "Superusuario"){?>
-                                <div class="input-field">
-                                    <label>Tipo de ayuda técnica a otorgar:</label>
-                                    <select name="atencion_recibida" id="atencion_recibida" required>
-                                        <option value="">Seleccione una opción</option>
-
-                                        <option value="1-silla.r">Silla de ruedas estándar</option>
-                                        <option value="1.1-S.E16">Silla de rueda ergonómica N16</option>
-                                        <option value="1.2-S.E14">Silla de rueda ergonómica N14</option>
-                                        <option value="1.3-S.E18">Silla de rueda ergonómica N18</option>
-                                        <option value="1.4-S.R.A.">Silla de rueda reclinable adulto</option>
-                                        <option value="1.5-SRPE">Silla de rueda pediátrica ergonómica</option>
-                                        <option value="1.6-SRB">Silla de rueda bariátrica</option>
-                                        <option value="21-sllm">Silla a motor</option>
-                                        <option value="27-Sllc">Silla de rueda clínica</option>
-                                        <option value="30-sllsr">Silla sanitaria sin ruedas</option>
-                                        <option value="31-sllsr">Silla sanitaria con ruedas</option>
-
-                                        <option value="2-MuletasS">Muletas talla S</option>
-                                        <option value="2-MuletasM">Muletas talla M</option>
-                                        <option value="2-MuletasL">Muletas talla L</option>
-                                        <option value="-MuletasCa">Muletas canadienses adultos</option>
-                                        <option value="12-Mucp">Muletas canadienses pediátricas</option>
-
-                                        <option value="6-andadera">Andadera adulto fija</option>
-                                        <option value="22-Apm">Andadera pediátrica multifuncional</option>
-                                        <option value="23-Apr">Andadera pediátrica con ruedas</option>
-                                        <option value="25-Anpp">Andadera pediátrica posterior</option>
-                                        <option value="26-Anpf">Andadera pediátrica fija</option>
-
-                                        <option value="7-CamaCli">Cama clínica</option>
-                                        <option value="10-Cola">Colchón antiescaras</option>
-                                        <option value="1.7-COP">Coche ortopédico pediátrico</option>
-
-                                        <option value="3-baston">Bastón de apoyo</option>
-                                        <option value="4-baston.p">Bastón de 4 puntas</option>
-
-                                        <option value="12-Pro-aud">Prótesis auditivas</option>
-                                        <option value="11-panales">Pañales</option>
-                                    </select>
-                                </div>
-                             <?php } ?>
-
+                        
                                 <div class="input-field">
                                     <label>Numero de certificado</label>
                                     <input type="number" placeholder="Ingresa el numero de certificado" id="carnet" name="carnet">
@@ -328,6 +286,66 @@ include_once("partearriba.php");
 
                                     </select>
                                 </div>
+
+                                   <?php if ($gerencia == "2Atc" || $rol == "Superusuario"){?>
+                                <div class="input-field" id="ayuda_tecnica_box">
+                                    <label>Tipo de ayuda técnica a otorgar:</label>
+                                    <select name="atencion_recibida" id="atencion_recibida">
+                                        <option value="">Seleccione una opción</option>
+                                         <option value="">No requiere ayuda</option>
+                                            <option value="1-silla.r">Silla de ruedas estandar</option>
+                                            <option value="1.1-S.E16">Silla de rueda ergonomica N16</option>
+                                            <option value="1.2-S.E14">Silla de rueda ergonomica N14</option>
+                                            <option value="1.3-S.E18">Silla de rueda ergonomica N18</option>
+                                            <option value="1.4-S.R.A.">Silla de rueda reclinable adulto</option>
+                                            <option value="1.5-SRPE">Silla de rueda pediatrica hergonomica</option>
+                                            <option value="1.6-SRB">Silla de rueda bariátricas</option>
+                                            <option value="21-sllm">Silla a motor</option>
+                                            <option value="27-Sllc">Silla de rueda clinica</option>
+                                            <option value="30-sllsr">Silla sanitaria sin ruedas</option>
+                                            <option value="31-sllsr">Silla sanitaria con ruedas</option>
+                                            <option value="2-MuletasS">Muletas talla S</option>
+                                            <option value="2-MuletasM">Muletas talla M</option>
+                                            <option value="2-MuletasL">Muletas talla L</option>
+                                            <option value="-MuletasCa">Muletas canadienses adultos</option>
+                                            <option value="12-Mucp">Muletas canadienses pediatricas</option>
+                                            <option value="20-Rglp">Regleta con punzon</option>
+                                            <option value="6-andadera">Andadera adulto fija</option>
+                                            <option value="22-Apm">Andadera pediatrica multifuncional</option>
+                                            <option value="23-Apr">Andadera pediatrica con ruedas</option>
+                                            <option value="25-Anpp">Andadera pediatrica posterior</option>
+                                            <option value="26-Anpf">Andadera pediatrica fija</option>
+                                            <option value="7-CamaCli">Cama Clinica</option>
+                                            <option value="10-Cola">Colchon Antiescara</option>
+                                            <option value="1.6-SRB">Silla de ruedas bariátricas</option>
+                                            <option value="1.7-COP">Coche ortopédico pediátrico</option>
+                                            <option value="28-chorm">Coche ortopedico mediano</option>
+                                            <option value="29-chorg">Coche ortopedico grande</option>
+                                            <option value="9-felula">Ferula</option>
+                                            <option value="8-Grab">Grabadora</option>
+                                            <option value="11-panales">Pañales</option>
+                                            <option value="12-Pro-aud">Protesis auditivas</option>
+                                            <option value="13-Pro-cad">Protesis de Cadera</option>
+                                            <option value="14-Pro-rod">Protesis de rodilla</option>
+                                            <option value="15-Pro-den">Protesis Dental</option>
+                                            <option value="11-Coj">Cojin antiescaras</option>
+                                            <option value="3-baston">Baston de apoyo</option>
+                                            <option value="4-baston.p">Baston de 4 puntas</option>
+                                            <option value="21-Btrpd">Baston de rastreo pediatricos</option>
+                                            <option value="13-Brpl34">Baston de rastreo plegable numero 34</option>
+                                            <option value="14-Brpl36">Baston de rastreo plegable numero 36</option>
+                                            <option value="15-Brpl38">Baston de rastreo plegable numero 38</option>
+                                            <option value="15-Brpl44">Baston de rastreo plegable numero 44</option>
+                                            <option value="16-Brpl46">Baston de rastreo plegable numero 46</option>
+                                            <option value="-bastonRas">Baston de rastreo plegable numero 48</option>
+                                            <option value="18-Brpl50">Baston de rastreo plegable numero 50</option>
+                                            <option value="19-Brpl52">Baston de rastreo plegable numero 52</option>
+                                           
+
+                                        
+                                    </select>
+                                </div>
+                             <?php } ?>
 
 
                             </div>
@@ -571,6 +589,9 @@ include_once("partearriba.php");
                 var fecha_naci = $("#fecha_naci").val();
                 var edad = $("#edad").val();
                 var atencion_recibida = $("#atencion_recibida").val();
+                if(atencion_recibida == ""){
+                    atencion_recibida = null;
+                }
                 var hijos = $("#hijos").val();
                 var civil = $("#civil").val();
                 var carnet = $("#carnet").val();
@@ -838,6 +859,30 @@ include_once("partearriba.php");
             }
         })
     })
+
+    $(document).ready(function(){
+
+    function toggleAyudaTecnica(){
+        var atencion = $("#atencion").val();
+
+        if(atencion === "1-oac"){
+            $("#ayuda_tecnica_box").slideDown();
+        }else{
+            $("#ayuda_tecnica_box").slideUp();
+            $("#atencion_recibida").prop("required", false);
+            $("#atencion_recibida").val("");
+        }
+    }
+
+    // Ejecutar al cargar
+    toggleAyudaTecnica();
+
+    // Ejecutar cuando cambie el tipo de atención
+    $("#atencion").on("change", function(){
+        toggleAyudaTecnica();
+    });
+
+});
 </script>
 
 
