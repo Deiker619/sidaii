@@ -317,336 +317,355 @@ include_once("partearriba.php");
                 ?>
 
         </div>
-                </form>
+        </form>
 
-                <?php if (!empty($registro['atencion_recibida'])) { ?>
-                    <script>
-                        (function(){
-                            try{
-                                document.addEventListener('DOMContentLoaded', function(){
-                                    var val = '<?php echo addslashes($registro['atencion_recibida']); ?>';
-                                    if(val){
-                                        var sel = document.getElementById('atencion_recibida');
-                                        if(sel) sel.value = val;
-                                    }
-                                });
-                            }catch(e){console.log(e)}
-                        })();
-                    </script>
-                <?php } ?>
+        <?php if (!empty($registro['atencion_recibida'])) { ?>
+            <script>
+                (function() {
+                    try {
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var val = '<?php echo addslashes($registro['atencion_recibida']); ?>';
+                            if (val) {
+                                var sel = document.getElementById('atencion_recibida');
+                                if (sel) sel.value = val;
+                            }
+                        });
+                    } catch (e) {
+                        console.log(e)
+                    }
+                })();
+            </script>
+        <?php } ?>
 
-        </div>
-        <script src="../package/dist/sweetalert2.all.js"></script>
-        <script src="../package/dist/sweetalert2.all.min.js"></script>
+    </div>
+    <script src="../package/dist/sweetalert2.all.js"></script>
+    <script src="../package/dist/sweetalert2.all.min.js"></script>
 
-        <script type="text/javascript">
-            function redireccionar(a) {
+    <script type="text/javascript">
+        function redireccionar(a) {
 
-                url = 'reportes/reporteAtencion.php?numero_aten=' + a;
+            url = 'reportes/reporteAtencion.php?numero_aten=' + a;
 
-                window.open(url, "_blank");
-            }
-            $(function() {
-                var coordinacions = null
+            window.open(url, "_blank");
+        }
+        let ayudaSeleccionada = null;
+        $(function() {
+            var coordinacions = null
+            let precargado = $("#atencion_recibida").val();
+    if (precargado && precargado.trim() !== "") {
+        ayudaSeleccionada = precargado;
+    }
+    $("#atencion_recibida").on("change", function () {
+    ayudaSeleccionada = $(this).val();
+});
 
-                $("#coordinacion_div").hide();
+            $("#coordinacion_div").hide();
+            mostrarCoordinacion();
+
+
+            $("#remit").change(function() {
                 mostrarCoordinacion();
 
 
-                $("#remit").change(function() {
-                    mostrarCoordinacion();
+            });
+
+            $("#coordinacion").change(function() {
+
+            });
+
+            function tomarvalor() {
+                $("select[name='coordinacion']").change(function() {
+
+                    coordinacions = this.value
+                    console.log(coordinacions)
+                })
+            }
 
 
-                });
+            function mostrarCoordinacion() {
+                if ($("#remit").val() == "4Gtno") {
+                    $("#coordinacion_div").show();
+                    tomarvalor()
 
-                $("#coordinacion").change(function() {
 
-                });
+                } else {
+                    $("#coordinacion_div").hide();
+                    coordinacions = null;
+                    console.log(coordinacions)
 
-                function tomarvalor() {
-                    $("select[name='coordinacion']").change(function() {
 
-                        coordinacions = this.value
-                        console.log(coordinacions)
-                    })
                 }
+            }
+
+        })
 
 
-                function mostrarCoordinacion() {
-                    if ($("#remit").val() == "4Gtno") {
-                        $("#coordinacion_div").show();
-                        tomarvalor()
 
 
-                    } else {
-                        $("#coordinacion_div").hide();
-                        coordinacions = null;
-                        console.log(coordinacions)
+        $("#registro").click(function(e) {
+            var valid = this.form.checkValidity();
+            if (valid) {
+
+                var gerencia = $("#gerencia").text().trim();
+
+                var registrador = <?php echo json_encode($cedulauser) ?>;
+                var cedula = $("#cedula").val();
+                var nombre = $("#nombre").val();
+                var apellido = $("#apellido").val();
+                var estado = $("#estado").val();
+                var discapacidad = $("#discapacidad").val();
+                var numero_aten = $("#numero_aten").val();
+                var fecha_aten = $("#fecha_aten").val();
+
+                /* FAMILIAR */
+                var nombre_familiar = $("#nombre_familiar").val() ?? null;
+                var apellido_familiar = $("#apellido_familiar").val() ?? null;
+                var cedula_familiar = $("#cedula_familiar").val() ?? null;
 
 
-                    }
+
+                /*       console.log(fecha_aten);
+                      console.log(cedula);
+                      console.log(gerencia); */
+
+
+                /* entrega */
+                var entrega = $("input[name='atencion_especial']:checked").val();
+                var atencion_recibida = ayudaSeleccionada;
+               if (entrega === "-ayudatec" && (!ayudaSeleccionada || ayudaSeleccionada.trim() === "")) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Debe seleccionar la ayuda técnica',
+                        text: 'Seleccione el tipo de ayuda a entregar.'
+                    });
+                    return;
                 }
+                var atencion_solicitada = $("#atencion_solicitada").val();
+                /*  console.log(atencion_recibida) */
 
-            })
+                /* remitir */
+                var remitir = $("#remitir").val();
+                var remit = $("#remit").val();
+                var motivo = $("#motivo").val();
 
+                /*    console.log(remit)
+                   console.log(remitir) */
 
+                /* orientado */
 
+                var descrip_orientacion = $("#descrip_orientacion").val();
+                var orientar = $("#orientar").val();
 
-            $("#registro").click(function(e) {
-                var valid = this.form.checkValidity();
-                if (valid) {
+                coordinacions = $("select[name='coordinacion']").val()
+                console.log(coordinacions);
 
-                    var gerencia = $("#gerencia").text().trim();
+                /* console.log(remit) */
 
-                    var registrador = <?php echo json_encode($cedulauser) ?>;
-                    var cedula = $("#cedula").val();
-                    var nombre = $("#nombre").val();
-                    var apellido = $("#apellido").val();
-                    var estado = $("#estado").val();
-                    var discapacidad = $("#discapacidad").val();
-                    var numero_aten = $("#numero_aten").val();
-                    var fecha_aten = $("#fecha_aten").val();
 
-                    /* FAMILIAR */
-                    var nombre_familiar = $("#nombre_familiar").val() ?? null;
-                    var apellido_familiar = $("#apellido_familiar").val() ?? null;
-                    var cedula_familiar = $("#cedula_familiar").val() ?? null;
+                e.preventDefault();
 
 
 
-                    /*       console.log(fecha_aten);
-                          console.log(cedula);
-                          console.log(gerencia); */
+        
 
 
-                    /* entrega */
-                    var entrega = $("#entrega").val();
-                    var atencion_recibida = $("#atencion_recibida").val();
-                    var atencion_solicitada = $("#atencion_solicitada").val();
-                    /*  console.log(atencion_recibida) */
 
-                    /* remitir */
-                    var remitir = $("#remitir").val();
-                    var remit = $("#remit").val();
-                    var motivo = $("#motivo").val();
+                $.ajax({
+                    type: "POST",
+                    url: "01,4-atencionAsignada.php",
+                    dataType: "json",
+                    data: {
+                        cedula: cedula,
+                        nombre: nombre,
+                        coordinacions: coordinacions,
+                        apellido: apellido,
+                        estado: estado,
+                        discapacidad: discapacidad,
+                        numero_aten: numero_aten,
+                        fecha_aten: fecha_aten,
 
-                    /*    console.log(remit)
-                       console.log(remitir) */
+                        /*  */
+                        nombre_familiar: nombre_familiar,
+                        apellido_familiar: apellido_familiar,
+                        cedula_familiar: cedula_familiar,
 
-                    /* orientado */
+                        /* ayuda tecnica */
+                        atencion_recibida: atencion_recibida,
+                        atencion_solicitada: atencion_solicitada,
+                        entrega: entrega,
 
-                    var descrip_orientacion = $("#descrip_orientacion").val();
-                    var orientar = $("#orientar").val();
+                        /* remitir */
+                        remitir: remitir,
+                        remit: remit,
+                        motivo: motivo,
 
-                    coordinacions = $("select[name='coordinacion']").val()
-                    console.log(coordinacions);
+                        /* descrip_orientacion */
+                        descrip_orientacion: descrip_orientacion,
+                        orientar: orientar,
 
-                    /* console.log(remit) */
+                        /* otros */
+                        registrador: registrador,
+                        gerencia: gerencia
 
 
-                    e.preventDefault();
 
-                    
 
-                    asignarAtencion();
-
-
-
-                    $.ajax({
-                        type: "POST",
-                        url: "01,4-atencionAsignada.php",
-                        data: {
-                            cedula: cedula,
-                            nombre: nombre,
-                            coordinacions: coordinacions,
-                            apellido: apellido,
-                            estado: estado,
-                            discapacidad: discapacidad,
-                            numero_aten: numero_aten,
-                            fecha_aten: fecha_aten,
-
-                            /*  */
-                            nombre_familiar: nombre_familiar,
-                            apellido_familiar: apellido_familiar,
-                            cedula_familiar: cedula_familiar,
-
-                            /* ayuda tecnica */
-                            atencion_recibida: atencion_recibida,
-                            atencion_solicitada: atencion_solicitada,
-                            entrega: entrega,
-
-                            /* remitir */
-                            remitir: remitir,
-                            remit: remit,
-                            motivo: motivo,
-
-                            /* descrip_orientacion */
-                            descrip_orientacion: descrip_orientacion,
-                            orientar: orientar,
-
-                            /* otros */
-                            registrador: registrador,
-                            gerencia: gerencia
-
-
-
-
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            if (data.i == "Remitido") {
-                                Swal.fire({
-                                    'icon': 'success',
-                                    'title': 'Asignacion de atencion: Remitido',
-                                    'text': "Remitido exitosamente",
-                                }).then(function() {
-                                    window.location = "01,2-atenciones.php";
-                                })
-                            }
-
-                            if (data.i == "Orientado") {
-                                Swal.fire({
-                                    'icon': 'success',
-                                    'title': 'Asignacion de atencion: Orientado',
-                                    'text': "Orientado exitosamente",
-                                }).then(function() {
-                                    window.location = "01,2-atenciones.php";
-                                })
-                            }
-
-                            if (data.oac.mensaje == "primera" && data.op.mensaje == "primera") {
-                                Swal.fire({
-                                    'icon': 'success',
-                                    'title': 'Asignacion de atencion por primera vez',
-                                    'text': "Ayuda tecnica entregada",
-                                }).then(function() {
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: 'top-end',
-                                        showConfirmButton: false,
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-
-
-
-                                        },
-                                        willClose: () => {
-
-                                            window.location.href = "01,2-atenciones.php#atenciones"
-                                        }
-                                    });
-
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: '¿Desea descargar PDF?',
-
-                                        html: '<button onclick="redireccionar(<?php echo $numero ?>)" class="buttonDownload">Download</button>'
-                                    });
-                                })
-
-                            }
-
-                            if (data.i == "OP") {
-
-
-                                if (data.op.mensaje == "entregado") {
-                                    console.log(data);
-
-                                    Swal.fire({
-                                        'icon': 'success',
-                                        'title': 'Asignacion de atencion',
-                                        'text': "Ayuda tecnica asignada",
-                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.op.fechaU + "<br>" +
-                                            '<b>Fecha Actual:</b> ' + data.op.fechaA + "<br>" +
-                                            '<b>Dias de diferencia: </b>' + data.op.difer +
-                                            '<b>Entregado en: </b>' + data.op.coordinacion
-                                    }).then(function() {
-                                        window.location = "01,2-atenciones.php#atenciones";
-                                    })
-                                }
-                                if (data.op.mensaje == "Noentregado") {
-
-                                    Swal.fire({
-                                        'icon': 'error',
-                                        'title': 'Asignación de atención',
-                                        'text': "Ayuda tecnica fallida",
-                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.op.fechaU + "<br>" +
-                                            '<b>Fecha Actual:</b> ' + data.op.fechaA + "<br>" +
-                                            '<b>Dias de diferencia: </b>' + data.op.difer + "<br>" +
-                                            '<b>Entregado en: </b>' + data.op.coordinacion,
-                                        'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
-                                    })
-                                }
-
-
-                            }
-
-
-                            if (data.i == "OAC") {
-
-
-                                if (data.oac.mensaje == "entregado") {
-
-                                    console.log(data);
-
-                                    Swal.fire({
-                                        'icon': 'success',
-                                        'title': 'Asignacion de atencion',
-                                        'text': "Ayuda tecnica asignada",
-                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
-                                            '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
-                                            '<b>Dias de diferencia: </b>' + data.oac.difer,
-                                        'footer': "Ya pasaron los 6 meses de la ultima entrega de este tipo"
-                                    }).then(function() {
-                                        window.location = "01,2-atenciones.php#atenciones";
-                                    })
-                                }
-                                if (data.oac.mensaje == "Noentregado") {
-
-                                    Swal.fire({
-                                        'icon': 'error',
-                                        'title': 'Asignación de atención',
-                                        'text': "Ayuda tecnica fallida",
-                                        'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
-                                            '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
-                                            '<b>Dias de diferencia: </b>' + data.oac.difer,
-                                        'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
-                                    })
-                                }
-
-
-                            }
-
-
-
-
-
-
-
-
-                            /* OTRAS OPCIONES */
-
-                        },
-                        error: function(data) {
-
-                            console.log(data.responseText)
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.i == "Remitido") {
                             Swal.fire({
-                                'icon': 'error',
-                                'title': 'Oops...',
-                                'text': data
+                                'icon': 'success',
+                                'title': 'Asignacion de atencion: Remitido',
+                                'text': "Remitido exitosamente",
+                            }).then(function() {
+                                window.location = "01,2-atenciones.php";
                             })
                         }
-                    })
+
+                        if (data.i == "Orientado") {
+                            Swal.fire({
+                                'icon': 'success',
+                                'title': 'Asignacion de atencion: Orientado',
+                                'text': "Orientado exitosamente",
+                            }).then(function() {
+                                window.location = "01,2-atenciones.php";
+                            })
+                        }
+
+                        if (data.oac.mensaje == "primera" && data.op.mensaje == "primera") {
+                            Swal.fire({
+                                'icon': 'success',
+                                'title': 'Asignacion de atencion por primera vez',
+                                'text': "Ayuda tecnica entregada",
+                            }).then(function() {
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer);
 
 
-                }
-            })
-        </script>
+
+                                    },
+                                    willClose: () => {
+
+                                        window.location.href = "01,2-atenciones.php#atenciones"
+                                    }
+                                });
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: '¿Desea descargar PDF?',
+
+                                    html: '<button onclick="redireccionar(<?php echo $numero ?>)" class="buttonDownload">Download</button>'
+                                });
+                            })
+
+                        }
+
+                        if (data.i == "OP") {
 
 
-        <?php
-        include_once("parteabajo.php");
-        ?>
+                            if (data.op.mensaje == "entregado") {
+                                console.log(data);
+
+                                Swal.fire({
+                                    'icon': 'success',
+                                    'title': 'Asignacion de atencion',
+                                    'text': "Ayuda tecnica asignada",
+                                    'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.op.fechaU + "<br>" +
+                                        '<b>Fecha Actual:</b> ' + data.op.fechaA + "<br>" +
+                                        '<b>Dias de diferencia: </b>' + data.op.difer +
+                                        '<b>Entregado en: </b>' + data.op.coordinacion
+                                }).then(function() {
+                                    window.location = "01,2-atenciones.php#atenciones";
+                                })
+                            }
+                            if (data.op.mensaje == "Noentregado") {
+
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Asignación de atención',
+                                    'text': "Ayuda tecnica fallida",
+                                    'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.op.fechaU + "<br>" +
+                                        '<b>Fecha Actual:</b> ' + data.op.fechaA + "<br>" +
+                                        '<b>Dias de diferencia: </b>' + data.op.difer + "<br>" +
+                                        '<b>Entregado en: </b>' + data.op.coordinacion,
+                                    'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
+                                })
+                            }
+
+
+                        }
+
+
+                        if (data.i == "OAC") {
+
+
+                            if (data.oac.mensaje == "entregado") {
+
+                                console.log(data);
+
+                                Swal.fire({
+                                    'icon': 'success',
+                                    'title': 'Asignacion de atencion',
+                                    'text': "Ayuda tecnica asignada",
+                                    'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
+                                        '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
+                                        '<b>Dias de diferencia: </b>' + data.oac.difer,
+                                    'footer': "Ya pasaron los 6 meses de la ultima entrega de este tipo"
+                                }).then(function() {
+                                    window.location = "01,2-atenciones.php#atenciones";
+                                })
+                            }
+                            if (data.oac.mensaje == "Noentregado") {
+
+                                Swal.fire({
+                                    'icon': 'error',
+                                    'title': 'Asignación de atención',
+                                    'text': "Ayuda tecnica fallida",
+                                    'html': '<b>Ultima fecha que recibio esta ayuda:</b> ' + data.oac.fechaU + "<br>" +
+                                        '<b>Fecha Actual:</b> ' + data.oac.fechaA + "<br>" +
+                                        '<b>Dias de diferencia: </b>' + data.oac.difer,
+                                    'footer': "No han pasado los 6 meses de la ultima entrega de este tipo"
+                                })
+                            }
+
+
+                        }
+
+
+
+
+
+
+
+
+                        /* OTRAS OPCIONES */
+
+                    },
+                    error: function(data) {
+
+                        console.log(data.responseText)
+                        Swal.fire({
+                            'icon': 'error',
+                            'title': 'Oops...',
+                            'text': data
+                        })
+                    }
+                })
+
+
+            }
+        })
+    </script>
+
+
+    <?php
+    include_once("parteabajo.php");
+    ?>

@@ -16,9 +16,9 @@ $fecha_aten = $_POST["fecha_aten"];
 $numero_aten = $_POST["numero_aten"];
 
 /* Familiar */
-$apellido_familiar = $_POST["apellido_familiar"]??null;
-$nombre_familiar = $_POST["nombre_familiar"]??null;
-$cedula_familiar = $_POST["cedula_familiar"]??null;
+$apellido_familiar = $_POST["apellido_familiar"] ?? null;
+$nombre_familiar = $_POST["nombre_familiar"] ?? null;
+$cedula_familiar = $_POST["cedula_familiar"] ?? null;
 
 /* entrega */
 $atencion_recibida = $_POST["atencion_recibida"];
@@ -71,16 +71,16 @@ if ($atencion_recibida) {
                 $oac->setpor($por);
                 $oac->setcedula($cedula);
                 $consulta = $oac->modificarAtenciones();
-                
-                if($cedula_familiar){
-                   $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten); 
+
+                if ($cedula_familiar) {
+                    $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten);
                 }
                 $oac->__destruct();
             }
         }
         if ($fecha2->format('Y-m-d') > $fecha1->format('Y-m-d')) { //OP es mayor
             $data["i"] = "OP";
-        
+
             if ($result_op["mensaje"] == "entregado") {
                 $oac = new Atenciones(1);
                 $oac->setatencion_brindada($entrega);
@@ -90,18 +90,36 @@ if ($atencion_recibida) {
                 $oac->setpor($por);
                 $oac->setcedula($cedula);
                 $consulta = $oac->modificarAtenciones();
-                if($cedula_familiar){
+                if ($cedula_familiar) {
                     $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten);
-                    
-                  }
-                  $oac->__destruct();
+                }
+                $oac->__destruct();
             }
         }
         if ($fecha1->format('Y-m-d') == $fecha2->format('Y-m-d')) { //Son iguales
             $data["i"] = "igual";
         }
+        if (
+            $fecha1->format('Y-m-d') == $fecha2->format('Y-m-d') &&
+            $result_oac["mensaje"] == "Noentregado" &&
+            $result_op["mensaje"] == "primera"
+        ) {
 
-        
+            $oac = new Atenciones(1);
+            $oac->setatencion_brindada($entrega);
+            $oac->setnumero_aten($numero_aten);
+            $oac->setfecha_aten($fecha_aten);
+            $oac->setatencion_recibida($atencion_recibida);
+            $oac->setpor($por);
+            $oac->setcedula($cedula);
+            $oac->modificarAtenciones();
+
+            if ($cedula_familiar) {
+                $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten);
+            }
+
+            $oac->__destruct();
+        }
     }
 
     if ($result_oac["mensaje"] == "primera" && $result_op["mensaje"] == "primera") {
@@ -113,10 +131,10 @@ if ($atencion_recibida) {
         $oac->setpor($por);
         $oac->setcedula($cedula);
         $consulta = $oac->modificarAtenciones();
-        if($cedula_familiar){
+        if ($cedula_familiar) {
             $oac->insertarFamiliar($cedula_familiar, $nombre_familiar, $apellido_familiar, $numero_aten);
-          }
-          $oac->__destruct();
+        }
+        $oac->__destruct();
     }
 
     header('Content-Type: application/json');
@@ -231,45 +249,23 @@ function procesarAtenciones($aten, $entrega, $numero_aten, $fecha_aten, $atencio
     $aten->setcedula($cedula);
 
     $resultados = $aten->CalculoeAtenciones();
+
     foreach ($resultados as $i) {
         if ($atencion_recibida == $i["atencion_recibida"]) {
-            $fechaU =  $i["fecha_aten"];
-            $fechaA =  date("Y-m-d");
 
             $fecha1 = new DateTime($i["fecha_aten"]);
             $fecha2 = new DateTime(date("Y-m-d"));
-            $diff = $fecha1->diff($fecha2);
+            $difer = $fecha1->diff($fecha2)->days;
 
-            // La diferencia será en días
-            $difer =  $diff->days;
-
-            $datos = array(
-                "fechaU" => $fechaU,
-                "fechaA" => $fechaA,
-                "fecha1" => $fecha1,
-                "fecha2" => $fecha2,
-                "difer" => $difer
-            );
-
-            if ($difer >= 180) {
-                $datos["mensaje"] = "entregado";
-            } else {
-                $datos["mensaje"] = "Noentregado";
-            }
-
-            // Devolver los datos como un arreglo asociativo
-            return $datos;
-        } else {
-            $datos = array();
-            $datos["mensaje"] = "primera";
-            return $datos;
+            return [
+                "fechaU" => $i["fecha_aten"],
+                "difer"  => $difer,
+                "mensaje" => ($difer >= 180) ? "entregado" : "Noentregado"
+            ];
         }
     }
+
+    return ["mensaje" => "primera"];
 }
 
-
-
-
-
-
-?>
+// Si no se encontró, es primera vez

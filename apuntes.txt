@@ -1,0 +1,27 @@
+***Problemas a correguir en el sistema Sidaii***
+
+Actualmente el modulo de atencion al ciudadano esta funcionando en un 90%, sin embargo, antes de su despliegue,
+se necesitan realizar algunas mejoras importantes, ya que no es recomendable subir a produccion sin antes resolverla 
+ademas de hacer pruebas de texting. En esta version se implemento una mejora para el formulario de registro de beneficiario
+el archivo donde se encuentra el de registro de beneficiario se llama 01-atencionCiu.php, en el campo llamado Tipo de atención solicitada
+al seleccionar el campo "Atencion a travez de OAC" se habilita el campo de tipo de ayuda tecnica a otorgar, este campo solo es visible
+para el superusuario o las personas de OAC, se selecciona y se registra, una vez registrado, queda en el cuadro, cuyo archivo es 
+01,2-atenciones.php, pero la ayuda tecnica registrada, queda como ayuda tecnica preseleccionada en el archivo 01,3-asignarAtencion.
+Este ultimo archivo es la raiz del problema, ya que se necesita corregir el sweetalert de confirmacion cuando esta la ayuda 
+preseleccionada, a continuacion los detalles:
+
+
+
+                     *** Problema Principal ***
+
+1) Actualmente en el archivo 01,3-asignarAtencion, esta un bug el cual no muestra el sweetalert de confirmacion de 
+entrega de ayuda tecnica de manera exitosa ni tampoco el boton para descargar el pdf, cabe recalcar que no aparece cuando esta 
+la ayuda tecnica preseleccionada, si se cambia aotra ayuda tecnica diferente, este si muestra el mensaje de confirmacion y el boton
+de descarga. Existe un conflictos de redundancia en los scripts en el js de este archivo, por lo que se necesita encontrar el 
+origen del conflicto para asi mostrar la alerta.
+
+*Cabe recalcar que se priorizo la integridad de la base de datos y no se modifico ningun campo , el problema es del lado del frontend.
+
+
+
+
