@@ -6,6 +6,11 @@ require_once __DIR__ . "/01-atenciones-estadales.php";
 require_once __DIR__ . "/detalles_institucionales.php";
 require_once __DIR__ . "/ManejadorBD.php";
 
+define("DOC_CEDULA_PATH",     __DIR__ . "/../Escritorio/documentos/cedula_beneficiarios");
+define("DOC_INFORME_PATH",    __DIR__ . "/../Escritorio/documentos/informes");
+define("DOC_FOTO_PATH",       __DIR__ . "/../Escritorio/documentos/doc_foto_web");
+define("DOC_SOLICITUD_PATH",  __DIR__ . "/../Escritorio/documentos/doc_solicitud_web");
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, X-API-Key");
@@ -214,10 +219,11 @@ function handleRegistrar(): void {
         $db->prepare("DELETE FROM atenciones_coordinaciones WHERE cedula = :cedula")->execute([":cedula" => $cedula]);
         $db->prepare("DELETE FROM detalles_institucionales WHERE cedula = :cedula")->execute([":cedula" => $cedula]);
         $db->prepare("DELETE FROM direcciones WHERE cedula = :cedula")->execute([":cedula" => $cedula]);
-        $uploadDir = UPLOAD_PATH . "/beneficiarios/" . $cedula;
-        if (is_dir($uploadDir)) {
-            array_map('unlink', glob("$uploadDir/*.*"));
-            rmdir($uploadDir);
+        $docDirs = [DOC_CEDULA_PATH, DOC_INFORME_PATH, DOC_FOTO_PATH, DOC_SOLICITUD_PATH];
+        foreach ($docDirs as $dir) {
+            foreach (glob($dir . "/*_" . $cedula . ".*") as $file) {
+                unlink($file);
+            }
         }
         throw $e;
     }
@@ -346,12 +352,23 @@ function handleAllFileUploads(array $data, string $cedula): void {
     }
 }
 
+function getDocPath(string $field): ?string {
+    $map = [
+        "doc_cedula"    => DOC_CEDULA_PATH,
+        "doc_informe"   => DOC_INFORME_PATH,
+        "doc_foto"      => DOC_FOTO_PATH,
+        "doc_solicitud" => DOC_SOLICITUD_PATH,
+    ];
+    return $map[$field] ?? null;
+}
+
 function handleBase64Files(array $documentos, string $cedula): void {
     foreach ($documentos as $field => $doc) {
         if (empty($doc["contenido"]) || empty($doc["nombre"])) continue;
+        $uploadDir = getDocPath($field);
+        if ($uploadDir === null) continue;
         $contenido = base64_decode($doc["contenido"], true);
         if ($contenido === false) continue;
-        $uploadDir = UPLOAD_PATH . "/beneficiarios/" . $cedula;
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
         $ext = pathinfo($doc["nombre"], PATHINFO_EXTENSION);
         $safeName = $field . "_" . $cedula . "." . $ext;
@@ -360,36 +377,33 @@ function handleBase64Files(array $documentos, string $cedula): void {
 }
 
 function handleIndividualFileUploads(string $cedula): void {
-    $map = [
-        "doc_cedula" => "copia_cedula",
-        "doc_informe" => "informe_medico",
-        "doc_foto" => "fotografia",
-        "doc_solicitud" => "solicitud",
+    $fieldMap = [
+        "doc_cedula"    => DOC_CEDULA_PATH,
+        "doc_informe"   => DOC_INFORME_PATH,
+        "doc_foto"      => DOC_FOTO_PATH,
+        "doc_solicitud" => DOC_SOLICITUD_PATH,
     ];
-    foreach ($map as $inputName => $tableColumn) {
+    foreach ($fieldMap as $inputName => $uploadDir) {
         if (!isset($_FILES[$inputName]) || $_FILES[$inputName]["error"] !== UPLOAD_ERR_OK) continue;
-        $uploadDir = UPLOAD_PATH . "/beneficiarios/" . $cedula;
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
         $origName = basename($_FILES[$inputName]["name"]);
         $ext = pathinfo($origName, PATHINFO_EXTENSION);
-        $safeName = $tableColumn . "_" . $cedula . "." . $ext;
+        $safeName = $inputName . "_" . $cedula . "." . $ext;
         move_uploaded_file($_FILES[$inputName]["tmp_name"], $uploadDir . "/" . $safeName);
     }
 }
 
 function handleArrayFileUploads(array $files, string $cedula): void {
-    $uploadDir = UPLOAD_PATH . "/beneficiarios/" . $cedula;
-    if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
-
-    $fileFieldMap = [
-        "copia_cedula" => "copia_cedula",
-        "partida_nacimiento" => "partida_nacimiento",
-        "constancia_estudio" => "constancia_estudio",
-        "informe_medico" => "informe_medico",
+    $fieldMap = [
+        "copia_cedula"       => DOC_CEDULA_PATH,
+        "informe_medico"     => DOC_INFORME_PATH,
+        "doc_foto"           => DOC_FOTO_PATH,
+        "doc_solicitud"      => DOC_SOLICITUD_PATH,
     ];
 
-    foreach ($fileFieldMap as $fieldName => $tableColumn) {
+    foreach ($fieldMap as $fieldName => $uploadDir) {
         if (!isset($files["name"][$fieldName]) || empty($files["name"][$fieldName])) continue;
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
         $tmpName = $files["tmp_name"][$fieldName];
         $origName = basename($files["name"][$fieldName]);
         $ext = pathinfo($origName, PATHINFO_EXTENSION);
