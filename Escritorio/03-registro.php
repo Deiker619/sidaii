@@ -90,6 +90,9 @@ include_once("partearriba.php");
                                         <?php if ($gerencia == "5Logi" || $rol == "Superusuario") { ?>
                                             <option value="5Logi">Gestion logistica y infrastructura</option>
                                         <?php } ?>
+                                          <?php if ($gerencia == "6Plan" || $rol == "Superusuario") { ?>
+                                            <option value="6Plan">Planificacion y presupuesto</option>
+                                        <?php } ?>
                                     </select>
                                 </div>
 

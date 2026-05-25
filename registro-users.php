@@ -79,6 +79,7 @@
                                         <option value="3Gtnd">Gestion y desarrollo social</option>
                                         <option value="4Gtno">Gestion operativa</option>
                                         <option value="5Logi">Gestion logistica y infrastructura</option>
+                                        <option value="6Plan">Planificacion y presupuesto</option>
                                     </select>
                                 </div>
         
