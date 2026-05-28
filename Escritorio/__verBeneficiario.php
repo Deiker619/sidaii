@@ -25,6 +25,28 @@ include_once("partearriba.php");
     $partida = $aten->ConsultarPartidaNacimiento($cedula)??null;
     $cantidadRegistros = count($consulta);
 
+    // Detección dinámica de archivos subidos por la web (API) sin modificar la BD
+    $fotoCedulaWeb = null;
+    $matchesCedula = glob("documentos/cedula_beneficiarios/*cedula_" . $cedula . ".*");
+    if (!empty($matchesCedula)) {
+        $fotoCedulaWeb = $matchesCedula[0];
+    }
+
+    $informeMedicoWeb = null;
+    $matchesInforme = glob("documentos/informes/*informe_" . $cedula . ".*");
+    if (empty($matchesInforme)) {
+        $matchesInforme = glob("documentos/informes/informe_medico_" . $cedula . ".*");
+    }
+    if (!empty($matchesInforme)) {
+        $informeMedicoWeb = $matchesInforme[0];
+    }
+
+    $fotoCuerpoWeb = null;
+    $matchesFoto = glob("documentos/doc_foto_web/doc_foto_" . $cedula . ".*");
+    if (!empty($matchesFoto)) {
+        $fotoCuerpoWeb = $matchesFoto[0];
+    }
+
     if ($consulta) { ?>
         <div class="cont-registro">
 
@@ -74,10 +96,10 @@ include_once("partearriba.php");
                             <div class="foto-beneficiario">
                                 <?php if ($copiaCedula) { ?>
                                     <img src="documentos/cedula_beneficiarios/<?php echo $copiaCedula["archivo"]; ?>" alt="" srcset="" alt="foto dl beneficiario">
-
+                                <?php } elseif ($fotoCedulaWeb) { ?>
+                                    <img src="<?php echo $fotoCedulaWeb; ?>" alt="Cédula Web" srcset="" alt="foto dl beneficiario">
                                 <?php } else { ?>
                                     <img src="profile.png" alt="" srcset="" alt="foto dl beneficiario">
-
                                 <?php } ?>
                             </div>
 
@@ -93,14 +115,11 @@ include_once("partearriba.php");
 
                         <div class="profile_beneficiario dos">
                             <form action="documentos/cedula_beneficiarios/cargarFoto.php" method="post" enctype="multipart/form-data">
-                                <?php if (!$copiaCedula) { ?>
+                                <?php if (!$copiaCedula && !$fotoCedulaWeb) { ?>
                                     <input type="file" name="foto_perfil" accept="image/*" required>
                                     <input type="text" name="cedula_beneficiario" style="display: none;" value="<?php echo $consulta["cedula"] ?>">
                                     <button type="submit">Subir foto</button>
                                 <?php } ?>
-
-
-
 
                             </form>
                             <?php if ($copiaCedula) { ?>
@@ -245,7 +264,27 @@ include_once("partearriba.php");
                                     <input type="text" placeholder="Ingresa el nombre " required readonly name="fecha_registro" id="fecha_registro" value="<?php echo $consulta["fecha_registro"] ?>">
                                 </div>
 
+                                <?php if ($informeMedicoWeb) { ?>
+                                    <div class="input-field">
+                                        <label> Informe Médico (Web)</label>
+                                        <div style="display:flex; align-items:center; height:45px; margin-top:5px;">
+                                            <a href="<?php echo $informeMedicoWeb; ?>" target="_blank" style="padding:10px 15px; background:#0e9cd4; color:white; text-decoration:none; border-radius:5px; text-align:center; font-weight:bold;">
+                                                <i class='bx bx-download'></i> Ver / Descargar
+                                            </a>
+                                        </div>
+                                    </div>
+                                <?php } ?>
 
+                                <?php if ($fotoCuerpoWeb) { ?>
+                                    <div class="input-field">
+                                        <label> Foto Cuerpo Completo (Web)</label>
+                                        <div style="display:flex; align-items:center; gap:10px; height:45px; margin-top:5px;">
+                                            <a href="<?php echo $fotoCuerpoWeb; ?>" target="_blank" style="padding:10px 15px; background:#3ab556; color:white; text-decoration:none; border-radius:5px; text-align:center; font-weight:bold;">
+                                                <i class='bx bx-image'></i> Ver Foto
+                                            </a>
+                                        </div>
+                                    </div>
+                                <?php } ?>
 
                                 <div class="input-field">
                                     <label>Discapacidad</label>

@@ -29,57 +29,84 @@ if (!$auth->authenticate()) {
 $action = $_GET["action"] ?? $_POST["action"] ?? "";
 
 try {
-    switch ($action) {
-        case "health":
-            handleHealth();
-            break;
-        case "verificar-cedula":
-            handleVerificarCedula();
-            break;
-        case "registrar":
-            handleRegistrar();
-            break;
-        case "discapacidades":
-            handleListDiscapacidades();
-            break;
-        case "verificar-atencion":
-            handleVerificarAtencion();
-            break;
-        default:
-            http_response_code(400);
-            echo json_encode(["success" => false, "message" => "Acción no válida"]);
-            break;
-    }
+    match ($action) {
+        "health" => handleHealth(),
+        "verificar-cedula" => handleVerificarCedula(),
+        "registrar" => handleRegistrar(),
+        "discapacidades" => handleListDiscapacidades(),
+        "ubicaciones" => handleUbicaciones(),
+        "verificar-atencion" => handleVerificarAtencion(),
+        default => throw new Exception("Acción no válida", 400),
+    };
 } catch (PDOException $e) {
     $auth->log("DB_ERROR: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(["success" => false, "message" => "Error interno del servidor"]);
 } catch (Exception $e) {
     $auth->log("ERROR: " . $e->getMessage());
-    http_response_code(400);
+    $code = $e->getCode() ?: 400;
+    http_response_code(is_numeric($code) && $code >= 400 ? $code : 400);
     echo json_encode(["success" => false, "message" => $e->getMessage()]);
 }
 
 function handleListDiscapacidades(): void {
-    try {
-        $db = getDbConnection();
-        $stmt = $db->query("SELECT id_e, nombre_e FROM discapacid_e ORDER BY nombre_e");
-        $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $list = array_map(function ($row) {
-            $row["nombre_e"] = mb_convert_encoding($row["nombre_e"], "UTF-8", "ISO-8859-1");
-            return $row;
-        }, $list);
-        echo json_encode(["success" => true, "data" => $list]);
-    } catch (Exception $e) {
-        echo json_encode(["success" => false, "message" => $e->getMessage()]);
+    $db = getDbConnection();
+    $stmt = $db->query("SELECT id_e, nombre_e FROM discapacid_e ORDER BY nombre_e");
+    $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $list = array_map(fn($row) => [
+        "id_e" => $row["id_e"],
+        "nombre_e" => $row["nombre_e"]
+    ], $list);
+    
+    echo json_encode(["success" => true, "data" => $list]);
+}
+
+function handleUbicaciones(): void {
+    $db = getDbConnection();
+
+    // Get all estados
+    $estados = $db->query("SELECT id_estados, nombre_estado FROM estados ORDER BY id_estados + 0")->fetchAll(PDO::FETCH_ASSOC);
+    // Get all municipios
+    $municipios = $db->query("SELECT id_municipios, estado, nombre FROM municipios")->fetchAll(PDO::FETCH_ASSOC);
+    // Get all parroquias
+    $parroquias = $db->query("SELECT id, municipio, nombre_parroquia FROM parroquia")->fetchAll(PDO::FETCH_ASSOC);
+
+    // Build hierarchy
+    $parroquiasByMunicipio = [];
+    foreach ($parroquias as $p) {
+        $mid = $p["municipio"];
+        if (!isset($parroquiasByMunicipio[$mid])) $parroquiasByMunicipio[$mid] = [];
+        $parroquiasByMunicipio[$mid][] = $p["nombre_parroquia"];
     }
+
+    $municipiosByEstado = [];
+    foreach ($municipios as $m) {
+        $eid = $m["estado"];
+        if (!isset($municipiosByEstado[$eid])) $municipiosByEstado[$eid] = [];
+        $municipiosByEstado[$eid][] = [
+            "nombre" => $m["nombre"],
+            "parroquias" => $parroquiasByMunicipio[$m["id_municipios"]] ?? []
+        ];
+    }
+
+    $result = [];
+    foreach ($estados as $e) {
+        $eid = $e["id_estados"];
+        $result[] = [
+            "id" => $eid,
+            "nombre" => $e["nombre_estado"],
+            "municipios" => $municipiosByEstado[$eid] ?? []
+        ];
+    }
+
+    echo json_encode(["success" => true, "data" => $result], JSON_UNESCAPED_UNICODE);
 }
 
 function handleHealth(): void {
     $dbOk = false;
     try {
-        $db = new ManejadorBD(1);
-        $cnn = $db->conectar(1);
+        $db = getDbConnection();
         $dbOk = true;
     } catch (Exception $e) {
         $dbOk = false;
@@ -89,7 +116,7 @@ function handleHealth(): void {
         "success" => true,
         "message" => "API SIDAII funcionando",
         "data" => [
-            "env" => ENV,
+            "env" => defined('ENV') ? ENV : 'production',
             "timestamp" => date("c"),
             "php_version" => PHP_VERSION,
             "db_connected" => $dbOk,
@@ -99,7 +126,7 @@ function handleHealth(): void {
 
 function handleVerificarCedula(): void {
     $cedula = $_GET["cedula"] ?? $_POST["cedula"] ?? "";
-    if (empty($cedula) || !ctype_digit($cedula)) {
+    if (empty($cedula) || !ctype_digit((string)$cedula)) {
         throw new Exception("Cédula inválida");
     }
 
@@ -116,12 +143,12 @@ function handleVerificarCedula(): void {
 
 function handleVerificarAtencion(): void {
     $cedula = $_GET["cedula"] ?? $_POST["cedula"] ?? "";
-    if (empty($cedula) || !ctype_digit($cedula)) {
+    if (empty($cedula) || !ctype_digit((string)$cedula)) {
         throw new Exception("Cédula inválida");
     }
 
     $db = getDbConnection();
-    $stmt = $db->prepare("
+    $stmt = $db->prepare(<<<SQL
         SELECT ac.numero_aten, ac.cedula, ac.fecha_creada, ac.atencion_solicitada,
                ac.statu, ac.asignado,
                COALESCE(ce.nombre_coordinacion, '(sin asignar a coordinación)') AS nombre_coordinacion,
@@ -132,7 +159,8 @@ function handleVerificarAtencion(): void {
         LEFT JOIN coordinaciones_estadales ce ON u.coordinacion = ce.id
         WHERE ac.cedula = :cedula
         ORDER BY ac.fecha_creada DESC
-    ");
+    SQL);
+    
     $stmt->execute([":cedula" => $cedula]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -141,10 +169,7 @@ function handleVerificarAtencion(): void {
         return;
     }
 
-    foreach ($rows as &$row) {
-        $row["nombre_coordinacion"] = mb_convert_encoding($row["nombre_coordinacion"], "UTF-8", "ISO-8859-1");
-        $row["asignado_nombre"] = mb_convert_encoding($row["asignado_nombre"], "UTF-8", "ISO-8859-1");
-    }
+    // Data is already UTF-8 from PDO; no conversion needed
 
     echo json_encode(["success" => true, "existe" => true, "data" => $rows]);
 }
@@ -156,7 +181,7 @@ function handleRegistrar(): void {
 
     $db = getDbConnection();
 
-    // 1. Verificar cédula duplicada en SIDAII
+    // 1. Verificar cédula duplicada
     $stmt = $db->prepare("SELECT cedula FROM beneficiario WHERE cedula = :cedula LIMIT 1");
     $stmt->execute([":cedula" => $cedula]);
     if ($stmt->fetch()) {
@@ -169,40 +194,40 @@ function handleRegistrar(): void {
     $parroquiaId = resolveParroquia($db, $data["parroquia"], $municipioId);
     $discapacidadId = resolveDiscapacidad($db, $data["discapacidad"]);
 
-    // 3. Subir archivos primero (operación más propensa a fallar)
+    // 3. Subir archivos
     try {
         handleAllFileUploads($data, $cedula);
     } catch (Exception $e) {
         throw new Exception("Error al subir archivos: " . $e->getMessage());
     }
 
-    // 4. Insertar beneficiario
-    $beneficiario = new Discapacitados(1);
-    $beneficiario->setcedula($cedula);
-    $beneficiario->setnombre($data["nombre"]);
-    $beneficiario->setapellido($data["apellido"]);
-    $beneficiario->setfecha_naci($data["fecha_naci"]);
-    $beneficiario->setemail($data["email"] ?? "");
-    $beneficiario->settelefono($data["telefono"] ?? "");
-    $beneficiario->setnacionalidad($data["nacionalidad"] ?? "V");
-    $beneficiario->setedad(calcularEdad($data["fecha_naci"]));
-    $beneficiario->setsexo($data["sexo"]);
-    $beneficiario->setcivil($data["edo_civil"] ?? "");
-    $beneficiario->sethijos($data["nro_hijo"] ?? 0);
-    $beneficiario->setestado($estadoId);
-    $beneficiario->setmunicipio($municipioId);
-    $beneficiario->setparroquia($parroquiaId);
-    $beneficiario->setdiscapacidad($discapacidadId);
-    $beneficiario->setatencion_solicitada("0-aten-coo");
-    $beneficiario->setcod_carnet($data["certificado"] ?? "");
-    $beneficiario->setregistrado_por("99999999");
-    $beneficiario->setfecha_registro(date("Y-m-d H:i:s"));
-
-    if (!$beneficiario->insertarDiscapacitados()) {
-        throw new Exception("Error al insertar beneficiario");
-    }
-
+    // 4. Inserción con limpieza en caso de error
     try {
+        $beneficiario = new Discapacitados(1);
+        $beneficiario->setcedula($cedula);
+        $beneficiario->setnombre($data["nombre"]);
+        $beneficiario->setapellido($data["apellido"]);
+        $beneficiario->setfecha_naci($data["fecha_naci"]);
+        $beneficiario->setemail($data["email"] ?? "");
+        $beneficiario->settelefono($data["telefono"] ?? "");
+        $beneficiario->setnacionalidad($data["nacionalidad"] ?? "V");
+        $beneficiario->setedad(calcularEdad($data["fecha_naci"]));
+        $beneficiario->setsexo($data["sexo"]);
+        $beneficiario->setcivil($data["edo_civil"] ?? "");
+        $beneficiario->sethijos($data["nro_hijo"] ?? 0);
+        $beneficiario->setestado($estadoId);
+        $beneficiario->setmunicipio($municipioId);
+        $beneficiario->setparroquia($parroquiaId);
+        $beneficiario->setdiscapacidad($discapacidadId);
+        $beneficiario->setatencion_solicitada("0-aten-coo");
+        $beneficiario->setcod_carnet($data["certificado"] ?? "");
+        $beneficiario->setregistrado_por("99999999");
+        $beneficiario->setfecha_registro(date("Y-m-d H:i:s"));
+
+        if (!$beneficiario->insertarDiscapacitados()) {
+            throw new Exception("Error al insertar beneficiario");
+        }
+
         $detalles = new detalles_institucionales(1);
         $detalles->setcedula($cedula);
         $detalles->setproteccion_social($data["proteccion_social"] ?? null);
@@ -210,19 +235,27 @@ function handleRegistrar(): void {
         $detalles->insertardetalles();
         $detalles->insertardireccion();
 
+        // Asignar dinámicamente a un usuario de la coordinación correspondiente
+        $asignado = getCoordinadorParaEstado($db, $estadoId);
+
         $atencion = new AtencionesEstadales(1);
         $atencion->setcedula($cedula);
-        $atencion->setasignado("99999999");
+        $atencion->setasignado($asignado);
         $atencion->insertarAtencion();
+
     } catch (Exception $e) {
+        // Rollback manual (ya que usamos múltiples clases con sus propias conexiones)
         $db->prepare("DELETE FROM beneficiario WHERE cedula = :cedula")->execute([":cedula" => $cedula]);
         $db->prepare("DELETE FROM atenciones_coordinaciones WHERE cedula = :cedula")->execute([":cedula" => $cedula]);
         $db->prepare("DELETE FROM detalles_institucionales WHERE cedula = :cedula")->execute([":cedula" => $cedula]);
         $db->prepare("DELETE FROM direcciones WHERE cedula = :cedula")->execute([":cedula" => $cedula]);
+        
         $docDirs = [DOC_CEDULA_PATH, DOC_INFORME_PATH, DOC_FOTO_PATH, DOC_SOLICITUD_PATH];
         foreach ($docDirs as $dir) {
             foreach (glob($dir . "/*_" . $cedula . ".*") as $file) {
-                unlink($file);
+                if (is_file($file)) {
+                    unlink($file);
+                }
             }
         }
         throw $e;
@@ -259,7 +292,7 @@ function validateRegistroData(array $data): void {
             throw new Exception("Campo requerido faltante: $field");
         }
     }
-    if (!ctype_digit($data["cedula"])) {
+    if (!ctype_digit((string)$data["cedula"])) {
         throw new Exception("Cédula debe ser numérica");
     }
 }
@@ -278,11 +311,13 @@ function resolveMunicipio(PDO $cnn, string $nombre, int $estadoId): int {
     $stmt = $cnn->prepare("SELECT id_municipios FROM municipios WHERE (nombre = :nombre OR id_municipios = :id) AND estado = :estado LIMIT 1");
     $stmt->execute([":nombre" => $nombre, ":id" => ctype_digit($nombre) ? $nombre : 0, ":estado" => $estadoId]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
     if (!$row) {
         $stmt = $cnn->prepare("SELECT id_municipios FROM municipios WHERE nombre = :nombre LIMIT 1");
         $stmt->execute([":nombre" => $nombre]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
     if (!$row) {
         throw new Exception("Municipio no encontrado: $nombre");
     }
@@ -293,11 +328,13 @@ function resolveParroquia(PDO $cnn, string $nombre, int $municipioId): int {
     $stmt = $cnn->prepare("SELECT id FROM parroquia WHERE (nombre_parroquia = :nombre OR id = :id) AND municipio = :municipio LIMIT 1");
     $stmt->execute([":nombre" => $nombre, ":id" => ctype_digit($nombre) ? $nombre : 0, ":municipio" => $municipioId]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
     if (!$row) {
         $stmt = $cnn->prepare("SELECT id FROM parroquia WHERE nombre_parroquia = :nombre LIMIT 1");
         $stmt->execute([":nombre" => $nombre]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
     if (!$row) {
         throw new Exception("Parroquia no encontrada: $nombre");
     }
@@ -311,6 +348,7 @@ function resolveDiscapacidad(PDO $cnn, string $nombre): string {
     if ($row) {
         return (string)$row["id_e"];
     }
+    
     $stmt = $cnn->prepare("SELECT id_e FROM discapacid_e WHERE nombre_e = :nombre LIMIT 1");
     $stmt->execute([":nombre" => $nombre]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -318,6 +356,41 @@ function resolveDiscapacidad(PDO $cnn, string $nombre): string {
         throw new Exception("Discapacidad no encontrada: $nombre");
     }
     return (string)$row["id_e"];
+}
+
+function getCoordinadorParaEstado(PDO $db, int $estadoId): string {
+    // Buscar un coordinador de ese estado
+    $stmt = $db->prepare("
+        SELECT u.cedula 
+        FROM usuario u
+        JOIN coordinaciones_estadales ce ON u.coordinacion = ce.id
+        JOIN estados e ON ce.codigo = e.codigo
+        WHERE e.id_estados = :estado_id AND u.rol = 'Coord'
+        LIMIT 1
+    ");
+    $stmt->execute([':estado_id' => $estadoId]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row) {
+        return (string)$row['cedula'];
+    }
+    
+    // Fallback: cualquier usuario de ese estado
+    $stmt = $db->prepare("
+        SELECT u.cedula 
+        FROM usuario u
+        JOIN coordinaciones_estadales ce ON u.coordinacion = ce.id
+        JOIN estados e ON ce.codigo = e.codigo
+        WHERE e.id_estados = :estado_id
+        LIMIT 1
+    ");
+    $stmt->execute([':estado_id' => $estadoId]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row) {
+        return (string)$row['cedula'];
+    }
+
+    // Fallback final: usuario sistema web
+    return "99999999";
 }
 
 function calcularEdad(string $fechaNaci): int {
@@ -341,6 +414,7 @@ function handleAllFileUploads(array $data, string $cedula): void {
             break;
         }
     }
+    
     if ($hasIndividual) {
         handleIndividualFileUploads($cedula);
         return;
@@ -353,23 +427,29 @@ function handleAllFileUploads(array $data, string $cedula): void {
 }
 
 function getDocPath(string $field): ?string {
-    $map = [
+    return match ($field) {
         "doc_cedula"    => DOC_CEDULA_PATH,
         "doc_informe"   => DOC_INFORME_PATH,
         "doc_foto"      => DOC_FOTO_PATH,
         "doc_solicitud" => DOC_SOLICITUD_PATH,
-    ];
-    return $map[$field] ?? null;
+        default         => null,
+    };
 }
 
 function handleBase64Files(array $documentos, string $cedula): void {
     foreach ($documentos as $field => $doc) {
         if (empty($doc["contenido"]) || empty($doc["nombre"])) continue;
+        
         $uploadDir = getDocPath($field);
         if ($uploadDir === null) continue;
+        
         $contenido = base64_decode($doc["contenido"], true);
         if ($contenido === false) continue;
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+        
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        
         $ext = pathinfo($doc["nombre"], PATHINFO_EXTENSION);
         $safeName = $field . "_" . $cedula . "." . $ext;
         file_put_contents($uploadDir . "/" . $safeName, $contenido);
@@ -383,12 +463,18 @@ function handleIndividualFileUploads(string $cedula): void {
         "doc_foto"      => DOC_FOTO_PATH,
         "doc_solicitud" => DOC_SOLICITUD_PATH,
     ];
+    
     foreach ($fieldMap as $inputName => $uploadDir) {
         if (!isset($_FILES[$inputName]) || $_FILES[$inputName]["error"] !== UPLOAD_ERR_OK) continue;
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+        
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        
         $origName = basename($_FILES[$inputName]["name"]);
         $ext = pathinfo($origName, PATHINFO_EXTENSION);
         $safeName = $inputName . "_" . $cedula . "." . $ext;
+        
         move_uploaded_file($_FILES[$inputName]["tmp_name"], $uploadDir . "/" . $safeName);
     }
 }
@@ -403,12 +489,17 @@ function handleArrayFileUploads(array $files, string $cedula): void {
 
     foreach ($fieldMap as $fieldName => $uploadDir) {
         if (!isset($files["name"][$fieldName]) || empty($files["name"][$fieldName])) continue;
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+        
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        
         $tmpName = $files["tmp_name"][$fieldName];
         $origName = basename($files["name"][$fieldName]);
         $ext = pathinfo($origName, PATHINFO_EXTENSION);
         $safeName = $fieldName . "_" . $cedula . "." . $ext;
         $dest = $uploadDir . "/" . $safeName;
+        
         if (!move_uploaded_file($tmpName, $dest)) {
             throw new Exception("Error al subir archivo: $fieldName");
         }
