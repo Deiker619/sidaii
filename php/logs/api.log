@@ -1,0 +1,17 @@
+2026-05-22 06:20:01 [GET health] FORBIDDEN: Invalid API Key from ::1
+2026-05-22 06:20:31 [POST registrar] ERROR: Discapacidad no encontrada: Visual
+2026-05-22 06:22:04 [POST registrar] ERROR: Campo requerido faltante: cedula
+2026-05-22 06:22:13 [POST registrar] ERROR: Campo requerido faltante: cedula
+2026-05-24 02:42:40 [POST registrar] ERROR: Discapacidad no encontrada: Visual
+2026-05-24 02:42:46 [POST registrar] ERROR: Discapacidad no encontrada: Visual
+2026-05-28 16:06:46 [POST registrar] ERROR: Discapacidad no encontrada: Baja VisiÃ³n
+2026-05-28 16:06:52 [POST registrar] ERROR: Discapacidad no encontrada: Baja VisiÃ³n
+2026-05-28 16:07:12 [POST registrar] ERROR: Discapacidad no encontrada: Baja VisiÃ³n
+2026-05-28 16:16:31 [POST registrar] ERROR: Municipio no encontrado: Ibarren
+2026-05-28 16:17:40 [POST registrar] ERROR: Municipio no encontrado: Ibarren
+2026-05-28 16:35:02 [POST registrar] ERROR: Discapacidad no encontrada: Anemia CrÃ³nica
+2026-05-28 17:58:00 [POST registrar] ERROR: Discapacidad no encontrada: Visual
+2026-05-28 18:00:17 [DELETE eliminar] ERROR: Acción no válida
+2026-05-28 18:11:45 [POST registrar] ERROR: Parroquia no encontrada: Baruta
+2026-05-28 18:11:56 [GET ubicacion] ERROR: Acción no válida
+2026-05-28 18:47:55 [GET discapacidades] FORBIDDEN: Invalid API Key from ::1
