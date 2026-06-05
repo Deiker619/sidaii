@@ -151,7 +151,7 @@ class Discapacitados extends ManejadorBD
 	}
 
 
-	/*  public function getdireccion()
+	  public function getdireccion()
 		{
 		    return $this->direccion;
 		}
@@ -159,7 +159,7 @@ class Discapacitados extends ManejadorBD
 		{
 		    $this->direccion = $direccion;		    
 		}
- */
+ 
 
 
 	public function getatencion_solicitada()
@@ -246,8 +246,8 @@ class Discapacitados extends ManejadorBD
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO beneficiario (cedula, nombre, apellido, fecha_naci, email, telefono,nacionalidad, edad,sexo, edo_civil, nro_hijo, estado, municipio, parroquia, discapacidad, atencion_solicitada, certificado, registrado_por, fecha_registro ) 
-											VALUES (:cedula, :nombre, :apellido, :fecha_naci, :email, :telefono,:nacionalidad, :edad,:sexo, :edo_civil, :nro_hijo, :estado, :municipio, :parroquia, :discapacidad, :atencion_solicitada, :certificado, :registrado_por, :fecha_registro )");
+			$stmt = $this->cnn->prepare("INSERT INTO beneficiario (cedula, nombre, apellido, fecha_naci, email, telefono,nacionalidad, edad,sexo, edo_civil, nro_hijo, estado, municipio, parroquia, discapacidad, atencion_solicitada, certificado, registrado_por, fecha_registro, direccion) 
+											VALUES (:cedula, :nombre, :apellido, :fecha_naci, :email, :telefono,:nacionalidad, :edad,:sexo, :edo_civil, :nro_hijo, :estado, :municipio, :parroquia, :discapacidad, :atencion_solicitada, :certificado, :registrado_por, :fecha_registro, :direccion )");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':cedula', $this->cedula);
@@ -269,9 +269,7 @@ class Discapacitados extends ManejadorBD
 			$stmt->bindParam(':registrado_por', $this->registrado_por);
 			$stmt->bindParam(':fecha_registro', $this->fecha_registro);
 			$stmt->bindParam(':sexo', $this->sexo);
-			/* $stmt->bindParam(':direccion', $this->direccion);
-				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
-				$stmt->bindParam(':estado', $this->estado); */
+			$stmt->bindParam(':direccion', $this->direccion);
 
 			// Ejecutamos
 			$exito = $stmt->execute();

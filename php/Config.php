@@ -11,11 +11,7 @@ define(	"USR",	"fmjgh");
 define(	"PAS",	"misionfmjgh");
 define(	"BDN",	"conapdis");
 
-// ============================================
-// CONFIGURACIÓN DE ENTORNO
-// ============================================
-// LOCAL: crear archivo php/.env.local (vacio)
-// PRODUCCIÓN: NO debe existir ese archivo
+
 define("ENV", file_exists(__DIR__ . "/.env.local") ? "local" : "production");
 
 // API Key para conectar WordPress → SIDAII

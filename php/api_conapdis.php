@@ -223,6 +223,7 @@ function handleRegistrar(): void {
         $beneficiario->setcod_carnet($data["certificado"] ?? "");
         $beneficiario->setregistrado_por("99999999");
         $beneficiario->setfecha_registro(date("Y-m-d H:i:s"));
+        $beneficiario->setdireccion($data["direccion"] ?? "");
 
         if (!$beneficiario->insertarDiscapacitados()) {
             throw new Exception("Error al insertar beneficiario");
