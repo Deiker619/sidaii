@@ -23,6 +23,14 @@ define("API_KEY", ENV === "local"
 define("API_RATE_LIMIT",	10); // max peticiones/minuto por IP
 define("API_RATE_WINDOW",	60); // ventana en segundos
 
+// Mail (SMTP) — usado por MailHelper para correos transaccionales
+define("MAIL_HOST",		"smtp.gmail.com");
+define("MAIL_PORT",		587);
+define("MAIL_USERNAME",		"fmjghmail75@gmail.com");
+define("MAIL_PASSWORD",		"itkq iunu ujgm zirb");
+define("MAIL_FROM",		"fmjghmail75@gmail.com");
+define("MAIL_FROM_NAME",	"SIDAII - Registro Web");
+
 // Rutas
 define("BASE_URL",	ENV === "local" ? "http://localhost/sidaii" : "https://sidaii.fmjgh.gob.ve");
 define("UPLOAD_PATH",	__DIR__ . "/../uploads");

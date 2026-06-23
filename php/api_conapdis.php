@@ -5,6 +5,7 @@ require_once __DIR__ . "/01-discapacitados.php";
 require_once __DIR__ . "/01-atenciones-estadales.php";
 require_once __DIR__ . "/detalles_institucionales.php";
 require_once __DIR__ . "/ManejadorBD.php";
+require_once __DIR__ . "/MailHelper.php";
 
 define("DOC_CEDULA_PATH",     __DIR__ . "/../Escritorio/documentos/cedula_beneficiarios");
 define("DOC_INFORME_PATH",    __DIR__ . "/../Escritorio/documentos/informes");
@@ -243,6 +244,25 @@ function handleRegistrar(): void {
         $atencion->setcedula($cedula);
         $atencion->setasignado($asignado);
         $atencion->insertarAtencion();
+
+        // ─── Envío de correo de confirmación (solo si hay email) ───
+        $emailBeneficiario = $data["email"] ?? "";
+        if ($emailBeneficiario !== "") {
+            try {
+                $mailer = new MailHelper();
+                $enviado = $mailer->sendRegistroExitoso(
+                    $emailBeneficiario,
+                    $data["nombre"],
+                    $data["apellido"],
+                    $cedula
+                );
+                if (!$enviado) {
+                    logError("EMAIL_FALLIDO: {$emailBeneficiario} — {$mailer->getLastError()}");
+                }
+            } catch (Exception $e) {
+                logError("EMAIL_ERROR: {$emailBeneficiario} — " . $e->getMessage());
+            }
+        }
 
     } catch (Exception $e) {
         // Rollback manual (ya que usamos múltiples clases con sus propias conexiones)
@@ -505,4 +525,16 @@ function handleArrayFileUploads(array $files, string $cedula): void {
             throw new Exception("Error al subir archivo: $fieldName");
         }
     }
+}
+
+/**
+ * Log seguro disponible desde cualquier función sin depender de $auth.
+ */
+function logError(string $msg): void {
+    $logDir = __DIR__ . "/logs";
+    if (!is_dir($logDir)) {
+        mkdir($logDir, 0755, true);
+    }
+    $line = date("Y-m-d H:i:s") . " [" . ($_SERVER["REQUEST_METHOD"] ?? "?") . " " . ($_GET["action"] ?? "?") . "] " . $msg . PHP_EOL;
+    file_put_contents($logDir . "/api.log", $line, FILE_APPEND | LOCK_EX);
 }
