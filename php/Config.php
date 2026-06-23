@@ -14,8 +14,7 @@ define(	"BDN",	"conapdis");
 
 define("ENV", file_exists(__DIR__ . "/.env.local") ? "local" : "production");
 
-// API Key para conectar WordPress → SIDAII
-// En local usa clave predefinida, en producción usa variable de entorno
+//Api Key 
 define("API_KEY", ENV === "local"
 	? "sk_sidaii_local_dev_2026"
 	: (getenv("SIDAII_API_KEY") ?: "sk_cambiar_en_produccion")
@@ -27,7 +26,7 @@ define("API_RATE_WINDOW",	60); // ventana en segundos
 define("MAIL_HOST",		"smtp.gmail.com");
 define("MAIL_PORT",		587);
 define("MAIL_USERNAME",		"fmjghmail75@gmail.com");
-define("MAIL_PASSWORD",		"itkq iunu ujgm zirb");
+define("MAIL_PASSWORD",		"*****");
 define("MAIL_FROM",		"fmjghmail75@gmail.com");
 define("MAIL_FROM_NAME",	"SIDAII - Registro Web");
 
