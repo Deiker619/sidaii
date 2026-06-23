@@ -24,7 +24,7 @@ class MailHelper
 	 * @param string $apellido     Apellido del beneficiario.
 	 * @param string $cedula       Cédula del beneficiario.
 	 * @return bool True si se envió correctamente, False si falló.
-	 */
+	 **/
 	public function sendRegistroExitoso(
 		string $destinatario,
 		string $nombre,
