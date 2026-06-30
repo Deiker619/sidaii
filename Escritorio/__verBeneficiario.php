@@ -304,6 +304,7 @@ include_once("partearriba.php");
                                     <input type="text" placeholder="Ingresa el nombre " required readonly name="estado" id="estado" value="<?php echo $consulta["nombre_parroquia"] ?>">
                                 </div>
                                 <?php
+                                $beneficiarioData = $consulta;
                                 $consulta = $aten->consultarDirecciones() ?? "Sin dirección" ?>
                                 <div class="input-field">
                                     <label>Dirección</label>
@@ -351,6 +352,25 @@ include_once("partearriba.php");
                                     </div>
 
 
+
+                                <?php
+
+                                }
+                                ?>
+
+                                <?php
+                                $beneficiarioRefugio = $beneficiarioData;
+                                if ($beneficiarioRefugio && ($beneficiarioRefugio["en_refugio"] ?? null) === "si") {  ?>
+
+                                    <div class="input-field">
+                                        <label>¿Está residiendo en un refugio?</label>
+                                        <input type="text" required readonly value="Sí">
+                                    </div>
+
+                                    <div class="input-field">
+                                        <label>Dirección del refugio</label>
+                                        <input type="text" required readonly value="<?php echo $beneficiarioRefugio["direccion_refugio"] ?>">
+                                    </div>
 
                                 <?php
 

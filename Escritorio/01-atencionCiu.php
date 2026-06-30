@@ -211,6 +211,22 @@ include_once("partearriba.php");
                             </div>
                         </div><!-- /* 22/8/2023     */ -->
                         <div class="details personal">
+                            <span class="title">Residencia en refugio</span>
+                            <div class="fields">
+                                <div class="input-field">
+                                    <label>¿Está residiendo en un refugio?</label>
+                                    <select name="en_refugio" id="en_refugio">
+                                        <option value="no">No</option>
+                                        <option value="si">Sí</option>
+                                    </select>
+                                </div>
+                                <div class="input-field" id="refugio_direccion" style="display: none;">
+                                    <label>Dirección del refugio</label>
+                                    <input type="text" placeholder="Ingresa la dirección del refugio" id="direccion_refugio" name="direccion_refugio">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="details personal">
                             <span class="title"></span>
                             <div class="fields">
 
@@ -620,6 +636,8 @@ include_once("partearriba.php");
                 var municipio = $("#municipio").val();
                 var parroquia = $("#parroquia").val();
                 var direccion = $("#direccion").val();
+                var en_refugio = $("#en_refugio").val();
+                var direccion_refugio = $("#direccion_refugio").val();
 
                 /* Detalles medicos */
                 var discapacidad = $("#D-especifica").val();
@@ -817,7 +835,9 @@ include_once("partearriba.php");
                                 cedulauser: cedulauser,
                                 sexo: sexo,
                                 direccion: direccion,
-                                nacionalidad: nacionalidad
+                                nacionalidad: nacionalidad,
+                                en_refugio: en_refugio,
+                                direccion_refugio: direccion_refugio
 
                             },
                             success: function(data) {
@@ -881,10 +901,24 @@ include_once("partearriba.php");
     $("#atencion").on("change", function(){
         toggleAyudaTecnica();
     });
+    function toggleRefugio(){
+        var en_refugio = $("#en_refugio").val();
+        if(en_refugio === "si"){
+            $("#refugio_direccion").slideDown();
+        }else{
+            $("#refugio_direccion").slideUp();
+            $("#direccion_refugio").val("");
+        }
+    }
+
+    toggleRefugio();
+
+    $("#en_refugio").on("change", function(){
+        toggleRefugio();
+    });
 
 });
 </script>
-
 
 <?php
 include_once("parteabajo.php");
