@@ -235,6 +235,7 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 	/* Refugio */
 	$en_refugio = $_POST["en_refugio"] ?? null;
 	$direccion_refugio = $_POST["direccion_refugio"] ?? null;
+	$nombre_refugio = $_POST["nombre_refugio"] ?? null;
 
 
 
@@ -285,6 +286,7 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 		$beneficiario->setnacionalidad($nacionalidad);
 		$beneficiario->seten_refugio($en_refugio);
 		$beneficiario->setdireccion_refugio($direccion_refugio);
+		$beneficiario->setnombre_refugio($nombre_refugio);
 
 		$beneficiario->insertarDiscapacitados();
 
@@ -636,6 +638,7 @@ if (isset($_POST['accion'])  && $_POST['accion'] == 'no-atencion') {
 	/* Refugio */
 	$en_refugio = $_POST["en_refugio"] ?? null;
 	$direccion_refugio = $_POST["direccion_refugio"] ?? null;
+	$nombre_refugio = $_POST["nombre_refugio"] ?? null;
 
 
 
@@ -691,6 +694,7 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 		$beneficiario->setnacionalidad($nacionalidad);
 		$beneficiario->seten_refugio($en_refugio);
 		$beneficiario->setdireccion_refugio($direccion_refugio);
+		$beneficiario->setnombre_refugio($nombre_refugio);
 
 		$beneficiario->insertarDiscapacitados();
 

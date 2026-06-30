@@ -221,6 +221,10 @@ include_once("partearriba.php");
                                     </select>
                                 </div>
                                 <div class="input-field" id="refugio_direccion" style="display: none;">
+                                    <label>Nombre del refugio</label>
+                                    <input type="text" placeholder="Ingresa el nombre del refugio" id="nombre_refugio" name="nombre_refugio">
+                                </div>
+                                <div class="input-field" id="refugio_direccion2" style="display: none;">
                                     <label>Dirección del refugio</label>
                                     <input type="text" placeholder="Ingresa la dirección del refugio" id="direccion_refugio" name="direccion_refugio">
                                 </div>
@@ -637,6 +641,7 @@ include_once("partearriba.php");
                 var parroquia = $("#parroquia").val();
                 var direccion = $("#direccion").val();
                 var en_refugio = $("#en_refugio").val();
+                var nombre_refugio = $("#nombre_refugio").val();
                 var direccion_refugio = $("#direccion_refugio").val();
 
                 /* Detalles medicos */
@@ -837,6 +842,7 @@ include_once("partearriba.php");
                                 direccion: direccion,
                                 nacionalidad: nacionalidad,
                                 en_refugio: en_refugio,
+                                nombre_refugio: nombre_refugio,
                                 direccion_refugio: direccion_refugio
 
                             },
@@ -905,8 +911,11 @@ include_once("partearriba.php");
         var en_refugio = $("#en_refugio").val();
         if(en_refugio === "si"){
             $("#refugio_direccion").slideDown();
+            $("#refugio_direccion2").slideDown();
         }else{
             $("#refugio_direccion").slideUp();
+            $("#refugio_direccion2").slideUp();
+            $("#nombre_refugio").val("");
             $("#direccion_refugio").val("");
         }
     }

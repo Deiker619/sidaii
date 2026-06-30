@@ -368,6 +368,11 @@ include_once("partearriba.php");
                                     </div>
 
                                     <div class="input-field">
+                                        <label>Nombre del refugio</label>
+                                        <input type="text" required readonly value="<?php echo $beneficiarioRefugio["nombre_refugio"] ?>">
+                                    </div>
+
+                                    <div class="input-field">
                                         <label>Dirección del refugio</label>
                                         <input type="text" required readonly value="<?php echo $beneficiarioRefugio["direccion_refugio"] ?>">
                                     </div>
