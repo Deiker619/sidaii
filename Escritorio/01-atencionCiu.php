@@ -208,6 +208,18 @@ include_once("partearriba.php");
                                     <input type="text" placeholder="Ingresa tu direccion" required id="direccion" name="direccion">
                                 </div>
 
+                                <div class="input-field">
+                                    <label>¿Está residiendo en un refugio?</label>
+                                    <select name="en_refugio" id="en_refugio">
+                                        <option value="no">No</option>
+                                        <option value="si">Sí</option>
+                                    </select>
+                                </div>
+                                <div class="input-field" id="direccion-refugio-field" style="display:none;">
+                                    <label>Dirección del refugio</label>
+                                    <input type="text" placeholder="Ingrese la dirección del refugio" name="direccion_refugio" id="direccion_refugio">
+                                </div>
+
                             </div>
                         </div><!-- /* 22/8/2023     */ -->
                         <div class="details personal">
@@ -527,7 +539,6 @@ include_once("partearriba.php");
 
                                 </div>
 
-
                             </div>
                         </fieldset>
 
@@ -817,7 +828,9 @@ include_once("partearriba.php");
                                 cedulauser: cedulauser,
                                 sexo: sexo,
                                 direccion: direccion,
-                                nacionalidad: nacionalidad
+                                nacionalidad: nacionalidad,
+                                en_refugio: $("#en_refugio").val(),
+                                direccion_refugio: $("#direccion_refugio").val()
 
                             },
                             success: function(data) {
@@ -861,6 +874,21 @@ include_once("partearriba.php");
     })
 
     $(document).ready(function(){
+
+    function toggleRefugio(){
+        if($("#en_refugio").val() === "si"){
+            $("#direccion-refugio-field").slideDown();
+        }else{
+            $("#direccion-refugio-field").slideUp();
+            $("#direccion_refugio").val("");
+        }
+    }
+
+    toggleRefugio();
+
+    $("#en_refugio").on("change", function(){
+        toggleRefugio();
+    });
 
     function toggleAyudaTecnica(){
         var atencion = $("#atencion").val();

@@ -26,7 +26,8 @@ class Discapacitados extends ManejadorBD
 	private $fecha_registro;
 	private $sexo;
 	private $nacionalidad;
-
+	private $en_refugio;
+	private $direccion_refugio;
 
 
 
@@ -239,15 +240,30 @@ class Discapacitados extends ManejadorBD
 		$this->nacionalidad = $nacionalidad;
 	}
 
+	public function geten_refugio()
+	{
+		return $this->en_refugio;
+	}
+	public function seten_refugio($en_refugio)
+	{
+		$this->en_refugio = $en_refugio;
+	}
 
-
+	public function getdireccion_refugio()
+	{
+		return $this->direccion_refugio;
+	}
+	public function setdireccion_refugio($direccion_refugio)
+	{
+		$this->direccion_refugio = $direccion_refugio;
+	}
 
 	public function insertarDiscapacitados()
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO beneficiario (cedula, nombre, apellido, fecha_naci, email, telefono,nacionalidad, edad,sexo, edo_civil, nro_hijo, estado, municipio, parroquia, discapacidad, atencion_solicitada, certificado, registrado_por, fecha_registro ) 
-											VALUES (:cedula, :nombre, :apellido, :fecha_naci, :email, :telefono,:nacionalidad, :edad,:sexo, :edo_civil, :nro_hijo, :estado, :municipio, :parroquia, :discapacidad, :atencion_solicitada, :certificado, :registrado_por, :fecha_registro )");
+			$stmt = $this->cnn->prepare("INSERT INTO beneficiario (cedula, nombre, apellido, fecha_naci, email, telefono,nacionalidad, edad,sexo, edo_civil, nro_hijo, estado, municipio, parroquia, discapacidad, atencion_solicitada, certificado, registrado_por, fecha_registro, en_refugio, direccion_refugio ) 
+											VALUES (:cedula, :nombre, :apellido, :fecha_naci, :email, :telefono,:nacionalidad, :edad,:sexo, :edo_civil, :nro_hijo, :estado, :municipio, :parroquia, :discapacidad, :atencion_solicitada, :certificado, :registrado_por, :fecha_registro, :en_refugio, :direccion_refugio )");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':cedula', $this->cedula);
@@ -269,6 +285,8 @@ class Discapacitados extends ManejadorBD
 			$stmt->bindParam(':registrado_por', $this->registrado_por);
 			$stmt->bindParam(':fecha_registro', $this->fecha_registro);
 			$stmt->bindParam(':sexo', $this->sexo);
+			$stmt->bindParam(':en_refugio', $this->en_refugio);
+			$stmt->bindParam(':direccion_refugio', $this->direccion_refugio);
 			/* $stmt->bindParam(':direccion', $this->direccion);
 				$stmt->bindParam(':tipoasistencia', $this->tipoasistencia);
 				$stmt->bindParam(':estado', $this->estado); */
@@ -448,7 +466,9 @@ class Discapacitados extends ManejadorBD
 			beneficiario.registrado_por, 
 			beneficiario.fecha_registro,
             discapacid.id_disca,
-            discapacid.nombre_discapacidad
+            discapacid.nombre_discapacidad,
+            beneficiario.en_refugio,
+            beneficiario.direccion_refugio
 		FROM 
 			beneficiario
 			JOIN estados ON beneficiario.estado = estados.id_estados
@@ -723,8 +743,9 @@ class Discapacitados extends ManejadorBD
                                         municipio = :municipio, 
                                         parroquia = :parroquia, 
                                         discapacidad = :discapacidad, 
-                                        certificado = :certificado
-                                        
+                                        certificado = :certificado,
+                                        en_refugio = :en_refugio,
+                                        direccion_refugio = :direccion_refugio
                                     WHERE cedula = :cedula");
 
 			// Asignamos valores a los parámetros
@@ -743,6 +764,8 @@ class Discapacitados extends ManejadorBD
 			$stmt->bindParam(':parroquia', $this->parroquia);
 			$stmt->bindParam(':discapacidad', $this->discapacidad);
 			$stmt->bindParam(':certificado', $this->cod_carnet);
+			$stmt->bindParam(':en_refugio', $this->en_refugio);
+			$stmt->bindParam(':direccion_refugio', $this->direccion_refugio);
 
 			// Ejecutamos
 			$exito = $stmt->execute();

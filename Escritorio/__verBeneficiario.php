@@ -21,6 +21,7 @@ include_once("partearriba.php");
 
     $aten->setcedula($cedula);
     $consulta = $aten->consultarDiscapacitados();
+    $beneficiarioData = $consulta;
     $copiaCedula = $aten->ConsultarCopiaCedula($cedula);
     $partida = $aten->ConsultarPartidaNacimiento($cedula)??null;
     $cantidadRegistros = count($consulta);
@@ -330,12 +331,7 @@ include_once("partearriba.php");
                                         <input type="number" placeholder="ingresa cedula cuidador" id="cedula_cui" name="cedula-cuidador" value="<?php echo $cuidador["cedula_r"] ?>">
                                     </div>
 
-
-
-
-
                                 <?php
-
                                 }
                                 ?>
 
@@ -356,6 +352,22 @@ include_once("partearriba.php");
 
                                 }
                                 ?>
+
+                                <?php if (!empty($beneficiarioData["en_refugio"])) { ?>
+                                <div class="input-field">
+                                    <label>¿Reside en un refugio?</label>
+                                    <input type="text" required readonly value="<?php echo $beneficiarioData["en_refugio"] === 'si' ? 'Sí' : 'No'; ?>">
+                                </div>
+                                <?php if ($beneficiarioData["en_refugio"] === 'si' && !empty($beneficiarioData["direccion_refugio"])) { ?>
+                                <div class="input-field">
+                                    <label>Dirección del refugio</label>
+                                    <input type="text" required readonly value="<?php echo $beneficiarioData["direccion_refugio"]; ?>">
+                                </div>
+                                <?php } ?>
+                                <?php } ?>
+
+
+                            </div>
 
                                 <?php
                                 $emprendimiento = $aten->detalles_emprendimiento();
