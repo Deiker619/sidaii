@@ -1920,5 +1920,582 @@ table {
     display: none;
 }
 
-       
+/* ========== RESPONSIVE: UP TO 1024px ========== */
+@media screen and (max-width: 1024px) {
+    form .fields .input-field {
+        flex-basis: 280px;
+    }
+}
+
+/* ========== RESPONSIVE: TABLET ========== */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        left: -250px;
+        z-index: 1000;
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.close {
+        left: 0;
+        width: 250px;
+    }
+
+    .sidebar.close .header-text {
+        opacity: 1;
+    }
+
+    .sidebar.close .nav-links li a .link-name {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .sidebar.close .bx-chevron-up {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .menu-dash {
+        left: 0;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .sidebar.close ~ .menu-dash {
+        left: 0;
+        width: 100%;
+    }
+
+    .menu-dash .top {
+        left: 0;
+        width: 100%;
+        height: 60px;
+        padding: 8px 12px;
+        z-index: 1001;
+    }
+
+    .sidebar.close ~ .menu-dash .top {
+        left: 0;
+        width: 100%;
+    }
+
+    .menu-dash .dash-contenido {
+        padding-top: 70px;
+    }
+
+    .menu-dash .top .busqueda {
+        max-width: 300px;
+        margin: 0 10px;
+    }
+
+    .menu-dash .titulo {
+        margin: 20px 0 15px 0;
+    }
+
+    .menu-dash .titulo .link-name {
+        font-size: 18px;
+    }
+
+    .container {
+        padding: 20px;
+        margin: 0 8px;
+    }
+
+    .container form .fields {
+        gap: 4px;
+    }
+
+    form .fields .input-field {
+        width: calc(100%/2 - 12px);
+        flex-basis: 200px;
+    }
+
+    .container .opciones_form {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .container .ya_registrado {
+        width: 100%;
+    }
+
+    .container form button {
+        max-width: 100%;
+    }
+
+    .cont-registro {
+        padding: 10px;
+    }
+
+    fieldset {
+        padding: 12px;
+    }
+
+    .action .action_container {
+        width: 90vw;
+        right: 5vw;
+    }
+}
+
+/* ========== RESPONSIVE: MOBILE ========== */
+@media screen and (max-width: 480px) {
+    body {
+        background: #f5f7fa;
+        background-attachment: fixed;
+        animation: none;
+    }
+
+    .sidebar {
+        left: -250px;
+        z-index: 1000;
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.close {
+        left: 0;
+        width: 250px;
+    }
+
+    .sidebar.close .header-text {
+        opacity: 1;
+    }
+
+    .sidebar.close .nav-links li a .link-name {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .sidebar.close .bx-chevron-up {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .menu-dash {
+        left: 0;
+        width: 100%;
+        padding: 8px;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .sidebar.close ~ .menu-dash {
+        left: 0;
+        width: 100%;
+    }
+
+    .menu-dash .top {
+        left: 0;
+        width: 100%;
+        height: 56px;
+        padding: 6px 10px;
+        backdrop-filter: none;
+        background: #fff;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        z-index: 1001;
+    }
+
+    .sidebar.close ~ .menu-dash .top {
+        left: 0;
+        width: 100%;
+    }
+
+    .menu-dash .dash-contenido {
+        padding-top: 65px;
+    }
+
+    .menu-dash .top .busqueda {
+        max-width: 180px;
+        margin: 0 6px;
+        height: 36px;
+    }
+
+    .top .busqueda input {
+        font-size: 13px;
+    }
+
+    .menu-dash .top li .ioncn-link a .link_name {
+        font-size: 12px;
+    }
+
+    .menu-dash .top .sidebar-toggle {
+        font-size: 22px;
+    }
+
+    .menu-dash .titulo {
+        margin: 15px 0 10px 0;
+    }
+
+    .menu-dash .titulo i {
+        height: 28px;
+        width: 28px;
+        font-size: 16px;
+    }
+
+    .menu-dash .titulo .link-name {
+        font-size: 15px;
+        margin-left: 6px;
+    }
+
+    .cont-registro {
+        padding: 6px;
+        margin-top: 0.5rem;
+        border-radius: 10px;
+        background: transparent;
+    }
+
+    .container {
+        padding: 14px;
+        margin: 0;
+        border-radius: 10px;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+    }
+
+    .container header {
+        font-size: 15px;
+    }
+
+    .container .fecha {
+        font-size: 12px;
+    }
+
+    .container form {
+        padding: 0;
+        margin-top: 8px;
+    }
+
+    .container form .details {
+        margin-top: 14px;
+    }
+
+    .container form .fields {
+        gap: 2px;
+    }
+
+    form .fields .input-field {
+        width: 100%;
+        flex-basis: 100%;
+        margin: 1px 0;
+        flex-grow: 1;
+    }
+
+    .input-field label {
+        font-size: 12px;
+    }
+
+    #label-chk {
+        font-size: 11px !important;
+        display: block;
+        margin-top: 1px;
+        line-height: 1.3;
+    }
+
+    .input-field input,
+    .input-field select {
+        font-size: 15px;
+        height: 42px;
+        margin: 3px 0;
+        padding: 0 12px;
+    }
+
+    .container .opciones_form {
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .container .ya_registrado {
+        width: 100%;
+        padding: 7px 10px;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+    fieldset {
+        padding: 10px 8px;
+        border-radius: 8px;
+    }
+
+    fieldset legend {
+        font-size: 12px;
+    }
+
+    .container form button {
+        max-width: 100%;
+        height: 44px;
+        font-size: 15px;
+        margin: 16px 0;
+    }
+
+    form button ion-icon {
+        height: 20px;
+    }
+
+    .form.first {
+        padding-top: 0;
+    }
+
+    .checkbox-menor {
+        position: relative;
+        left: auto;
+        top: auto;
+        right: auto;
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin: 0 0 8px 0;
+        padding: 10px 12px;
+        background: #f0f7fa;
+        border-radius: 8px;
+        border: 1px solid #d8e8ed;
+        border-bottom: 1px solid #d8e8ed;
+        font-size: 13px;
+        font-weight: 400;
+        color: #2e2e2e;
+        box-sizing: border-box;
+    }
+
+    .checkbox-menor .check {
+        margin: 2px 0 0 0;
+        flex-shrink: 0;
+    }
+
+    .checkbox-menor span {
+        line-height: 1.4;
+        flex: 1;
+    }
+
+    .container form .details {
+        margin-top: 8px;
+    }
+
+    .modal__container {
+        width: 95%;
+        max-width: 95%;
+        padding: 1.5em 1em;
+        margin: 0 auto;
+        border-radius: 8px;
+    }
+
+    .modal__title {
+        font-size: 1.5rem;
+    }
+
+    .action .action_container {
+        width: 95vw;
+        right: 2.5vw;
+    }
+
+    .action .contenedor_action {
+        max-height: 70vh;
+    }
+
+    .menu-dash .top .img-profi img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .menu-dash .top li .ioncn-link a {
+        gap: 3px;
+    }
+}
+
+/* ========== RESPONSIVE: SMALL MOBILE ========== */
+@media screen and (max-width: 360px) {
+    .container {
+        padding: 10px;
+    }
+
+    .input-field input,
+    .input-field select {
+        font-size: 14px;
+        height: 38px;
+    }
+
+    .menu-dash .titulo .link-name {
+        font-size: 14px;
+    }
+
+    .menu-dash .top .busqueda {
+        max-width: 140px;
+    }
+}
+
+/* ========== RESPONSIVE: BOXES (Dashboard index) ========== */
+@media screen and (max-width: 768px) {
+    .menu-dash .boxes .box {
+        width: 100%;
+    }
+
+    .contenedor-box .boxes1 .cont-box {
+        padding: 18px;
+    }
+
+    .boxes .box .number {
+        font-size: 32px;
+    }
+
+    .boxes .box .link-name {
+        font-size: 15px;
+    }
+
+    .cardinfo {
+        width: 100%;
+        max-width: 280px;
+        height: auto;
+        min-height: 220px;
+        padding: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .menu-dash .boxes .box {
+        width: 100%;
+        padding: 12px 15px;
+    }
+
+    .contenedor-box {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .contenedor-box .boxes1,
+    .contenedor-box .boxes2 {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+    }
+
+    .contenedor-box .boxes1 .cont-box {
+        padding: 12px;
+    }
+
+    .boxes .box .number {
+        font-size: 28px;
+    }
+
+    .boxes .box .link-name {
+        font-size: 14px;
+    }
+
+    .boxes .box i {
+        font-size: 30px;
+    }
+
+    .cardinfo {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        min-height: 200px;
+        padding: 1.2rem;
+    }
+
+    .cardinfo-title {
+        font-size: 1.2em;
+    }
+}
+
+/* ========== RESPONSIVE: ACCORDION, BUTTONS, CHECKBOX ========== */
+@media screen and (max-width: 768px) {
+    .acordeon {
+        margin: 0 20px;
+    }
+
+    .buttons {
+        width: 130px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .acordeon {
+        margin: 0 10px;
+        max-width: 100%;
+    }
+
+    .acordeon .tab {
+        padding: 0 10px 15px;
+    }
+
+    .acordeon .tab label h2 {
+        width: 32px;
+        height: 32px;
+        font-size: 1em;
+    }
+
+    .acordeon .tab input:checked ~ label h2 {
+        font-size: 5em;
+        padding: 20px;
+    }
+
+    .acordeon .tab label h3 {
+        font-size: 0.9rem;
+    }
+
+    .acordeon .tab label::after {
+        right: 10px;
+        font-size: 1.5em;
+    }
+
+    .acordeon .tab .content {
+        font-size: 0.85rem;
+    }
+
+    .buttons {
+        width: 110px;
+        height: 36px;
+    }
+
+    .buttons .buttons__text {
+        transform: translateX(22px);
+        font-size: 0.85rem;
+    }
+
+    .buttons .buttons__icon {
+        transform: translateX(72px);
+        width: 35px;
+    }
+
+    .buttons:hover .buttons__icon {
+        width: 108px;
+    }
+
+    .cl-checkbox > span {
+        font-size: 0.85rem;
+    }
+
+    .cl-checkbox > span::before {
+        width: 16px;
+        height: 16px;
+        margin: 2px 8px 2px 1px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .acordeon {
+        margin: 0 5px;
+    }
+
+    .acordeon .tab input:checked ~ label h2 {
+        font-size: 3.5em;
+        padding: 10px;
+    }
+
+    .buttons {
+        width: 100px;
+        height: 32px;
+    }
+
+    .buttons .buttons__text {
+        transform: translateX(18px);
+        font-size: 0.75rem;
+    }
+
+    .buttons .buttons__icon {
+        transform: translateX(62px);
+        width: 32px;
+    }
+
+    .buttons:hover .buttons__icon {
+        width: 98px;
+    }
+}
 

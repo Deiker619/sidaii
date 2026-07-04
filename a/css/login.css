@@ -223,6 +223,10 @@ a:hover{
 	.login-content{
 		justify-content: center;
 	}
+
+	.login-form {
+		margin-left: 0;
+	}
 }
 
 .img-cintillo img {
@@ -230,4 +234,24 @@ a:hover{
     min-width: 400px;
     min-height: 48.4px;
     height: auto;
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .login-form {
+        margin-left: 0;
+    }
+
+    .img-cintillo img {
+        min-width: 0;
+        width: 100%;
+        height: auto;
+    }
 }

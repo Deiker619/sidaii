@@ -563,6 +563,7 @@ canvas#ayudas_tec{
   width: 100%;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .dash-contenido .tabla-atencion .personas-conatencion .enlace{
@@ -2481,4 +2482,406 @@ table.dataTable.no-footer{
 
 .tag.fmjgh{
   color: rgb(233, 158, 19);
+}
+
+/* ========== RESPONSIVE DASHBOARD ========== */
+@media screen and (max-width: 1024px) {
+    .graficas {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .dash-contenido .reportes-totales {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+        padding: 10px;
+    }
+
+    .graficas {
+        grid-template-columns: 1fr;
+        padding: 8px;
+        margin-top: 1rem;
+    }
+
+    .graficas .tarjetas-graficas {
+        flex-basis: 100%;
+    }
+
+    .tabla-conteo {
+        flex-direction: column;
+    }
+
+    .tabla-conteo .tabla-atencion.una,
+    .tabla-conteo .tabla-atencion.dos {
+        width: 100%;
+        flex-grow: 1;
+    }
+
+    .dash-contenido .tabla-atencion {
+        overflow-x: auto;
+    }
+
+    .dash-contenido .tabla-atencion table {
+        min-width: 600px;
+    }
+
+    .search_wrap,
+    .search_wrap .search_box {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .saludo {
+        height: auto;
+        padding: 15px;
+    }
+
+    .saludo .contenedor-saludo {
+        flex-direction: column;
+        height: auto;
+        gap: 1rem;
+    }
+
+    .saludo .contenedor-saludo .text {
+        width: 100%;
+    }
+
+    .saludo .contenedor-img {
+        width: 100%;
+        height: 200px;
+    }
+
+    .resumen {
+        justify-content: center;
+    }
+
+    .resumen .cards {
+        width: calc(50% - 40px);
+        height: 220px;
+        margin: 15px;
+    }
+
+    .cardd {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .header-beneficiario {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .botones-beneficiario-sup {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .footer__privacy {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .upload .upload_body {
+        padding: 30px 15px;
+    }
+
+    .dataTables_wrapper {
+        overflow-x: auto;
+    }
+
+    .dataTables_wrapper table.dataTable {
+        min-width: 600px;
+    }
+
+    .checkboxes {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .botones__especiales {
+        justify-content: center;
+    }
+
+    .card {
+        max-width: 100%;
+        width: 100%;
+        margin: 15px 0;
+    }
+
+    .dash-contenido .personas-conatencion {
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .dash-contenido .reportes-totales {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+        padding: 6px;
+        margin-top: 0.8rem;
+    }
+
+    .dash-contenido .reportes-totales h3 {
+        font-size: 0.9rem;
+    }
+
+    .graficas {
+        padding: 5px;
+        margin-top: 0.8rem;
+        border-radius: 12px;
+    }
+
+    .graficas .tarjetas-graficas {
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+
+    .graficas .titulo-grafica {
+        font-size: 0.85rem;
+    }
+
+    .tabla-conteo .tabla-atencion {
+        padding: 10px;
+        margin-top: 0.8rem;
+    }
+
+    .dash-contenido .tabla-atencion table thead th,
+    .dash-contenido .tabla-atencion table tbody td {
+        padding: 6px 4px;
+        font-size: 0.8rem;
+    }
+
+    .table-pdf {
+        font-size: 0.8rem;
+    }
+
+    .table-pdf thead tr,
+    .table-pdf tbody tr {
+        font-size: 0.8rem;
+    }
+
+    .saludo {
+        height: auto;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+    }
+
+    .saludo .date-saludo {
+        width: 120px;
+        height: 32px;
+        font-size: 0.85rem;
+    }
+
+    .saludo .contenedor-saludo {
+        font-size: 1.1rem;
+    }
+
+    .saludo .contenedor-img {
+        height: 150px;
+    }
+
+    .saludo .contenedor-img img {
+        object-fit: contain;
+    }
+
+    .saludo .contenedor-saludo .botones-saludo {
+        flex-direction: column;
+        gap: 0.5em;
+        width: 100%;
+    }
+
+    .boton-saludo {
+        font-size: 9px;
+        padding: 10px 14px;
+    }
+
+    .resumen {
+        margin-top: 30px;
+    }
+
+    .resumen .cards {
+        width: 100%;
+        height: 200px;
+        margin: 10px 0;
+    }
+
+    .resumen .cards .content h2 {
+        font-size: 3em;
+    }
+
+    .resumen .cards .content h3 {
+        font-size: 1.4em;
+    }
+
+    .Btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .Btn:hover {
+        width: 110px;
+    }
+
+    .sign i {
+        font-size: 20px;
+    }
+
+    .search_wrap {
+        width: 100%;
+        margin: 10px auto;
+    }
+
+    .search_wrap .search_box {
+        width: 100%;
+    }
+
+    .search_wrap .search_box .input {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .upload .upload_body {
+        padding: 20px 10px;
+    }
+
+    .upload .upload_body i {
+        font-size: 36px;
+    }
+
+    .header-beneficiario {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .table-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .cardd {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .checkboxes {
+        flex-direction: column;
+        gap: 0.4rem;
+        padding: 0.3rem;
+    }
+
+    .botones__especiales {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .foto-beneficiario img {
+        height: 200px;
+    }
+
+    .dash-contenido .personas-conatencion {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .dash-contenido .tabla-atencion .personas-conatencion .enlace,
+    .enlace {
+        margin: 0.5rem 0 0 0;
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+
+    .urgencia-contenedor {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .otras_opciones {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .opciones_button {
+        font-size: 7px;
+        padding: 2px 4px;
+    }
+
+    .opciones_button i {
+        font-size: 24px;
+    }
+
+    .opciones_button span {
+        font-size: 13px;
+    }
+
+    .avance {
+        width: 100%;
+    }
+
+    canvas#chart2, .chart2, canvas#graficasXestados {
+        padding: 8px;
+        margin-top: 0.8rem;
+    }
+
+    canvas#ayudas_tec {
+        padding: 20px;
+        margin-top: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .dash-contenido .reportes-totales {
+        gap: 0.4rem;
+        padding: 4px;
+    }
+
+    .dash-contenido .reportes-totales h3 {
+        font-size: 0.8rem;
+    }
+
+    .graficas .tarjetas-graficas {
+        padding: 5px;
+    }
+
+    .saludo {
+        padding: 8px;
+    }
+
+    .saludo .date-saludo {
+        width: 100px;
+        height: 28px;
+        font-size: 0.75rem;
+    }
+
+    .saludo .contenedor-img {
+        height: 120px;
+    }
+
+    .resumen .cards {
+        height: 180px;
+    }
+
+    .search_wrap .search_box .input {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .Btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .Btn:hover {
+        width: 100px;
+    }
+
+    .opciones_button i {
+        font-size: 20px;
+    }
 }
