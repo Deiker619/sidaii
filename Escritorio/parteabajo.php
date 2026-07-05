@@ -47,6 +47,9 @@
                         <a>Presidenta: Carolina Rojas Hernández</a>
                         <a>Ente adscrito al Despacho de la Presidencia</a>
                     </div>
+                    <div class="footer__gaceta">
+                        Gaceta Oficial N.º 43.314 · Decreto N.º 5.249 · 13 de febrero de 2026
+                    </div>
 
                 </div>
 

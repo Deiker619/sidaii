@@ -1544,6 +1544,14 @@ backdrop-filter: blur(10px);
     column-gap: 3.25rem;
 }
 
+.footer__gaceta{
+    font-size: .80rem;
+    font-weight: 400;
+    color: hsl(228, 10%, 55%);
+    margin-top: 0.25rem;
+    letter-spacing: 0.02em;
+}
+
 
 /* Seguimiento */
 
