@@ -44,7 +44,7 @@
 
                     <br><br>
                     <div class="footer__privacy">
-                        <a>Presidenta: Soraida Ramirez</a>
+                        <a>Presidenta: Carolina Rojas Hernández</a>
                         <a>Ente adscrito al Despacho de la Presidencia</a>
                     </div>
 
