@@ -91,6 +91,47 @@ function recargarDiscapacidad(){
 }
   
 
+function camp_recargarLista() {
+  $.ajax({
+    type: 'POST',
+    url: 'datosCampMunicipios.php',
+    data: 'camp_estado=' + $('#camp_estado').val(),
+    success: function (r) {
+      $('#camp_lista2').html(r);
+      camp_recargarParroquias();
+      $('#camp_municipio').off('change').on('change', function () {
+        camp_recargarParroquias();
+      });
+    }
+  });
+}
+
+function camp_recargarParroquias() {
+  $.ajax({
+    type: 'POST',
+    url: 'datosCampParroquias.php',
+    data: 'camp_municipio=' + $('#camp_municipio').val(),
+    success: function (p) {
+      $('#camp_lista3').html(p);
+      camp_recargarCampamentos();
+      $('#camp_parroquia').off('change').on('change', function () {
+        camp_recargarCampamentos();
+      });
+    }
+  });
+}
+
+function camp_recargarCampamentos() {
+  $.ajax({
+    type: 'POST',
+    url: 'datosCampamentos.php',
+    data: 'parroquia=' + $('#camp_parroquia').val(),
+    success: function (c) {
+      $('#camp_lista4').html(c);
+    }
+  });
+}
+
 $(document).ready(function() {
   // Evento para detectar cambios en el campo de fecha de nacimiento
   $('#fecha_naci').change(function() {

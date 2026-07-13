@@ -211,23 +211,62 @@ include_once("partearriba.php");
                             </div>
                         </div><!-- /* 22/8/2023     */ -->
                         <div class="details personal">
-                            <span class="title">Residencia en refugio</span>
+                            <span class="title">Campamento transitorio</span>
                             <div class="fields">
                                 <div class="input-field">
-                                    <label>¿Está residiendo en un refugio?</label>
-                                    <select name="en_refugio" id="en_refugio">
-                                        <option value="no">No</option>
+                                    <label>¿Su vivienda se encuentra en condiciones habitables?</label>
+                                    <select name="vivienda_habitable" id="vivienda_habitable">
+                                        <option value="">Seleccione</option>
                                         <option value="si">Sí</option>
+                                        <option value="no">No</option>
                                     </select>
                                 </div>
-                                <div class="input-field" id="refugio_direccion" style="display: none;">
-                                    <label>Nombre del refugio</label>
-                                    <input type="text" placeholder="Ingresa el nombre del refugio" id="nombre_refugio" name="nombre_refugio">
+                                <div class="input-field" id="camp_pregunta" style="display:none;">
+                                    <label>¿Usted se encuentra en un campamento transitorio?</label>
+                                    <select name="en_campamento" id="en_campamento">
+                                        <option value="">Seleccione</option>
+                                        <option value="si">Sí</option>
+                                        <option value="no">No</option>
+                                    </select>
                                 </div>
-                                <div class="input-field" id="refugio_direccion2" style="display: none;">
-                                    <label>Dirección del refugio</label>
-                                    <input type="text" placeholder="Ingresa la dirección del refugio" id="direccion_refugio" name="direccion_refugio">
+                            </div>
+                        </div>
+                        <div class="details personal" id="camp_ubicacion" style="display:none;">
+                            <span class="title">Ubicación del campamento</span>
+                            <div class="fields">
+                                <div class="input-field">
+                                    <label>Estado</label>
+                                    <select name="camp_estado" id="camp_estado">
+                                        <option value="0">Selecciona una opcion</option>
+                                        <option value="1">Amazonas</option>
+                                        <option value="2">Anzoátegui</option>
+                                        <option value="3">Apure</option>
+                                        <option value="4">Aragua</option>
+                                        <option value="5">Barinas</option>
+                                        <option value="6">Bolívar</option>
+                                        <option value="7">Carabobo</option>
+                                        <option value="8">Cojedes</option>
+                                        <option value="9">Delta Amacuro</option>
+                                        <option value="24" selected>Distrito Capital</option>
+                                        <option value="10">Falcon</option>
+                                        <option value="11">Guarico</option>
+                                        <option value="21">La Guaira</option>
+                                        <option value="12">Lara</option>
+                                        <option value="13">Mérida</option>
+                                        <option value="14">Miranda</option>
+                                        <option value="15">Monagas</option>
+                                        <option value="16">Nueva Esparta</option>
+                                        <option value="17">Portuguesa</option>
+                                        <option value="18">Sucre</option>
+                                        <option value="19">Tachira</option>
+                                        <option value="20">Trujillo</option>
+                                        <option value="22">Yaracuy</option>
+                                        <option value="23">Zulia</option>
+                                    </select>
                                 </div>
+                                <div class="input-field" id="camp_lista2"></div>
+                                <div class="input-field" id="camp_lista3"></div>
+                                <div class="input-field" id="camp_lista4"></div>
                             </div>
                         </div>
                         <div class="details personal">
@@ -640,10 +679,6 @@ include_once("partearriba.php");
                 var municipio = $("#municipio").val();
                 var parroquia = $("#parroquia").val();
                 var direccion = $("#direccion").val();
-                var en_refugio = $("#en_refugio").val();
-                var nombre_refugio = $("#nombre_refugio").val();
-                var direccion_refugio = $("#direccion_refugio").val();
-
                 /* Detalles medicos */
                 var discapacidad = $("#D-especifica").val();
                 var carnet = $("#carnet").val();
@@ -663,6 +698,9 @@ include_once("partearriba.php");
                 var registrador = $("#user_active").text()
                 var fecha_registro = $("#fecha_registro").text()
                 var nacionalidad = $("#nacionalidad").val()
+                var vivienda_habitable = $("#vivienda_habitable").val();
+                var en_campamento = $("#en_campamento").val();
+                var id_campamento = $("#id_campamento").val();
                 console.log(cuidador, cedula_cui)
 
                 /*  var nombre = $("#nombre").val(); */
@@ -841,10 +879,9 @@ include_once("partearriba.php");
                                 sexo: sexo,
                                 direccion: direccion,
                                 nacionalidad: nacionalidad,
-                                en_refugio: en_refugio,
-                                nombre_refugio: nombre_refugio,
-                                direccion_refugio: direccion_refugio
-
+                                vivienda_habitable: vivienda_habitable,
+                                en_campamento: en_campamento,
+                                id_campamento: id_campamento
                             },
                             success: function(data) {
                                 console.log(data)
@@ -907,25 +944,29 @@ include_once("partearriba.php");
     $("#atencion").on("change", function(){
         toggleAyudaTecnica();
     });
-    function toggleRefugio(){
-        var en_refugio = $("#en_refugio").val();
-        if(en_refugio === "si"){
-            $("#refugio_direccion").slideDown();
-            $("#refugio_direccion2").slideDown();
-        }else{
-            $("#refugio_direccion").slideUp();
-            $("#refugio_direccion2").slideUp();
-            $("#nombre_refugio").val("");
-            $("#direccion_refugio").val("");
+
+    $("#vivienda_habitable").on("change", function () {
+        if ($(this).val() === "no") {
+            $("#camp_pregunta").slideDown();
+        } else {
+            $("#camp_pregunta").slideUp();
+            $("#camp_ubicacion").slideUp();
+            $("#en_campamento").val("");
         }
-    }
-
-    toggleRefugio();
-
-    $("#en_refugio").on("change", function(){
-        toggleRefugio();
     });
 
+    $("#en_campamento").on("change", function () {
+        if ($(this).val() === "si") {
+            $("#camp_ubicacion").slideDown();
+            camp_recargarLista();
+        } else {
+            $("#camp_ubicacion").slideUp();
+        }
+    });
+
+    $("#camp_estado").on("change", function () {
+        camp_recargarLista();
+    });
 });
 </script>
 

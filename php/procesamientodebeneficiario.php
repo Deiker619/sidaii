@@ -232,12 +232,10 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 	$direccion = $_POST["direccion"];
 	$nacionalidad = $_POST["nacionalidad"];
 
-	/* Refugio */
-	$en_refugio = $_POST["en_refugio"] ?? null;
-	$direccion_refugio = $_POST["direccion_refugio"] ?? null;
-	$nombre_refugio = $_POST["nombre_refugio"] ?? null;
-
-
+	/* campamento */
+	$vivienda_habitable = $_POST["vivienda_habitable"] ?? null;
+	$en_campamento = $_POST["en_campamento"] ?? null;
+	$id_campamento = $_POST["id_campamento"] ?? null;
 
 	/* cuidador */
 	$cuidador = $_POST["cuidador"];
@@ -251,8 +249,6 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 
 	/* institucionales */
 	$bono = $_POST["bono"];
-
-
 
 
 
@@ -284,9 +280,9 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 		$beneficiario->setregistrado_por($registrado_por);
 		$beneficiario->setfecha_registro($fecha_registro);
 		$beneficiario->setnacionalidad($nacionalidad);
-		$beneficiario->seten_refugio($en_refugio);
-		$beneficiario->setdireccion_refugio($direccion_refugio);
-		$beneficiario->setnombre_refugio($nombre_refugio);
+		$beneficiario->setvivienda_habitable($vivienda_habitable);
+		$beneficiario->seten_campamento($en_campamento);
+		$beneficiario->setid_campamento($id_campamento);
 
 		$beneficiario->insertarDiscapacitados();
 
@@ -580,6 +576,7 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 
 
 
+
 	/* $municipio = $_POST["municipio"];
 	$direccion = $_POST["direccion"]; */
 
@@ -595,8 +592,6 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 	$area_comercial = $_POST["nombre-emprendimiento"]; */
 }
 }
-
-
 
 //Solo para usuarios de infraestructura
 if (isset($_POST['accion'])  && $_POST['accion'] == 'no-atencion') {
@@ -635,12 +630,10 @@ if (isset($_POST['accion'])  && $_POST['accion'] == 'no-atencion') {
 	$direccion = $_POST["direccion"];
 	$nacionalidad = $_POST["nacionalidad"];
 
-	/* Refugio */
-	$en_refugio = $_POST["en_refugio"] ?? null;
-	$direccion_refugio = $_POST["direccion_refugio"] ?? null;
-	$nombre_refugio = $_POST["nombre_refugio"] ?? null;
-
-
+	/* campamento */
+	$vivienda_habitable = $_POST["vivienda_habitable"] ?? null;
+	$en_campamento = $_POST["en_campamento"] ?? null;
+	$id_campamento = $_POST["id_campamento"] ?? null;
 
 	/* cuidador */
 	$cuidador = $_POST["cuidador"];
@@ -692,9 +685,9 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 		$beneficiario->setregistrado_por($registrado_por);
 		$beneficiario->setfecha_registro($fecha_registro);
 		$beneficiario->setnacionalidad($nacionalidad);
-		$beneficiario->seten_refugio($en_refugio);
-		$beneficiario->setdireccion_refugio($direccion_refugio);
-		$beneficiario->setnombre_refugio($nombre_refugio);
+		$beneficiario->setvivienda_habitable($vivienda_habitable);
+		$beneficiario->seten_campamento($en_campamento);
+		$beneficiario->setid_campamento($id_campamento);
 
 		$beneficiario->insertarDiscapacitados();
 
@@ -704,8 +697,7 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 		$detalles->setproteccion_social($bono);
 		$detalles->setdireccion($direccion);
 		$detalles->insertardetalles();
-		$detalles->insertardireccion(); //10/01/2024
-
+		$detalles->insertardireccion();
 
 		if ($nombre_empre and $rif_emp) {
 			$emprendimiento = new detalles_emprendimiento(1);

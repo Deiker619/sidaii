@@ -26,13 +26,9 @@ class Discapacitados extends ManejadorBD
 	private $fecha_registro;
 	private $sexo;
 	private $nacionalidad;
-	private $en_refugio;
-	private $direccion_refugio;
-	private $nombre_refugio;
-
-
-
-
+	private $vivienda_habitable;
+	private $en_campamento;
+	private $id_campamento;
 
 	private $cnn;
 	/*===============================  */
@@ -242,41 +238,42 @@ class Discapacitados extends ManejadorBD
 		$this->nacionalidad = $nacionalidad;
 	}
 
-	public function geten_refugio()
+	public function getvivienda_habitable()
 	{
-		return $this->en_refugio;
-	}
-	public function seten_refugio($en_refugio)
-	{
-		$this->en_refugio = $en_refugio;
+		return $this->vivienda_habitable;
 	}
 
-	public function getdireccion_refugio()
+	public function setvivienda_habitable($vivienda_habitable)
 	{
-		return $this->direccion_refugio;
-	}
-	public function setdireccion_refugio($direccion_refugio)
-	{
-		$this->direccion_refugio = $direccion_refugio;
+		$this->vivienda_habitable = $vivienda_habitable;
 	}
 
-	public function getnombre_refugio()
+	public function geten_campamento()
 	{
-		return $this->nombre_refugio;
-	}
-	public function setnombre_refugio($nombre_refugio)
-	{
-		$this->nombre_refugio = $nombre_refugio;
+		return $this->en_campamento;
 	}
 
+	public function seten_campamento($en_campamento)
+	{
+		$this->en_campamento = $en_campamento;
+	}
 
+	public function getid_campamento()
+	{
+		return $this->id_campamento;
+	}
+
+	public function setid_campamento($id_campamento)
+	{
+		$this->id_campamento = $id_campamento;
+	}
 
 	public function insertarDiscapacitados()
 	{
 		try {
 
-			$stmt = $this->cnn->prepare("INSERT INTO beneficiario (cedula, nombre, apellido, fecha_naci, email, telefono,nacionalidad, edad,sexo, edo_civil, nro_hijo, estado, municipio, parroquia, discapacidad, atencion_solicitada, certificado, registrado_por, fecha_registro, direccion, en_refugio, direccion_refugio, nombre_refugio) 
-											VALUES (:cedula, :nombre, :apellido, :fecha_naci, :email, :telefono,:nacionalidad, :edad,:sexo, :edo_civil, :nro_hijo, :estado, :municipio, :parroquia, :discapacidad, :atencion_solicitada, :certificado, :registrado_por, :fecha_registro, :direccion, :en_refugio, :direccion_refugio, :nombre_refugio )");
+			$stmt = $this->cnn->prepare("INSERT INTO beneficiario (cedula, nombre, apellido, fecha_naci, email, telefono, nacionalidad, edad, sexo, edo_civil, nro_hijo, estado, municipio, parroquia, discapacidad, atencion_solicitada, certificado, registrado_por, fecha_registro, direccion, vivienda_habitable, en_campamento, id_campamento) 
+											VALUES (:cedula, :nombre, :apellido, :fecha_naci, :email, :telefono, :nacionalidad, :edad, :sexo, :edo_civil, :nro_hijo, :estado, :municipio, :parroquia, :discapacidad, :atencion_solicitada, :certificado, :registrado_por, :fecha_registro, :direccion, :vivienda_habitable, :en_campamento, :id_campamento)");
 
 			// Asignamos valores a los parametros
 			$stmt->bindParam(':cedula', $this->cedula);
@@ -299,9 +296,9 @@ class Discapacitados extends ManejadorBD
 			$stmt->bindParam(':fecha_registro', $this->fecha_registro);
 			$stmt->bindParam(':sexo', $this->sexo);
 			$stmt->bindParam(':direccion', $this->direccion);
-			$stmt->bindParam(':en_refugio', $this->en_refugio);
-			$stmt->bindParam(':direccion_refugio', $this->direccion_refugio);
-			$stmt->bindParam(':nombre_refugio', $this->nombre_refugio);
+			$stmt->bindParam(':vivienda_habitable', $this->vivienda_habitable);
+			$stmt->bindParam(':en_campamento', $this->en_campamento);
+			$stmt->bindParam(':id_campamento', $this->id_campamento);
 
 			// Ejecutamos
 			$exito = $stmt->execute();
@@ -477,11 +474,12 @@ class Discapacitados extends ManejadorBD
 			beneficiario.certificado, 
 			beneficiario.registrado_por, 
 			beneficiario.fecha_registro,
-			beneficiario.en_refugio,
-            beneficiario.direccion_refugio,
-            beneficiario.nombre_refugio,
-            discapacid.id_disca,
-            discapacid.nombre_discapacidad
+	            discapacid.id_disca,
+            discapacid.nombre_discapacidad,
+			beneficiario.vivienda_habitable,
+            beneficiario.en_campamento,
+            beneficiario.id_campamento,
+            campamentos_transitorios.nombre_campamento
 		FROM 
 			beneficiario
 			JOIN estados ON beneficiario.estado = estados.id_estados
@@ -489,6 +487,7 @@ class Discapacitados extends ManejadorBD
 			JOIN parroquia ON beneficiario.parroquia = parroquia.id
 			JOIN discapacid_e ON beneficiario.discapacidad = discapacid_e.id_e
             join discapacid on discapacid_e.general = discapacid.id_disca
+            LEFT JOIN campamentos_transitorios ON beneficiario.id_campamento = campamentos_transitorios.id_campamento
 		WHERE 
 			beneficiario.cedula = :cedula;
 		");
@@ -757,10 +756,9 @@ class Discapacitados extends ManejadorBD
                                         parroquia = :parroquia, 
                                         discapacidad = :discapacidad, 
                                         certificado = :certificado,
-                                        en_refugio = :en_refugio,
-                                        direccion_refugio = :direccion_refugio,
-                                        nombre_refugio = :nombre_refugio
-                                        
+                                        vivienda_habitable = :vivienda_habitable,
+                                        en_campamento = :en_campamento,
+                                        id_campamento = :id_campamento
                                     WHERE cedula = :cedula");
 
 			// Asignamos valores a los parámetros
@@ -779,9 +777,9 @@ class Discapacitados extends ManejadorBD
 			$stmt->bindParam(':parroquia', $this->parroquia);
 			$stmt->bindParam(':discapacidad', $this->discapacidad);
 			$stmt->bindParam(':certificado', $this->cod_carnet);
-			$stmt->bindParam(':en_refugio', $this->en_refugio);
-			$stmt->bindParam(':direccion_refugio', $this->direccion_refugio);
-			$stmt->bindParam(':nombre_refugio', $this->nombre_refugio);
+			$stmt->bindParam(':vivienda_habitable', $this->vivienda_habitable);
+			$stmt->bindParam(':en_campamento', $this->en_campamento);
+			$stmt->bindParam(':id_campamento', $this->id_campamento);
 
 			// Ejecutamos
 			$exito = $stmt->execute();

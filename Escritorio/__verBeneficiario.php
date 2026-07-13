@@ -356,29 +356,41 @@ include_once("partearriba.php");
                                 <?php
 
                                 }
+
+                                if (
+                                    ($beneficiarioData['vivienda_habitable'] ?? null) === 'no'
+                                    && ($beneficiarioData['en_campamento'] ?? null) === 'si'
+                                    && ($beneficiarioData['id_campamento'] ?? null)
+                                ) {
+                                    include_once __DIR__ . '/../php/04-campamentos.php';
+
+                                    $camp = new CampamentoTransitorio(1);
+                                    $info = $camp->obtener(
+                                        (int) $beneficiarioData['id_campamento']
+                                    );
+
+                                    if ($info) {
                                 ?>
-
+                                    <div class="input-field">
+                                        <label>¿Vivienda habitable?</label>
+                                        <input type="text" readonly value="No">
+                                    </div>
+                                    <div class="input-field">
+                                        <label>Campamento transitorio</label>
+                                        <input type="text" readonly
+                                            value="<?php echo $info['nombre_campamento']; ?>">
+                                    </div>
+                                    <div class="input-field">
+                                        <label>Ubicación</label>
+                                        <input type="text" readonly
+                                            value="<?php
+                                                echo $info['nombre_parroquia']
+                                                   . ', Mun. ' . $info['nombre_municipio']
+                                                   . ', Edo. ' . $info['nombre_estado'];
+                                            ?>">
+                                    </div>
                                 <?php
-                                $beneficiarioRefugio = $beneficiarioData;
-                                if ($beneficiarioRefugio && ($beneficiarioRefugio["en_refugio"] ?? null) === "si") {  ?>
-
-                                    <div class="input-field">
-                                        <label>¿Está residiendo en un refugio?</label>
-                                        <input type="text" required readonly value="Sí">
-                                    </div>
-
-                                    <div class="input-field">
-                                        <label>Nombre del refugio</label>
-                                        <input type="text" required readonly value="<?php echo $beneficiarioRefugio["nombre_refugio"] ?>">
-                                    </div>
-
-                                    <div class="input-field">
-                                        <label>Dirección del refugio</label>
-                                        <input type="text" required readonly value="<?php echo $beneficiarioRefugio["direccion_refugio"] ?>">
-                                    </div>
-
-                                <?php
-
+                                    }
                                 }
                                 ?>
 
