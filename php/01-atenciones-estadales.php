@@ -1664,13 +1664,146 @@ public function consultarTodosAtenciones()
 		}
 	}
 
-	
+	/* =========================================
+	   MÉTODOS PARA GRÁFICAS DE CAMPAMENTOS
+	   TRANSITORIOS
+	   ========================================= */
 
+	/**
+	 * Cuenta las personas en campamentos transitorios agrupadas por sexo.
+	 */
+	public function campamentos_por_sexo()
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT beneficiario.sexo as sexos, COUNT(beneficiario.sexo) as cantidades
+				 FROM beneficiario
+				 WHERE beneficiario.en_campamento = 'si'
+				 GROUP BY beneficiario.sexo"
+			);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
 
-	
+	/**
+	 * Cuenta las personas en campamentos transitorios agrupadas por edad.
+	 */
+	public function campamentos_por_edad()
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT beneficiario.edad, COUNT(beneficiario.edad) as cantidades
+				 FROM beneficiario
+				 WHERE beneficiario.en_campamento = 'si'
+				 GROUP BY beneficiario.edad"
+			);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
 
+	/**
+	 * Cuenta las personas en campamentos transitorios agrupadas
+	 * por discapacidad general.
+	 */
+	public function campamentos_por_discapacidad_general()
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT discapacid.nombre_discapacidad, COUNT(beneficiario.discapacidad) as cantidades
+				 FROM beneficiario, discapacid, discapacid_e
+				 WHERE beneficiario.en_campamento = 'si'
+				   AND beneficiario.discapacidad = discapacid_e.id_e
+				   AND discapacid_e.general = discapacid.id_disca
+				 GROUP BY discapacid.nombre_discapacidad"
+			);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	/**
+	 * Cuenta las personas en campamentos transitorios agrupadas
+	 * por discapacidad específica.
+	 */
+	public function campamentos_por_discapacidad_especifica()
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT discapacid_e.nombre_e AS discapacidad, COUNT(beneficiario.discapacidad) as cantidades
+				 FROM beneficiario
+				 INNER JOIN discapacid_e ON beneficiario.discapacidad = discapacid_e.id_e
+				 WHERE beneficiario.en_campamento = 'si'
+				 GROUP BY discapacid_e.nombre_e"
+			);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	/**
+	 * Retorna el listado de personas asignadas a campamentos
+	 * transitorios con sus datos personales y ubicación del
+	 * campamento.
+	 */
+	public function consultarPersonasEnCampamentos()
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT beneficiario.cedula,
+						beneficiario.nombre,
+						beneficiario.apellido,
+						e_ben.nombre_estado AS estado_beneficiario,
+						discapacid_e.nombre_e AS discapacidad,
+						beneficiario.telefono,
+						beneficiario.edad,
+						beneficiario.email,
+						campamentos_transitorios.nombre_campamento,
+					 CONCAT(parroquia.nombre_parroquia, ', ',
+							municipios.nombre, ', ',
+							e_camp.nombre_estado) AS direccion_campamento
+				 FROM beneficiario
+				 LEFT JOIN campamentos_transitorios
+				   ON beneficiario.id_campamento = campamentos_transitorios.id_campamento
+				 LEFT JOIN parroquia
+				   ON campamentos_transitorios.id_parroquia = parroquia.id
+				 LEFT JOIN municipios
+				   ON parroquia.municipio = municipios.id_municipios
+				 LEFT JOIN estados e_camp
+				   ON municipios.estado = e_camp.id_estados
+				 LEFT JOIN discapacid_e
+				   ON beneficiario.discapacidad = discapacid_e.id_e
+				 LEFT JOIN estados e_ben
+				   ON beneficiario.estado = e_ben.id_estados
+				 WHERE beneficiario.en_campamento = 'si'
+				 ORDER BY beneficiario.nombre"
+			);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
 }
-
 
 
 

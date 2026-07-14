@@ -147,6 +147,7 @@
                         <li><a href="12-D-escuela-comunitaria.php">Talleres</a></li>
                         <li><a href="10-encuentros.php">Encuentros</a></li>
                         <li><a href="13-proteccionSocial.php">Proteccion social</a></li>
+                        <li><a href="14-campamentoTransitorios.php">Campamentos transitorios</a></li>
 
                     </ul>
                 </li>
@@ -176,6 +177,7 @@
                         
                         <li><a href="02-jornadas.php">Jornadas</a></li>
                         <li><a href="10-encuentros.php">Encuentros</a></li>
+                        <li><a href="14-campamentoTransitorios.php">Campamentos transitorios</a></li>
 
                     </ul>
 
