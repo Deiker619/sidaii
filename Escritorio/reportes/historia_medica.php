@@ -118,7 +118,7 @@
         $aten->setcodigo_cita($codigo_cita);
         $consulta = $aten->ConsultarHistoria();
         $cantidadRegistros = count($consulta);
-        $nombreImagen = "cintillo2.jpg";
+        $nombreImagen = "../../a/img/cintillo2.png";
         $imagenBase64 = "data:image/png;base64," . base64_encode(file_get_contents($nombreImagen));
         ?>
 

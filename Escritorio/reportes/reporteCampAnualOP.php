@@ -4,8 +4,6 @@ use Dompdf\Dompdf;
 
 ob_start()
 
-
-
 ?>
 
 <!DOCTYPE html>
@@ -13,30 +11,14 @@ ob_start()
 
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
-    <!--  <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- JQuery -->
-
     <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous">
     </script>
-
-    <!-- CSS -->
-
-    <!-- Boxicon -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/ css/line.css">
-
-    <!--  Boostrap-->
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-
     <title>Documento PDF</title>
     <style>
         .tabla-atencion {
-
             margin: 15px;
             border-radius: 20px;
             margin-top: 15px;
@@ -72,7 +54,6 @@ ob_start()
         .tabla-atencion table thead tr {
             color: #232c33;
             border: 1px solid black;
-
         }
 
         .tabla-atencion table tbody tr,
@@ -90,8 +71,6 @@ ob_start()
             height: auto;
             font-size: 16px;
             margin-bottom: 50px;
-
-
         }
 
         .pulgar {
@@ -108,108 +87,66 @@ ob_start()
         }
     </style>
 </head>
-<!-- Ese documento aun no esta funcionamiento, esperando que se desarrolle la funcion de imprimir de las atenciones -->
 
 <body>
-    <?php include_once("../../php/10-coordinaciones-estadales.php");
-    $aten = new Coordinacion(1);
-    /* echo $numero_aten; */
-    $coordinacion = $_REQUEST["coordinacion"];
-    $consulta = $aten->PDF_solicitudes($coordinacion);
-
-    $cantidadRegistros = count($consulta);
-
-    /*     echo $consulta["cedula"]; */
+    <?php include_once("../../php/01-atenciones-estadales.php");
+    $aten = new AtencionesEstadales(1);
+    $anio = $_REQUEST["anio"];
+    $consulta = $aten->campamentos_anual($anio);
     $nombreImagen = "../../a/img/cintillo2.png";
     $imagenBase64 = "data:image/png;base64," . base64_encode(file_get_contents($nombreImagen));
-
     ?>
-
 
     <div class="dash-contenido">
         <div class="overview">
             <div class="titulo">
-                <!--  <i class='bx bxs-dashboard'> </i> -->
                 <span class="link-name"></span>
             </div>
         </div>
 
-
         <div class="cont-registro">
-
-
-
             <div class="container">
                 <img src="<?php echo $imagenBase64 ?>" width="100%">
 
+                <h3 style="margin-top: 20px;">Reporte anual: <?php echo $anio; ?></h3>
 
                 <div class="tabla-atencion" style="width: 100%; margin-top:5%">
-                    <?php if($consulta){?>
-                        <?php echo "<h3>Total de solicitudes: " . $cantidadRegistros. "</h3>" ?>
-                        <?php echo "<h3>Coordinación: " . $consulta[0]["nombre_coordinacion"]. "</h3>" ?>
-
-                        <table style="width:100%">
-                        <?php foreach ($consulta as $registros) { ?> 
-                        <tbody>
-
+                    <table style="width:100%">
+                        <thead>
                             <tr>
-                                <td><?php echo $registros["atencion_solicitada"] ?></td>
-                                <td><?php echo $registros["cantidades"] ?></td>
+                                <th>Mes</th>
+                                <th>Cantidad de personas</th>
                             </tr>
-
+                        </thead>
+                        <tbody>
+                            <?php foreach ($consulta as $registros) { ?>
+                                <tr>
+                                    <td><?php echo $registros["nombre_mes"]; ?></td>
+                                    <td><?php echo $registros["cantidades"]; ?></td>
+                                </tr>
+                            <?php } ?>
                         </tbody>
-                        <?php }?>
                     </table>
-                        <?php } ?>
-                    
-
-                    
-
-
-
-
                 </div>
-
-
-
-
-
-
-
-
-
             </div>
-
-
         </div>
     </div>
 
-
-    </div>
-
-
     <?php
-
     $html = ob_get_clean();
-           /*  echo $html; */
 
     require_once("../../dompdf/autoload.inc.php");
 
     $dompdf = new Dompdf();
     $option = $dompdf->getOptions();
-
     $option->set(array('isRemoteEnable' => true));
     $dompdf->setOptions($option);
 
     $dompdf->loadHtml($html);
-    /* $dompdf->setPaper('letter'); */
     $dompdf->setPaper('A4', 'portrait');
-
     $dompdf->render();
 
-    $nombre = "Solicitudes-".date("Y-m-d");
+    $nombre = "ReporteCampamentosAnual" . date("Y-m-d H:i:s");
     $dompdf->stream($nombre, array("Attachment" => false));
-
-
     ?>
 </body>

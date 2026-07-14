@@ -1803,6 +1803,131 @@ public function consultarTodosAtenciones()
 			exit();
 		}
 	}
+
+	/* =========================================
+	   MÉTODOS PARA REPORTES DE CAMPAMENTOS
+	   ========================================= */
+
+	/**
+	 * Cuenta personas en campamentos agrupadas por municipio.
+	 */
+	public function campamentos_por_municipio()
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT municipios.nombre AS municipio,
+						COUNT(*) AS cantidades
+				 FROM beneficiario
+				 INNER JOIN campamentos_transitorios
+				   ON beneficiario.id_campamento = campamentos_transitorios.id_campamento
+				 INNER JOIN parroquia
+				   ON campamentos_transitorios.id_parroquia = parroquia.id
+				 INNER JOIN municipios
+				   ON parroquia.municipio = municipios.id_municipios
+				 WHERE beneficiario.en_campamento = 'si'
+				 GROUP BY municipios.nombre
+				 ORDER BY cantidades DESC"
+			);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	/**
+	 * Retorna personas en campamentos agrupadas por semana
+	 * según fecha de registro.
+	 */
+	public function campamentos_semanal()
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT YEARWEEK(fecha_registro) AS semana,
+						MIN(fecha_registro) AS inicio_semana,
+						MAX(fecha_registro) AS fin_semana,
+						COUNT(*) AS registros
+				 FROM beneficiario
+				 WHERE beneficiario.en_campamento = 'si'
+				   AND fecha_registro IS NOT NULL
+				 GROUP BY YEARWEEK(fecha_registro)
+				 ORDER BY semana DESC"
+			);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	/**
+	 * Retorna personas en campamentos registradas en un mes
+	 * y año específicos.
+	 */
+	public function campamentos_mensual($mes, $anio)
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT beneficiario.cedula,
+						beneficiario.nombre,
+						beneficiario.apellido,
+						beneficiario.edad,
+						beneficiario.sexo,
+						beneficiario.fecha_registro,
+						discapacid_e.nombre_e AS discapacidad,
+						campamentos_transitorios.nombre_campamento
+				 FROM beneficiario
+				 LEFT JOIN discapacid_e
+				   ON beneficiario.discapacidad = discapacid_e.id_e
+				 LEFT JOIN campamentos_transitorios
+				   ON beneficiario.id_campamento = campamentos_transitorios.id_campamento
+				 WHERE beneficiario.en_campamento = 'si'
+				   AND MONTH(beneficiario.fecha_registro) = :mes
+				   AND YEAR(beneficiario.fecha_registro) = :anio
+				 ORDER BY beneficiario.fecha_registro"
+			);
+			$stmt->bindParam(':mes', $mes, PDO::PARAM_INT);
+			$stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	/**
+	 * Cuenta personas en campamentos agrupadas por mes
+	 * de un año específico.
+	 */
+	public function campamentos_anual($anio)
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT MONTH(fecha_registro) AS mes,
+						MONTHNAME(fecha_registro) AS nombre_mes,
+						COUNT(*) AS cantidades
+				 FROM beneficiario
+				 WHERE beneficiario.en_campamento = 'si'
+				   AND YEAR(fecha_registro) = :anio
+				   AND fecha_registro IS NOT NULL
+				 GROUP BY MONTH(fecha_registro), MONTHNAME(fecha_registro)
+				 ORDER BY mes"
+			);
+			$stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
 }
 
 

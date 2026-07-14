@@ -140,7 +140,7 @@ ob_start()
     $aten->setnumero_aten($numero_aten);
     $consulta = $aten->ReportesOP();
 /*     echo $consulta["cedula"]; */
-    $nombreImagen = "cintillo2.jpg";
+    $nombreImagen = "../../a/img/cintillo2.png";
     $imagenBase64 = "data:image/png;base64," . base64_encode(file_get_contents($nombreImagen));
     
     ?>
