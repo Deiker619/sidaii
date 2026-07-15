@@ -29,7 +29,6 @@
 		</div>
 		<div class="login-content">
 			<form action="index.html" method="post" class="login-form">
-				<img src="a/img/logo3.6.png">
 				<h2 class="title">Bienvenido</h2>
 				<div class="input-div one">
 					<div class="i">
