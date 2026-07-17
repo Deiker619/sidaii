@@ -36,6 +36,7 @@ try {
         "registrar" => handleRegistrar(),
         "discapacidades" => handleListDiscapacidades(),
         "ubicaciones" => handleUbicaciones(),
+        "campamentos" => handleCampamentos(),
         "verificar-atencion" => handleVerificarAtencion(),
         default => throw new Exception("Acción no válida", 400),
     };
@@ -102,6 +103,26 @@ function handleUbicaciones(): void {
     }
 
     echo json_encode(["success" => true, "data" => $result], JSON_UNESCAPED_UNICODE);
+}
+
+function handleCampamentos(): void {
+    $parroquia = $_POST["parroquia"] ?? "";
+    if (empty($parroquia)) {
+        throw new Exception("Parroquia requerida");
+    }
+
+    $db = getDbConnection();
+    $stmt = $db->prepare(<<<SQL
+        SELECT ct.id_campamento, ct.nombre_campamento
+        FROM campamentos_transitorios ct
+        JOIN parroquia p ON ct.id_parroquia = p.id
+        WHERE p.nombre_parroquia = :parroquia
+        ORDER BY ct.nombre_campamento
+    SQL);
+    $stmt->execute([":parroquia" => $parroquia]);
+    $campamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode(["success" => true, "data" => $campamentos]);
 }
 
 function handleHealth(): void {
@@ -225,6 +246,9 @@ function handleRegistrar(): void {
         $beneficiario->setregistrado_por("99999999");
         $beneficiario->setfecha_registro(date("Y-m-d H:i:s"));
         $beneficiario->setdireccion($data["direccion"] ?? "");
+        $beneficiario->setvivienda_habitable($data["vivienda_habitable"] ?? null);
+        $beneficiario->seten_campamento($data["en_campamento"] ?? null);
+        $beneficiario->setid_campamento(!empty($data["id_campamento"]) ? (int)$data["id_campamento"] : null);
 
         if (!$beneficiario->insertarDiscapacitados()) {
             throw new Exception("Error al insertar beneficiario");
