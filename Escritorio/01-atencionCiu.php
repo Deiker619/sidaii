@@ -625,6 +625,7 @@ include_once("partearriba.php");
 <script src="../package/dist/sweetalert2.all.min.js"></script>
 
 <script src="../php/api.js"></script>
+<script src="formulario.js"></script>
 <!-- <script src="validacion.js"></script> -->
 <script type="text/javascript">
     $(function() {
