@@ -229,6 +229,28 @@ include_once("partearriba.php");
                                         <option value="no">No</option>
                                     </select>
                                 </div>
+                                <div class="input-field" id="camp_cerrar_box" style="display:none;">
+                                    <label>¿Desea cerrar el caso y entregar la ayuda técnica directamente?</label>
+                                    <select name="camp_cerrar" id="camp_cerrar">
+                                        <option value="">Seleccione</option>
+                                        <option value="si">Sí</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div class="input-field" id="camp_ayuda_box" style="display:none;">
+                                    <label>¿Qué ayuda técnica se le entregará?</label>
+                                    <select name="camp_ayuda" id="camp_ayuda">
+                                        <option value="">Seleccione una opción</option>
+                                        <?php
+                                        include_once("../php/01-01-ayudas_tec.php");
+                                        $ayudas_tec = new Ayudas_tec(1);
+                                        $consulta_ayudas = $ayudas_tec->consultarTiposAyuda();
+                                        foreach ($consulta_ayudas as $i) {
+                                            echo '<option value="' . $i["id"] . '">' . $i["nombre_tipoayuda"] . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="details personal" id="camp_ubicacion" style="display:none;">
@@ -702,6 +724,8 @@ include_once("partearriba.php");
                 var vivienda_habitable = $("#vivienda_habitable").val();
                 var en_campamento = $("#en_campamento").val();
                 var id_campamento = $("#id_campamento").val();
+                var camp_cerrar = $("#camp_cerrar").val();
+                var camp_ayuda = $("#camp_ayuda").val();
                 console.log(cuidador, cedula_cui)
 
                 /*  var nombre = $("#nombre").val(); */
@@ -882,7 +906,9 @@ include_once("partearriba.php");
                                 nacionalidad: nacionalidad,
                                 vivienda_habitable: vivienda_habitable,
                                 en_campamento: en_campamento,
-                                id_campamento: id_campamento
+                                id_campamento: id_campamento,
+                                camp_cerrar: camp_cerrar,
+                                camp_ayuda: camp_ayuda
                             },
                             success: function(data) {
                                 console.log(data)
@@ -928,6 +954,14 @@ include_once("partearriba.php");
 
     function toggleAyudaTecnica(){
         var atencion = $("#atencion").val();
+        var camp_ayuda = $("#camp_ayuda").val();
+
+        if(camp_ayuda){
+            $("#ayuda_tecnica_box").slideUp();
+            $("#atencion_recibida").prop("required", false);
+            $("#atencion_recibida").val("");
+            return;
+        }
 
         if(atencion === "1-oac"){
             $("#ayuda_tecnica_box").slideDown();
@@ -946,6 +980,22 @@ include_once("partearriba.php");
         toggleAyudaTecnica();
     });
 
+    // Exclusión mutua: si se elige ayuda del campamento, se limpia la de OAC y viceversa
+    $("#atencion_recibida").on("change", function(){
+        if($(this).val()){
+            $("#camp_ayuda").val("");
+            $("#camp_ayuda").prop("required", false);
+            $("#camp_cerrar").val("");
+            $("#camp_cerrar").prop("required", false);
+            $("#camp_ayuda_box").slideUp();
+            toggleAyudaTecnica();
+        }
+    });
+
+    $("#camp_ayuda").on("change", function(){
+        toggleAyudaTecnica();
+    });
+
     $("#vivienda_habitable").on("change", function () {
         if ($(this).val() === "no") {
             $("#camp_pregunta").slideDown();
@@ -953,16 +1003,44 @@ include_once("partearriba.php");
             $("#camp_pregunta").slideUp();
             $("#camp_ubicacion").slideUp();
             $("#en_campamento").val("");
+            $("#camp_cerrar_box").slideUp();
+            $("#camp_ayuda_box").slideUp();
+            $("#camp_cerrar").val("");
+            $("#camp_ayuda").val("");
+            $("#camp_cerrar").prop("required", false);
+            $("#camp_ayuda").prop("required", false);
+            toggleAyudaTecnica();
         }
     });
 
     $("#en_campamento").on("change", function () {
         if ($(this).val() === "si") {
             $("#camp_ubicacion").slideDown();
+            $("#camp_cerrar_box").slideDown();
+            $("#camp_cerrar").prop("required", true);
             camp_recargarLista();
         } else {
             $("#camp_ubicacion").slideUp();
+            $("#camp_cerrar_box").slideUp();
+            $("#camp_ayuda_box").slideUp();
+            $("#camp_cerrar").val("");
+            $("#camp_ayuda").val("");
+            $("#camp_cerrar").prop("required", false);
+            $("#camp_ayuda").prop("required", false);
+            toggleAyudaTecnica();
         }
+    });
+
+    $("#camp_cerrar").on("change", function () {
+        if ($(this).val() === "si") {
+            $("#camp_ayuda_box").slideDown();
+            $("#camp_ayuda").prop("required", true);
+        } else {
+            $("#camp_ayuda_box").slideUp();
+            $("#camp_ayuda").val("");
+            $("#camp_ayuda").prop("required", false);
+        }
+        toggleAyudaTecnica();
     });
 
     $("#camp_estado").on("change", function () {

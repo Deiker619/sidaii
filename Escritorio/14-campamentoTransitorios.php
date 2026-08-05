@@ -130,6 +130,14 @@ include_once("partearriba.php");
         </div>
     </div>
 
+    <!-- Gráfica de ayudas técnicas otorgadas -->
+    <div class="graficas">
+        <div class="tarjetas-graficas">
+            <h2 class="titulo-grafica">Ayudas técnicas otorgadas en campamentos</h2>
+            <canvas id="campAyudaTecnica"></canvas>
+        </div>
+    </div>
+
     <!-- Tabla de personas en campamentos transitorios -->
     <div class="tabla-atencion" id="tablaCampamentos">
         <h2>Personas en campamentos transitorios</h2>
@@ -181,7 +189,7 @@ include_once("partearriba.php");
     </div>
 </div>
 
-<script src="mainCampamento.js"></script>
+<script src="mainCampamento.js?v=3"></script>
 <script src="graficas/graficasEstadales/buscarCampMensual.js"></script>
 
 <script>

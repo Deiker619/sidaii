@@ -126,6 +126,21 @@ class Ayudas_tec extends ManejadorBD{
 				exit();
 	        } 
 		}
+		public function consultarTiposAyuda(){
+			try{	
+
+				$stmt = $this->cnn->prepare("SELECT id, nombre_tipoayuda FROM tipo_ayuda_tecnica ORDER BY nombre_tipoayuda");
+				$stmt->setFetchMode(PDO::FETCH_ASSOC);
+				$stmt->execute();
+				return $stmt->fetchAll();
+
+	        }catch(PDOException $error) {
+			    // Mostramos un mensaje genérico de error.
+				echo "Error: ejecutando consulta SQL.".$error->getMessage();
+				exit();
+	        } 
+		}
+
 		public function consultarAyudas_tec(){
 			try{	
 

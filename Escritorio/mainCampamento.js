@@ -2,6 +2,7 @@ const campSexo = document.querySelector("#campSexo").getContext("2d");
 const campEdad = document.querySelector("#campEdad").getContext("2d");
 const campDiscGeneral = document.querySelector("#campDiscGeneral").getContext("2d");
 const campDiscEspecifica = document.querySelector("#campDiscEspecifica").getContext("2d");
+const campAyudaTecnica = document.querySelector("#campAyudaTecnica").getContext("2d");
 
 $(document).ready(function () {
   cargarCampSexo();
@@ -161,6 +162,50 @@ function cargarCampDiscapacidadEspecifica() {
               label: "Personas por discapacidad específica",
               data: cantidades,
               borderColor: "#0e9cd4",
+              borderWidth: 2,
+              Fill: false,
+              cubicInterpolationMode: "default",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          bezierCurve: "Smooth",
+          interaction: {
+            intersect: false,
+          },
+        },
+      });
+    },
+  });
+}
+
+$(document).ready(function () {
+  cargarCampAyudaTecnica();
+});
+function cargarCampAyudaTecnica() {
+  $.ajax({
+    type: "POST",
+    url: "graficas/graficasEstadales/graficasCampAyudaTecnica.php",
+    dataType: "json",
+    success: function (ayudas) {
+      var tipos = [];
+      var cantidades = [];
+
+      for (var i = 0; i < ayudas.length; i++) {
+        tipos.push(ayudas[i].ayuda);
+        cantidades.push(ayudas[i].cantidades);
+      }
+
+      new Chart(campAyudaTecnica, {
+        type: "line",
+        data: {
+          labels: tipos,
+          datasets: [
+            {
+              label: "Ayudas técnicas otorgadas",
+              data: cantidades,
+              borderColor: "#38b000",
               borderWidth: 2,
               Fill: false,
               cubicInterpolationMode: "default",

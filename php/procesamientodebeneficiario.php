@@ -7,6 +7,57 @@ include_once("detalles_emprendimiento.php");
 include_once("detalles_cuidador.php");
 
 if (isset($_POST['accion'])  && $_POST['accion'] == 'si-atencion'){
+
+function entregarAyudaDirecta($atencion, $camp_ayuda, $cedulauser, $cedula)
+{
+    $ult = $atencion->UltimoIdRegistrado();
+    if (!$ult) {
+        return "";
+    }
+    $atencion->setnumero_aten($ult["id"]);
+    $atencion->setfecha_aten(date("Y-m-d"));
+    $atencion->setatencion_recibida($camp_ayuda);
+    $atencion->setatencion_brindada("-ayudatec");
+    $atencion->setpor($cedulauser);
+    $atencion->setcedula($cedula);
+
+    $aviso = "";
+    $verificar = function ($objeto) use ($camp_ayuda, $cedula) {
+        $objeto->setcedula($cedula);
+        $objeto->setatencion_recibida($camp_ayuda);
+        $resultados = $objeto->CalculoeAtenciones();
+        foreach ($resultados as $i) {
+            if ($camp_ayuda == $i["atencion_recibida"] && !empty($i["fecha_aten"])) {
+                $fecha1 = new DateTime($i["fecha_aten"]);
+                $fecha2 = new DateTime(date("Y-m-d"));
+                $difer = $fecha1->diff($fecha2)->days;
+                if ($difer < 180) {
+                    return " Aviso: este beneficiario ya recibió esta ayuda hace " . $difer . " día(s).";
+                }
+                break;
+            }
+        }
+        return "";
+    };
+
+    $aviso = $verificar($atencion);
+    if ($aviso === "") {
+        require_once("../php/01-atenciones.php");
+        require_once("../php/01-atenciones-estadales.php");
+        $otra = ($atencion instanceof Atenciones)
+            ? new AtencionesEstadales(1)
+            : new Atenciones(1);
+        $aviso = $verificar($otra);
+    }
+
+    if ($aviso === "") {
+        $atencion->modificarAtenciones();
+    } else {
+        $atencion->eliminarAtencion();
+    }
+    return $aviso;
+}
+
 if (isset($_POST['registrado'])) {
 	$beneficiario = new Discapacitados(1);
 	$cedula = $_POST["cedula"];
@@ -14,9 +65,19 @@ if (isset($_POST['registrado'])) {
 
 	$atencion_solicitada = $_POST["atencion"];
 	$atencion_recibida = $_POST["atencion_recibida"] ?? null;
+	$camp_cerrar = $_POST["camp_cerrar"] ?? null;
+	$camp_ayuda = $_POST["camp_ayuda"] ?? null;
 
 if ($atencion_recibida === '' || $atencion_recibida === 'null') {
     $atencion_recibida = null;
+}
+
+if ($camp_cerrar === '' || $camp_cerrar === 'null') {
+    $camp_cerrar = null;
+}
+
+if ($camp_ayuda === '' || $camp_ayuda === 'null') {
+    $camp_ayuda = null;
 }
 	$beneficiario->setcedula($cedula);
 
@@ -31,16 +92,20 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 				$atencion->setasignado($cedulauser);
 				$atencion->setcedula($cedula);
 				$atencion->setatencion_solicitada($atencion_solicitada);
-				$atencion->setatencion_recibida($atencion_recibida);
+				$atencion->setatencion_recibida(($camp_cerrar === 'si' && $camp_ayuda) ? $camp_ayuda : $atencion_recibida);
 				$consultaayuda = $atencion->autenticarAtencion();
+
+				$atencion->insertarAtencion();
 
 				$data = [
 					'message' => 'Se registro exitosamente',
 					'others' => $consultaayuda ?? null
 				];
+				if ($camp_cerrar === 'si' && $camp_ayuda) {
+					$data['message'] .= entregarAyudaDirecta($atencion, $camp_ayuda, $cedulauser, $cedula);
+				}
 				header('Content-Type: application/json');
 				echo json_encode($data);
-				$atencion->insertarAtencion();
 
 				break;
 
@@ -157,15 +222,18 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
 				$atencion->setatencion_solicitada($atencion_solicitada);
-				$atencion->setatencion_recibida($atencion_recibida);
+				$atencion->setatencion_recibida(($camp_cerrar === 'si' && $camp_ayuda) ? $camp_ayuda : $atencion_recibida);
 				$consultaayuda = $atencion->autenticarAtencion();
+				$atencion->insertarAtencion();
 				$data = [
 					'message' => 'Se registro exitosamente',
 					'others' => $consultaayuda ?? null
 				];
+				if ($camp_cerrar === 'si' && $camp_ayuda) {
+					$data['message'] .= entregarAyudaDirecta($atencion, $camp_ayuda, $cedulauser, $cedula);
+				}
 				header('Content-Type: application/json');
 				echo json_encode($data);
-				$atencion->insertarAtencion();
 
 
 				break;
@@ -199,9 +267,19 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 	$cedulauser = $_POST["cedulauser"];
 	$atencion_solicitada = $_POST["atencion"];
 	$atencion_recibida = $_POST["atencion_recibida"] ?? null;
+	$camp_cerrar = $_POST["camp_cerrar"] ?? null;
+	$camp_ayuda = $_POST["camp_ayuda"] ?? null;
 
 if ($atencion_recibida === '' || $atencion_recibida === 'null') {
     $atencion_recibida = null;
+}
+
+if ($camp_cerrar === '' || $camp_cerrar === 'null') {
+    $camp_cerrar = null;
+}
+
+if ($camp_ayuda === '' || $camp_ayuda === 'null') {
+    $camp_ayuda = null;
 }
 
 	$nombre = $_POST["nombre"];
@@ -326,11 +404,14 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 					$atencion->setcedula($cedula);
 					$atencion->setasignado($cedulauser);
 					$atencion->setatencion_solicitada($atencion_solicitada);
-					$atencion->setatencion_recibida($atencion_recibida);
+					$atencion->setatencion_recibida(($camp_cerrar === 'si' && $camp_ayuda) ? $camp_ayuda : $atencion_recibida);
 				$consultaayuda = $atencion->autenticarAtencion();
 
 				$atencion->insertarAtencion();
 				echo "Se registró " . $nombre . " exitosamente";
+				if ($camp_cerrar === 'si' && $camp_ayuda) {
+					echo entregarAyudaDirecta($atencion, $camp_ayuda, $cedulauser, $cedula);
+				}
 				break;
 
 			case "0-aten-coo":
@@ -339,9 +420,12 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 					$atencion->setcedula($cedula);
 					$atencion->setasignado($cedulauser);
 					$atencion->setatencion_solicitada($atencion_solicitada);
-					$atencion->setatencion_recibida($atencion_recibida);
+					$atencion->setatencion_recibida(($camp_cerrar === 'si' && $camp_ayuda) ? $camp_ayuda : $atencion_recibida);
 				$atencion->insertarAtencion();
 				echo "Se registró " . $nombre . " exitosamente";
+				if ($camp_cerrar === 'si' && $camp_ayuda) {
+					echo entregarAyudaDirecta($atencion, $camp_ayuda, $cedulauser, $cedula);
+				}
 				break;
 
 			case "2-ayudte":
@@ -446,10 +530,13 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
 				$atencion->setatencion_solicitada($atencion_solicitada);
-				$atencion->setatencion_recibida($atencion_recibida);
+				$atencion->setatencion_recibida(($camp_cerrar === 'si' && $camp_ayuda) ? $camp_ayuda : $atencion_recibida);
 				$consultaayuda = $atencion->autenticarAtencion();
 				echo "Ya " . $nombre . " se encuentra registrado, se le cargara otra solicitud ";
 				$atencion->insertarAtencion();
+				if ($camp_cerrar === 'si' && $camp_ayuda) {
+					echo entregarAyudaDirecta($atencion, $camp_ayuda, $cedulauser, $cedula);
+				}
 
 				break;
 
@@ -458,8 +545,13 @@ if ($atencion_recibida === '' || $atencion_recibida === 'null') {
 				$atencion = new AtencionesEstadales(1);
 				$atencion->setcedula($cedula);
 				$atencion->setasignado($cedulauser);
+				$atencion->setatencion_solicitada($atencion_solicitada);
+				$atencion->setatencion_recibida(($camp_cerrar === 'si' && $camp_ayuda) ? $camp_ayuda : $atencion_recibida);
 				$atencion->insertarAtencion();
 				echo "Ya " . $nombre . " se encuentra registrado, se le cargara otra solicitud";
+				if ($camp_cerrar === 'si' && $camp_ayuda) {
+					echo entregarAyudaDirecta($atencion, $camp_ayuda, $cedulauser, $cedula);
+				}
 				break;
 
 			case "8-rehabilitacion":

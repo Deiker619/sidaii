@@ -662,6 +662,21 @@ public function consultarTodosAtenciones()
 		}
 	}
 
+	public function UltimoIdRegistrado()
+	{
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT MAX(numero_aten) as id FROM atenciones_coordinaciones;");
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+
+			return $stmt->fetch();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
 	public function carga_solicitud()
 	{
 
@@ -1748,6 +1763,39 @@ public function consultarTodosAtenciones()
 				 INNER JOIN discapacid_e ON beneficiario.discapacidad = discapacid_e.id_e
 				 WHERE beneficiario.en_campamento = 'si'
 				 GROUP BY discapacid_e.nombre_e"
+			);
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			return $stmt->fetchAll();
+		} catch (PDOException $error) {
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
+	/**
+	 * Cuenta las ayudas técnicas otorgadas a personas en campamentos
+	 * transitorios, agrupadas por tipo de ayuda.
+	 */
+	public function campamentos_por_ayuda_tecnica()
+	{
+		try {
+			$stmt = $this->cnn->prepare(
+				"SELECT tipo_ayuda_tecnica.nombre_tipoayuda AS ayuda, COUNT(*) as cantidades
+				 FROM (
+					 SELECT a.atencion_recibida
+					 FROM atenciones a
+					 INNER JOIN beneficiario b ON b.cedula = a.cedula
+					 WHERE a.atencion_brindada = '-ayudatec' AND b.en_campamento = 'si'
+					 UNION ALL
+					 SELECT ac.atencion_recibida
+					 FROM atenciones_coordinaciones ac
+					 INNER JOIN beneficiario b ON b.cedula = ac.cedula
+					 WHERE ac.atencion_brindada = '-ayudatec' AND b.en_campamento = 'si'
+				 ) t
+				 INNER JOIN tipo_ayuda_tecnica ON tipo_ayuda_tecnica.id = t.atencion_recibida
+				 GROUP BY tipo_ayuda_tecnica.nombre_tipoayuda
+				 ORDER BY cantidades DESC"
 			);
 			$stmt->setFetchMode(PDO::FETCH_ASSOC);
 			$stmt->execute();
