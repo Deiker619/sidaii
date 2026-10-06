@@ -35,7 +35,8 @@ include_once("02-jornadas.php");
 		//echo "Host: ".$host."<br>";
 		$uri=rtrim(dirname($_SERVER['PHP_SELF']), '/\\'); //Devuelve el Directorio desde donde se esta ejecutando la pagina que invoca la funcion.
 		//echo "Uri: ".$uri."<br>";
-		header("Location: http://$host$uri/$url"); //Redirecciona a la Pagina Solicitada
+		$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) ? "https" : "http";
+		header("Location: $protocol://$host$uri/$url"); //Redirecciona a la Pagina Solicitada
 		ob_flush();  // Se utiliza para solucionar el error de  headers already sent 
 	}
 

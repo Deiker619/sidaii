@@ -237,11 +237,11 @@ $coordinacion_json = json_encode($coordi);
                             window.location = "02-jornadas.php";
                         })
                     },
-                    error: function(data) {
+                    error: function(jqXHR, textStatus, errorThrown) {
                         Swal.fire({
                             'icon': 'error',
                             'title': 'Oops...',
-                            'text': data
+                            'text': 'Error de comunicación: ' + errorThrown
                         })
                     }
                 })
@@ -327,11 +327,11 @@ $coordinacion_json = json_encode($coordi);
                                     })
                                 }
                             },
-                            error: function(data) {
+                            error: function(jqXHR, textStatus, errorThrown) {
                                 Swal.fire({
                                     'icon': 'error',
                                     'title': 'Oops...',
-                                    'text': data
+                                    'text': 'Error de comunicación: ' + errorThrown
                                 })
                             }
                         })
