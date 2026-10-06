@@ -1,4 +1,12 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$rolActual = $_SESSION['rol'] ?? '';
+if ($rolActual !== '1adm' && $rolActual !== '3supe') {
+    header('Location: index.php');
+    exit;
+}
 include_once("partearriba.php");
 ?>
 

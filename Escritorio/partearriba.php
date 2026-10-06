@@ -39,7 +39,7 @@
 
 <body>
     <?php
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) session_start();
     include_once("../php/03-usuario.php");
     $user = new Usuario(1);
 
@@ -144,7 +144,6 @@
                         <?php }?>
                         <!-- <li><a href="14-coordinacionesEstadales.php">Coordinaciones estadales</a></li> -->
                         <li><a href="02-jornadas.php">Jornadas</a></li>
-                        <li><a href="12-D-escuela-comunitaria.php">Talleres</a></li>
                         <li><a href="10-encuentros.php">Encuentros</a></li>
                         <li><a href="13-proteccionSocial.php">Proteccion social</a></li>
                         <li><a href="14-campamentoTransitorios.php">Campamentos transitorios</a></li>
@@ -189,7 +188,7 @@
             <!-- Copias -->
             <!-- Boton 1: Dashboard -->
             <?php
-            if ($rol == "Administrador" || $rol == "Superusuario" || $rol=="Coordinador") {
+            if ($rol == "Administrador" || $rol == "Superusuario" || ($rol == "Coordinador" && !in_array($gerencia, ["4Gtno", "2Atc"]))) {
             ?>
                 <li>
                     <a href="03-registro.php">

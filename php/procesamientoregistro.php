@@ -1,8 +1,13 @@
+<?php
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $rolActual = $_SESSION['rol'] ?? '';
+        if ($rolActual !== '1adm' && $rolActual !== '3supe') {
+            echo "no_autorizado";
+            exit;
+        }
 
-
-
-    
-    <?php
         require_once("03-usuario.php");
 
       
