@@ -125,17 +125,16 @@ include_once("partearriba.php")
             <div class="cards">
                 <?php
 
-                include_once("../php/04-taller.php");
-                $aten = new taller(1);
-                $consulta = $aten->consultarTodosTaller();
-                $talleres = count($consulta);
+                include_once("../php/7-escuela-comunitaria.php");
+                $escTaller = new escuela(1);
+                $talleres = count($escTaller->consultarTodasEscuelas());
 
                 ?>
                 <div class="content">
                     <h2><?php echo $talleres ?></h2>
                     <h3>Talleres total:</h3>
                     <p></p>
-                    <a href="08-desarrolloSocial-talleres.php">Ir</a>
+                    <a href="12-D-escuela-comunitaria.php">Ir</a>
                 </div>
             </div>
 
@@ -153,21 +152,6 @@ include_once("partearriba.php")
                     <h3>Encuentros total:</h3>
                     <p></p>
                     <a href="10-encuentros.php">Ir</a>
-                </div>
-            </div>
-
-            <div class="cards">
-                <?php
-                include_once("../php/7-escuela-comunitaria.php");
-                $esc = new escuela(1);
-                $contar = $esc->consultarTodasEscuelas();
-
-                ?>
-                <div class="content">
-                    <h2><?php echo count($contar) ?></h2>
-                    <h3>Cursos:</h3>
-                    <p></p>
-                    <a href="12-D-escuela-comunitaria.php">Ir</a>
                 </div>
             </div>
         <?php } ?>

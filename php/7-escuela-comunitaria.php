@@ -201,7 +201,7 @@ class escuela extends ManejadorBD{
 
 			try{	
 
-				$stmt = $this->cnn->prepare("SELECT escuela_comunitaria.id_curso, escuela_comunitaria.fecha_inicio,escuela_comunitaria.fecha_final,escuela_comunitaria.Tema, escuela_comunitaria.coordinacion, escuela_comunitaria.gerencia ,escuela_comunitaria.comunidad,estados.nombre_estado ,municipios.nombre ,parroquia.nombre_parroquia FROM `escuela_comunitaria`, estados, municipios, parroquia WHERE escuela_comunitaria.estado = estados.id_estados and municipios.id_municipios = escuela_comunitaria.estado and parroquia.id = escuela_comunitaria.parroquia");
+				$stmt = $this->cnn->prepare("SELECT escuela_comunitaria.id_curso, escuela_comunitaria.fecha_inicio,escuela_comunitaria.fecha_final,escuela_comunitaria.Tema, escuela_comunitaria.coordinacion, escuela_comunitaria.gerencia ,escuela_comunitaria.comunidad,estados.nombre_estado ,municipios.nombre ,parroquia.nombre_parroquia FROM `escuela_comunitaria`, estados, municipios, parroquia WHERE escuela_comunitaria.estado = estados.id_estados and municipios.id_municipios = escuela_comunitaria.municipio and parroquia.id = escuela_comunitaria.parroquia");
 				// Especificamos el fetch mode antes de llamar a fetch()
 				$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 				// Ejecutamos
