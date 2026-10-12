@@ -37,7 +37,7 @@ $solicitud -> setparroquia($parroquia);
 
 $solicitud -> setedad($edad);
 $solicitud -> setsexo($sexo);
-$solicitud -> setfecha_naci($parroquia);
+$solicitud -> setfecha_naci($fecha_nacimiento);
 $solicitud -> setnacionalidad($nacionalidad);
 $solicitud -> insertarParticipante();
 }
