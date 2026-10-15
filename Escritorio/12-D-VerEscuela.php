@@ -76,15 +76,15 @@ include_once("partearriba.php");
 
                             <div class="input-field">
                                 <label>estado</label>
-                                <input type="text" placeholder="Ingresa el nombre" required readonly value="<?php echo $registro["estado"] ?>">
+                                <input type="text" placeholder="Ingresa el nombre" required readonly value="<?php echo $registro["nombre_estado"] ?>">
                             </div>
                             <div class="input-field">
                                 <label>municipio</label>
-                                <input type="text" placeholder="Ingresa el nombre" required readonly value="<?php echo $registro["municipio"] ?>">
+                                <input type="text" placeholder="Ingresa el nombre" required readonly value="<?php echo $registro["nombre_municipio"] ?>">
                             </div>
                             <div class="input-field">
                                 <label>parroquia</label>
-                                <input type="text" placeholder="Ingresa el nombre" required readonly value="<?php echo $registro["parroquia"] ?>">
+                                <input type="text" placeholder="Ingresa el nombre" required readonly value="<?php echo $registro["nombre_parroquia"] ?>">
                             </div>
                             <div class="input-field">
                                 <label>Comuna</label>
@@ -192,46 +192,15 @@ include_once("partearriba.php");
                                 </div>
 
                             <div class="input-field">
-                                <label>Estado</label>
-                                <select name="estado" id="estado" require>
-                                    <option value="0">Seleciona una opcion</option>
-                                    <option value="1">Amazonas</option>
-                                    <option value="2">Anzoátegui</option>
-                                    <option value="3">Apure</option>
-                                    <option value="4">Aragua</option>
-                                    <option value="5">Barinas</option>
-                                    <option value="6">Bolívar</option>
-                                    <option value="7">Carabobo</option>
-                                    <option value="8">Cojedes</option>
-                                    <option value="9">Delta Amacuro</option>
-                                    <option value="24">Distrito Capital</option>
-                                    <option value="10">Falcon</option>
-                                    <option value="11">Guarico</option>
-                                    <option value="21">La Guaira</option>
-                                    <option value="12">Lara</option>
-                                    <option value="13">Mérida</option>
-                                    <option value="14">Miranda</option>
-                                    <option value="15">Monagas</option>
-                                    <option value="16">Nueva Esparta</option>
-                                    <option value="17">Portuguesa</option>
-                                    <option value="18">Sucre</option>
-                                    <option value="19">Tachira</option>
-                                    <option value="20">Trujillo</option>
-                                    <option value="22">Yaracuy</option>
-                                    <option value="23">Zulia</option>
-
-                                </select>
+                                <label>Dirección</label>
+                                <input type="text" required readonly
+                                    value="<?php echo $registro["nombre_estado"] . ' / ' . $registro["nombre_municipio"] . ' / ' . $registro["nombre_parroquia"] ?>">
                             </div>
 
-                            <div class="input-field" id="lista2">
-
-
-                            </div>
-
-                            <div class="input-field" id="lista3">
-
-
-                            </div>
+                            <!-- El participante vive en la misma dirección que el taller: se envía la del taller -->
+                            <input type="hidden" name="estado" id="estado" value="<?php echo $registro["estado"] ?>">
+                            <input type="hidden" name="municipio" id="municipio" value="<?php echo $registro["municipio"] ?>">
+                            <input type="hidden" name="parroquia" id="parroquia" value="<?php echo $registro["parroquia"] ?>">
 
 
                         </div>

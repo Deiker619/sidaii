@@ -198,7 +198,12 @@ class escuela extends ManejadorBD{
 		public function consultarescuela(){
 			try{	
 
-				$stmt = $this->cnn->prepare("SELECT * FROM `escuela_comunitaria` WHERE id_curso = :id");
+				$stmt = $this->cnn->prepare("SELECT escuela_comunitaria.*, estados.nombre_estado, municipios.nombre AS nombre_municipio, parroquia.nombre_parroquia 
+											FROM `escuela_comunitaria`, estados, municipios, parroquia 
+											WHERE escuela_comunitaria.id_curso = :id 
+											AND estados.id_estados = escuela_comunitaria.estado 
+											AND municipios.id_municipios = escuela_comunitaria.municipio 
+											AND parroquia.id = escuela_comunitaria.parroquia");
 				// Especificamos el fetch mode antes de llamar a fetch()
 				$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 				// Asiganmos valores a los parametros
