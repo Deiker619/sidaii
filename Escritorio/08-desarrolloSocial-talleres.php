@@ -15,79 +15,56 @@ include_once("partearriba.php");
     <div class="boxes">
 
         <?php
-        include_once("../php/01-discapacitados.php");
-        $dis = new Discapacitados(1);
+        include_once("../php/04-participante_taller.php");
+        $participantesTaller = new participante_taller(1);
+        $totalParticipantesTaller = $participantesTaller->contarTodosParticipantes();
 
-        $consulta = $dis->consultarTodosDiscapacitados();
-        $sincarnet = $dis->consultageneralsincarnet();
-
-        include_once("../php/01-atenciones.php");
-        $aten = new Atenciones(1);
-
-        $atenciones =  $aten->contarTodasAtencionesa();
+        include_once("../php/05-participante_encuentro.php");
+        $participantesEncuentro = new participante_encuentro(1);
+        $totalParticipantesEncuentro = $participantesEncuentro->contarTodosParticipantes();
 
         ?>
-        <div class="box box1">
+        <div class="box box1 box-azul">
             <div class="contenedor-box">
 
 
                 <div class="boxes1">
                     <div class="cont-box">
-                        <i class='bx bx-first-aid'></i>
+                        <i class='bx bx-book'></i>
                     </div>
                 </div>
                 <div class="boxes2">
-                    <span class="link-name">Atenciones</span></a>
-                    <span class="number"><?php echo count($atenciones) ?></span>
+                    <span class="link-name"><a href="08-desarrolloSocial-talleres.php">Participantes en talleres</a></span>
+                    <span class="number"><?php echo $totalParticipantesTaller["total"] ?></span>
                     <div class="progress">
                         <div class="progress-bar" style="width:75%;">
                             <span class="progress-bar-text"></span>
                         </div>
                     </div>
+                    <span> <a href="08-desarrolloSocial-talleres.php" class="ir"><i class='bx bxs-right-top-arrow-circle'></i></a></span>
 
                 </div>
             </div>
         </div>
-        <div class="box box1">
+
+        <div class="box box1 box-azul">
             <div class="contenedor-box">
 
 
                 <div class="boxes1">
                     <div class="cont-box">
-                        <i class='bx bx-id-card'></i>
+                        <i class='bx bx-calendar-event'></i>
                     </div>
                 </div>
                 <div class="boxes2">
-                    <span class="link-name"><a href="sincarnet.php">Sin carnet </a></span>
-                    <span class="number"><?php echo count($sincarnet) ?></span>
+                    <span class="link-name"><a href="10-encuentros.php">Participantes en encuentros</a></span>
+                    <span class="number"><?php echo $totalParticipantesEncuentro["total"] ?></span>
                     <div class="progress">
                         <div class="progress-bar" style="width:75%;">
                             <span class="progress-bar-text"></span>
                         </div>
                     </div>
-                    <span> <a href="sincarnet.php" class="ir"><i class='bx bxs-right-top-arrow-circle'></i></a></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="box box1">
-            <div class="contenedor-box">
-
-
-                <div class="boxes1">
-                    <div class="cont-box">
-                        <i class='bx bx-group'></i>
-                    </div>
-                </div>
-                <div class="boxes2">
-                    <span class="link-name"><a href="Beneficiarios.php">Beneficiarios </a></span>
-                    <span class="number"><?php echo count($consulta); ?></span>
-                    <div class="progress">
-                        <div class="progress-bar" style="width:75%;">
-                            <span class="progress-bar-text"></span>
-                        </div>
-                    </div>
-                    <span> <a href="Beneficiarios.php" class="ir"><i class='bx bxs-right-top-arrow-circle'></i></a></span>
+                    <span> <a href="10-encuentros.php" class="ir"><i class='bx bxs-right-top-arrow-circle'></i></a></span>
                 </div>
             </div>
         </div>

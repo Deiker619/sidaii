@@ -280,6 +280,26 @@ class participante_encuentro extends ManejadorBD
 		}
 	}
 
+	public function contarTodosParticipantes()
+	{
+
+		try {
+
+			$stmt = $this->cnn->prepare("SELECT COUNT(*) as total FROM participante_encuentro");
+			// Especificamos el fetch mode antes de llamar a fetch()
+			$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
+			// Ejecutamos
+			$stmt->execute();
+
+			// Devuelve los resultados obtenidos
+			return $stmt->fetch();
+		} catch (PDOException $error) {
+			// Mostramos un mensaje genérico de error.
+			echo "Error: ejecutando consulta SQL." . $error->getMessage();
+			exit();
+		}
+	}
+
 	public function contarJornadas()
 	{
 

@@ -172,8 +172,8 @@ class participante_escuela extends ManejadorBD{
 		public function insertarParticipante(){
 			try{	
 
-				$stmt = $this->cnn->prepare("INSERT INTO `participante_escuela`(`cedula`, `nombre`, `apellido`, `discapacidad`, `id_curso`, `telefono`, `email`, estado, municipio, parroquia, edad, sexo, fecha_nacimiento, nacionalidad
-            															) VALUES (:cedula, :nombre, :apellido, :discapacidad, :id_curso, :telefono, :email, :estado, :municipio, :parroquia, :edad, :sexo, :fecha_nacimiento, :nacionalidad)");
+				$stmt = $this->cnn->prepare("INSERT INTO `participante_escuela`(`cedula`, `nombre`, `apellido`, `discapacidad`, `id_curso`, `telefono`, estado, municipio, parroquia, edad, sexo, fecha_nacimiento, nacionalidad
+            															) VALUES (:cedula, :nombre, :apellido, :discapacidad, :id_curso, :telefono, :estado, :municipio, :parroquia, :edad, :sexo, :fecha_nacimiento, :nacionalidad)");
 				
 				// Asignamos valores a los parametros
                 $stmt->bindParam(':cedula', $this->cedula);
@@ -181,7 +181,6 @@ class participante_escuela extends ManejadorBD{
 				$stmt->bindParam(':apellido', $this->apellido);
                 $stmt->bindParam(':discapacidad', $this->discapacidad);
 				$stmt->bindParam(':telefono', $this->telefono);
-				$stmt->bindParam(':email', $this->email);
                 $stmt->bindParam(':estado', $this->estado);
 				$stmt->bindParam(':municipio', $this->municipio);
 				$stmt->bindParam(':parroquia', $this->parroquia);

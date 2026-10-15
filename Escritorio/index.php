@@ -50,6 +50,7 @@ include_once("partearriba.php")
         $atenciones =  $aten->contarTodasAtencionesa();
 
         ?>
+        <?php if ($gerencia != "3Gtnd") { ?>
         <div class="box box1">
             <div class="contenedor-box">
 
@@ -111,6 +112,61 @@ include_once("partearriba.php")
                         </div>
                     </div>
                     <span> <a href="Beneficiarios.php" class="ir"><i class='bx bxs-right-top-arrow-circle'></i></a></span>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+
+        <div class="box box1 box-azul">
+            <div class="contenedor-box">
+
+                <?php
+                include_once("../php/04-participante_taller.php");
+                $participantesTaller = new participante_taller(1);
+                $totalParticipantesTaller = $participantesTaller->contarTodosParticipantes();
+                ?>
+
+                <div class="boxes1">
+                    <div class="cont-box">
+                        <i class='bx bx-book'></i>
+                    </div>
+                </div>
+                <div class="boxes2">
+                    <span class="link-name"><a href="08-desarrolloSocial-talleres.php">Participantes en talleres</a></span>
+                    <span class="number"><?php echo $totalParticipantesTaller["total"] ?></span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width:75%;">
+                            <span class="progress-bar-text"></span>
+                        </div>
+                    </div>
+                    <span> <a href="08-desarrolloSocial-talleres.php" class="ir"><i class='bx bxs-right-top-arrow-circle'></i></a></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="box box1 box-azul">
+            <div class="contenedor-box">
+
+                <?php
+                include_once("../php/05-participante_encuentro.php");
+                $participantesEncuentro = new participante_encuentro(1);
+                $totalParticipantesEncuentro = $participantesEncuentro->contarTodosParticipantes();
+                ?>
+
+                <div class="boxes1">
+                    <div class="cont-box">
+                        <i class='bx bx-calendar-event'></i>
+                    </div>
+                </div>
+                <div class="boxes2">
+                    <span class="link-name"><a href="10-encuentros.php">Participantes en encuentros</a></span>
+                    <span class="number"><?php echo $totalParticipantesEncuentro["total"] ?></span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width:75%;">
+                            <span class="progress-bar-text"></span>
+                        </div>
+                    </div>
+                    <span> <a href="10-encuentros.php" class="ir"><i class='bx bxs-right-top-arrow-circle'></i></a></span>
                 </div>
             </div>
         </div>

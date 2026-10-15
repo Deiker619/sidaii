@@ -7,6 +7,8 @@ class escuela extends ManejadorBD{
         private $estado;
         private $municipio;
         private $parroquia;
+		private $comuna;
+		private $consejo_comunal;
 		private $comunidad;
         private $fecha_inicio;
         private $fecha_final;
@@ -73,6 +75,24 @@ class escuela extends ManejadorBD{
 		    $this->parroquia = $parroquia;		    
 		}
 
+		public function getcomuna()
+        {
+            return $this->comuna;
+        }
+		public function setcomuna($comuna)
+		{
+		    $this->comuna = $comuna;		    
+		}
+
+		public function getconsejo_comunal()
+        {
+            return $this->consejo_comunal;
+        }
+		public function setconsejo_comunal($consejo_comunal)
+		{
+		    $this->consejo_comunal = $consejo_comunal;		    
+		}
+
 
 
 		public function getfecha_inicio()
@@ -120,8 +140,8 @@ class escuela extends ManejadorBD{
 		public function insertarescuela($coordinacion){
 			try{	
 
-				$stmt = $this->cnn->prepare("INSERT INTO escuela_comunitaria (fecha_inicio, fecha_final, tema, comunidad, estado, municipio, parroquia, gerencia, coordinacion) 
-											VALUES (:fecha_inicio, :fecha_final, :tema, :comunidad, :estado, :municipio, :parroquia, :gerencia, :coordinacion )");
+				$stmt = $this->cnn->prepare("INSERT INTO escuela_comunitaria (fecha_inicio, fecha_final, tema, comunidad, estado, municipio, parroquia, comuna, consejo_comunal, gerencia, coordinacion) 
+											VALUES (:fecha_inicio, :fecha_final, :tema, :comunidad, :estado, :municipio, :parroquia, :comuna, :consejo_comunal, :gerencia, :coordinacion )");
 				
 				// Asignamos valores a los parametros
                 $stmt->bindParam(':fecha_inicio', $this->fecha_inicio);
@@ -131,6 +151,8 @@ class escuela extends ManejadorBD{
                 $stmt->bindParam(':estado', $this->estado);
                 $stmt->bindParam(':municipio', $this->municipio);
                 $stmt->bindParam(':parroquia', $this->parroquia);
+                $stmt->bindParam(':comuna', $this->comuna);
+                $stmt->bindParam(':consejo_comunal', $this->consejo_comunal);
                 $stmt->bindParam(':gerencia', $this->gerencia);
                 $stmt->bindParam(':coordinacion', $coordinacion);
 		
@@ -201,7 +223,7 @@ class escuela extends ManejadorBD{
 
 			try{	
 
-				$stmt = $this->cnn->prepare("SELECT escuela_comunitaria.id_curso, escuela_comunitaria.fecha_inicio,escuela_comunitaria.fecha_final,escuela_comunitaria.Tema, escuela_comunitaria.coordinacion, escuela_comunitaria.gerencia ,escuela_comunitaria.comunidad,estados.nombre_estado ,municipios.nombre ,parroquia.nombre_parroquia FROM `escuela_comunitaria`, estados, municipios, parroquia WHERE escuela_comunitaria.estado = estados.id_estados and municipios.id_municipios = escuela_comunitaria.municipio and parroquia.id = escuela_comunitaria.parroquia");
+				$stmt = $this->cnn->prepare("SELECT escuela_comunitaria.id_curso, escuela_comunitaria.fecha_inicio,escuela_comunitaria.fecha_final,escuela_comunitaria.Tema, escuela_comunitaria.coordinacion, escuela_comunitaria.gerencia ,escuela_comunitaria.comunidad,escuela_comunitaria.comuna, escuela_comunitaria.consejo_comunal,estados.nombre_estado ,municipios.nombre ,parroquia.nombre_parroquia FROM `escuela_comunitaria`, estados, municipios, parroquia WHERE escuela_comunitaria.estado = estados.id_estados and municipios.id_municipios = escuela_comunitaria.municipio and parroquia.id = escuela_comunitaria.parroquia");
 				// Especificamos el fetch mode antes de llamar a fetch()
 				$stmt->setFetchMode(PDO::FETCH_ASSOC); // Devuelve los datos en un arreglo asociativo
 				// Ejecutamos

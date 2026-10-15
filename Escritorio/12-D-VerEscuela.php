@@ -86,6 +86,14 @@ include_once("partearriba.php");
                                 <label>parroquia</label>
                                 <input type="text" placeholder="Ingresa el nombre" required readonly value="<?php echo $registro["parroquia"] ?>">
                             </div>
+                            <div class="input-field">
+                                <label>Comuna</label>
+                                <input type="text" placeholder="Sin comuna" readonly value="<?php echo $registro["comuna"] ?>">
+                            </div>
+                            <div class="input-field">
+                                <label>Consejo comunal</label>
+                                <input type="text" placeholder="Sin consejo comunal" readonly value="<?php echo $registro["consejo_comunal"] ?>">
+                            </div>
 
                         </div>
 
@@ -154,11 +162,6 @@ include_once("partearriba.php");
                                     <option value="V">Venezolano</option>
                                     <option value="E">Extranjero</option>
                                 </select>
-                            </div>
-
-                            <div class="input-field">
-                                <label>Email</label>
-                                <input type="email" placeholder="Ingresa el apellido " required name="email" id="email">
                             </div>
 
                             <div class="input-field">
@@ -261,7 +264,6 @@ include_once("partearriba.php");
                         <th>Apellido</th>
                         <th>Cedula</th>
                         <th>Telefono</th>
-                        <th>Email</th>
                         <th>Estado</th>
                         <th>Municipio</th>
                         <th>Parroquia</th>
@@ -286,8 +288,7 @@ include_once("partearriba.php");
                                 <td><?php echo $registros["apellido"] ?></td>
                                 <td><?php echo $registros["cedula"] ?></td>
                                 <td><?php echo $registros["telefono"] ?></td>
-                                <td><?php echo $registros["email"] ?></td>
-                            
+
                                 <td><?php echo $registros["nombre_estado"] ?></td>
                                 <td><?php echo $registros["nombre_municipio"] ?></td>
                                 <td><?php echo $registros["nombre_parroquia"] ?></td>
@@ -314,7 +315,6 @@ include_once("partearriba.php");
                         var nombre = $("#nombre").val();
                         var apellido = $("#apellido").val();
                         var telefono = $("#telefono").val();
-                        var email = $("#email").val();
                         var numero_escuela = $("#numero_escuela").val();
                         var discapacidad = $("#discapacidad").val();
                         var estado = $("#estado").val();
@@ -335,7 +335,6 @@ include_once("partearriba.php");
                                 nombre: nombre,
                                 apellido: apellido,
                                 telefono: telefono,
-                                email: email,
                                 numero_escuela: numero_escuela,
                                 discapacidad: discapacidad,
                                 estado: estado,

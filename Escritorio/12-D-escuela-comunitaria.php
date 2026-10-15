@@ -95,6 +95,16 @@ $coordinacion_json = json_encode($coordi);
 
                             </div>
 
+                            <div class="input-field">
+                                <label>Comuna</label>
+                                <input type="text" id="comuna" name="comuna" placeholder="Opcional">
+                            </div>
+
+                            <div class="input-field">
+                                <label>Consejo comunal</label>
+                                <input type="text" id="consejo_comunal" name="consejo_comunal" placeholder="Opcional">
+                            </div>
+
                             <div class="input-field dos">
                                 <label>Comunidad</label>
                                 <input type="text" id="comunidad" name="comunidad">
@@ -158,6 +168,8 @@ $coordinacion_json = json_encode($coordi);
                     <th>estado</th>
                     <th>municipio</th>
                     <th>parroquia</th>
+                    <th>Comuna</th>
+                    <th>Consejo comunal</th>
                     <th></th>
                     <!-- <th></th> -->
                 </tr>
@@ -182,6 +194,8 @@ $coordinacion_json = json_encode($coordi);
                                 <td><?php echo $registros["nombre_estado"] ?></td>
                                 <td><?php echo $registros["nombre"] ?></td>
                                 <td><?php echo $registros["nombre_parroquia"] ?></td>
+                                <td><?php echo $registros["comuna"] ?></td>
+                                <td><?php echo $registros["consejo_comunal"] ?></td>
                                 <td><a href="12-D-VerEscuela.php?id=<?php echo $registros["id_curso"] ?>">Ver taller</a></td>
                             </tr>
 
@@ -199,6 +213,8 @@ $coordinacion_json = json_encode($coordi);
                                 <td><?php echo $registros["nombre_estado"] ?></td>
                                 <td><?php echo $registros["nombre"] ?></td>
                                 <td><?php echo $registros["nombre_parroquia"] ?></td>
+                                <td><?php echo $registros["comuna"] ?></td>
+                                <td><?php echo $registros["consejo_comunal"] ?></td>
                                 <td><a href="12-D-VerEscuela.php?id=<?php echo $registros["id_curso"] ?>">Ver taller</a></td>
                             </tr>
 
@@ -223,6 +239,8 @@ $coordinacion_json = json_encode($coordi);
                     var coordinacion = <?php echo $coordinacion_json; ?>;
                     var municipio = $("#municipio").val();
                     var parroquia = $("#parroquia").val();
+                    var comuna = $("#comuna").val();
+                    var consejo_comunal = $("#consejo_comunal").val();
                     var comunidad = $("#comunidad").val();
                     var fecha_encuentro = $("#fecha_encuentro").val();
                     var fin_encuentro = $("#fin_encuentro").val();
@@ -239,6 +257,8 @@ $coordinacion_json = json_encode($coordi);
                             estado: estado,
                             municipio: municipio,
                             parroquia: parroquia,
+                            comuna: comuna,
+                            consejo_comunal: consejo_comunal,
                             comunidad: comunidad,
                             fecha_encuentro: fecha_encuentro,
                             fin_encuentro: fin_encuentro,

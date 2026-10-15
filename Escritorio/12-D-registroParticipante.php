@@ -7,7 +7,6 @@ $cedula = $_POST["cedula"];
 $nombre = $_POST["nombre"];
 $apellido= $_POST["apellido"];
 $telefono= $_POST["telefono"];
-$email= $_POST["email"];
 $numero_escuela= $_POST["numero_escuela"];
 $discapacidad= $_POST["discapacidad"];
 $estado= $_POST["estado"];
@@ -29,7 +28,6 @@ if($verificar){
 $solicitud -> setnombre($nombre);
 $solicitud -> setapellido($apellido);
 $solicitud -> settelefono($telefono);
-$solicitud -> setemail($email);
 $solicitud -> setdiscapacidad($discapacidad);
 $solicitud -> setestado($estado);
 $solicitud -> setmunicipio($municipio);
